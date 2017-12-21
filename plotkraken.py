@@ -1,10 +1,9 @@
-def ohlcFile():
-    with open(path) as js:
-        jsc=js.read(path)
-        print jsc
-        jsp=json.loads(jsc)
-        print jsp["result"]["XXMRZEUR"]
-        for record in jsp["result"]["XXMRZEUR"]:
+import json
+def ohlcFile(path):
+    with open(path) as fo:
+        ohlcjsonstring=fo.read()
+        ohlcjson=json.loads(ohlcjsonstring)
+        for record in ohlcjson["result"]["XXMRZEUR"]:
             yield record
 
 if __name__ == "__main__":
