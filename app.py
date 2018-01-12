@@ -16,8 +16,13 @@ def plot():
     x_new = np.linspace(x[0], x[-1], 50)
     y_new = f(x_new)
     peaks = peakutils.indexes(y_new, thres=0.5, min_dist=30)
+    trade = np.array([yt + 1 for yt in peaks])
 
-    plt.plot(x,y,'o', x_new, y_new,x_new[peaks],y_new[peaks],'+')
+    plt.plot(x,y,'o',
+             x_new, y_new,
+             x_new[peaks],y_new[peaks],'+',
+             x_new[trade], y_new[trade],'+'
+    )
     plt.ylabel('Price in EURO')
     plt.show()
 
