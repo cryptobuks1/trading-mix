@@ -24,7 +24,7 @@ def plot():
     yidx = 1
     [x, y] = xandy = extract(ohlcdata, xidx, yidx)
     [x_new, y_new, peaks] = fit(xandy)
-    [x_sub_new, y_sub_new, peaks_sub] = fit(extract(ohlcdata, xidx, yidx))
+    [x_sub_new, y_sub_new, peaks_sub] = fit(extract(ohlcdata_sub, xidx, yidx))
     # print datetime.fromtimestamp(x[0])
     trade = np.array([t + 5 for t in peaks])
     plots = [x,y,'o']
