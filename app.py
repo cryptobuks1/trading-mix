@@ -13,6 +13,7 @@ def plot():
     ohlc_1513269300 = [record for record in readjsonfile("/home/kristian/projects/kraken-bash/ohlc-1513269300.json")]
     ohlc_1516217100 = [record for record in readjsonfile("/home/kristian/projects/kraken-bash/ohlc-1516217100.json")]
     ohlc_1516320660 = [record for record in readjsonfile("/home/kristian/projects/kraken-bash/ohlc-1516320660.json")]
+    print "ohlc_1513226220"
     print_start_end(ohlc_1513226220)
 
     ohlcdata = ohlc_1513226220
@@ -23,14 +24,7 @@ def plot():
     [x_new, y_new, peaks] = fit(xandy)
     [x_sub_new, y_sub_new, peaks_sub] = fit(extract(ohlcdata, xidx, yidx))
     # print datetime.fromtimestamp(x[0])
-    print peaks
-    print "peak"
-    print int(x_new[peaks[0]])
-    print toDate(x_new[peaks[0]])
     trade = np.array([t + 10 for t in peaks])
-    print "trade"
-    print int(x_new[trade[0]])
-    print toDate(int(x_new[trade[0]]))
     plots = [x,y,'o']
     plots.extend([x_new, y_new])
     plots.extend([x_new[peaks], y_new[peaks], 'r+'])
