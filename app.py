@@ -33,10 +33,11 @@ def plot():
     print toDate(int(x_new[trade[0]]))
     plots = [x,y,'o']
     plots.extend([x_new, y_new])
-    plots.extend([x_sub_new, y_sub_new])
     plots.extend([x_new[peaks], y_new[peaks], 'r+'])
-    plots.extend([x_sub_new[peaks_sub], y_sub_new[peaks_sub], '+'])
     plots.extend([x_new[trade], y_new[trade], 'y+'])
+    plots.extend([x_sub_new, y_sub_new])
+    plots.extend([x_sub_new[peaks_sub], y_sub_new[peaks_sub], '+'])
+
 
     # plt.plot(
     #          x_new, y_new,
