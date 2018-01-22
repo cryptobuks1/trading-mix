@@ -2,9 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import peakutils
 
-def fit(data, xidx, yidx):
-    x = [record[xidx] for record in data]
-    y = [record[yidx] for record in data]
+def fit((x, y)):
     z = np.polyfit(x, y, 2)
     f = np.poly1d(z)
     x_new = np.linspace(x[0], x[-1], 50)
@@ -13,11 +11,16 @@ def fit(data, xidx, yidx):
     print peaks
     return [x_new, y_new, peaks]
 
+def extract(data, xidx=0, yidx=1):
+    return [[record[xidx] for record in data],
+            [record[yidx] for record in data]]
+
+
 if __name__ == "__main__":
     from ohlc import readjsonfile
     ohlc_1513226220 = [record for record in readjsonfile("/home/kristian/projects/kraken-bash/ohlc-1513226220.json")]
     xidx = 0
     yidx = 1
-    [x, y, peaks] = fit(ohlc_1513226220, xidx, yidx)
+    [x, y, peaks] = fit(extract(ohlc_1513226220, xidx, yidx))
     plt.plot(x, y, x[peaks], y[peaks], '+')
     plt.show()
