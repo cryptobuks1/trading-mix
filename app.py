@@ -18,9 +18,10 @@ def plot():
 
     ohlcdata = ohlc_1513226220
     ohlcdata_sub = [record for record in ohlcdata if record[0] < 1513245588]
-    [x, y] = xandy = extract(ohlcdata, xidx, yidx)
-    [x_new, y_new, peaks] = fit(xandy)
-    [x_sub_new, y_sub_new, peaks_sub] = fit(extract(ohlcdata_sub, xidx, yidx))
+    xidx=0
+    yidx=1
+    [x, y, x_new, y_new, peaks] = fit(extract(ohlcdata, xidx, yidx))
+    [x_sub, y_sub, x_sub_new, y_sub_new, peaks_sub] = fit(extract(ohlcdata_sub, xidx, yidx))
     trade = np.array([t + 5 for t in peaks])
     plots = [x,y,'o']
     plots.extend([x_new, y_new])
