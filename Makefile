@@ -1,5 +1,6 @@
+.PHONY: test
 test:
-	python setup.py test
+	tox
 
 .PHONY: test-mark-%
 test-mark-%:
