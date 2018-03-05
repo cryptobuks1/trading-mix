@@ -1,3 +1,4 @@
+import pytest
 from trading.data import fit,extract
 import matplotlib.pyplot as plt
 
@@ -9,4 +10,8 @@ def test_fit():
     [x, y, x_fit, y_fit, peaks_fit] = fit(extract(ohlc_1513226220, xidx, yidx))
     plt.plot(x, y, x_fit, y_fit, x_fit[peaks_fit], y_fit[peaks_fit], '+')
     plt.show()
+    assert True
+
+@pytest.mark.range
+def test_range():
     assert True
