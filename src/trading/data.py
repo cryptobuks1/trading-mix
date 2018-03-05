@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import peakutils
 
-def fit((x, y)):
+def fit(coord):
+    x, y = coord
     z = np.polyfit(x, y, 2)
     f = np.poly1d(z)
     x_new = np.linspace(x[0], x[-1], 50)
