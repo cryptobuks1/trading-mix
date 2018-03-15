@@ -14,4 +14,12 @@ def test_fit():
 
 @pytest.mark.range
 def test_range():
+    from trading.ohlc import readjsonfile
+    ohlc_1513226220 = extract([record for record in readjsonfile("/home/kristian/projects/kraken-bash/ohlc-1513226220.json")])
+    first_hour = filter(lambda p: 1513226220 <= p[0] > (1513226220 + 3600), ohlc_1513226220)
+
+    [x, y] = ohlc_1513226220
+    [subx, suby] = first_hour
+    plt.plot(x, y, subx, suby)
+    plt.show()
     assert True
