@@ -1,4 +1,6 @@
 import pytest
+import trading
+import trading.data as data
 from trading.data import fit,extract
 import matplotlib.pyplot as plt
 
@@ -19,7 +21,7 @@ def test_range():
     first_hour = filter(lambda p: 1513226220 <= p[0] > (1513226220 + 3600), ohlc_1513226220)
 
     [x, y] = ohlc_1513226220
-    [subx, suby] = first_hour
+    [subx, suby] = trading
     plt.plot(x, y, subx, suby)
     plt.show()
     assert True
