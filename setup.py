@@ -1,6 +1,8 @@
 from setuptools import setup, find_packages
 package_dir = 'src'
 setup(
+    name='trading',
+    version='0.0.1',
     setup_requires=[
         'pytest-runner',
     ],
