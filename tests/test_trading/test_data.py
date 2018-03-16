@@ -1,7 +1,5 @@
 import pytest
-import trading
-import trading.data as data
-from trading.data import fit,extract
+from trading.data import fit, extract
 import matplotlib.pyplot as plt
 
 def test_fit():
