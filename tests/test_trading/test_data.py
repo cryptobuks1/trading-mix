@@ -2,12 +2,14 @@ import pytest
 from trading.data import fit, extract
 import matplotlib.pyplot as plt
 
+@pytest.mark.fit
 def test_fit():
     from trading.ohlc import readjsonfile
     ohlc_1513226220 = [record for record in readjsonfile("/home/kristian/projects/kraken-bash/ohlc-1513226220.json")]
     xidx = 0
     yidx = 1
     [x, y, x_fit, y_fit, peaks_fit] = fit(extract(ohlc_1513226220, xidx, yidx))
+    assert(len(x) == len(y))
     plt.plot(x, y, x_fit, y_fit, x_fit[peaks_fit], y_fit[peaks_fit], '+')
     plt.show()
     assert True
@@ -19,7 +21,9 @@ def test_range():
     first_hour = extract(filter(lambda p: 1513226220 <= p[0] > (1513226220 + (3 * 3600)), ohlc_1513226220))
 
     [x, y] = extract(ohlc_1513226220)
+    assert(len(x) == len(y))
     [subx, suby] = first_hour
+    assert(len(subx) == len(suby))
     plt.plot(x, y, subx, suby)
     plt.show()
     assert True
