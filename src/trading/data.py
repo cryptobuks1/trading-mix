@@ -2,10 +2,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import peakutils
 
+
 def fit(coord):
     x, y = coord
-    z = np.polyfit(x, y, 2)
-    f = np.poly1d(z)
+    z = np.polyfit(x, y, 2, full=True)
+    f = np.poly1d(z[0])
     x_new = np.linspace(x[0], x[-1], 50)
     y_new = f(x_new)
     return [x, y, x_new, y_new]
