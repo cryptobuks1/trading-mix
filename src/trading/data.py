@@ -8,8 +8,12 @@ def fit(coord):
     f = np.poly1d(z)
     x_new = np.linspace(x[0], x[-1], 50)
     y_new = f(x_new)
-    peaks = peakutils.indexes(y_new, thres=0.5, min_dist=30)
-    return [x, y, x_new, y_new, peaks]
+    return [x, y, x_new, y_new]
+
+
+def peaks(values):
+    return peakutils.indexes(values, thres=0.5, min_dist=30)
+
 
 def extract(data, xidx=0, yidx=1):
     return [[record[xidx] for record in data],

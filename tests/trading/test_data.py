@@ -1,5 +1,5 @@
 import pytest
-from trading.data import fit, extract
+from trading.data import fit, extract, peaks
 import matplotlib.pyplot as plt
 
 @pytest.mark.fit
@@ -8,7 +8,8 @@ def test_fit():
     ohlc_1513226220 = [record for record in readjsonfile("/home/kristian/projects/kraken-bash/ohlc-1513226220.json")]
     xidx = 0
     yidx = 1
-    [x, y, x_fit, y_fit, peaks_fit] = fit(extract(ohlc_1513226220, xidx, yidx))
+    x, y, x_fit, y_fit = fit(extract(ohlc_1513226220, xidx, yidx))
+    peaks_fit = peaks(y_fit)
     assert(len(x) == len(y))
     plt.plot(x, y, x_fit, y_fit, x_fit[peaks_fit], y_fit[peaks_fit], '+')
     plt.show()
