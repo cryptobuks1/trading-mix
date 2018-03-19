@@ -47,10 +47,21 @@ def test_full_fit():
 
 def test_sliding_window():
     data = ohlc_1513226220()
-    start = 1513226220
-    end = (start + (3 * 3600))
-    window = filter(lambda p: start <= p[0] > end, data)
-    x, y, xfit, yfit = fit(extract(window))
-    p = peaks(yfit)
-    if p:
-        plt.plot(x, y, xfit, yfit, xfit[p], yfit[p], '+')
+    offset = 0
+    step = 600
+    start = 1
+    end = 2
+    x, y = extract(data)
+    plt.plot(x, y)
+    while start + offset < end:
+        start = 1513226220 + offset
+        end = start + (3 * 3600)
+        window = filter(lambda p: start <= p[0] <= end, data)
+        _, _, xfit, yfit = fit(extract(window))
+        p = peaks(yfit)
+        print p
+        if p:
+            plt.plot(xfit, yfit, xfit[p], yfit[p], 'b+')
+
+        offset += step
+    plt.show()
