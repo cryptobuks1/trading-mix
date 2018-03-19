@@ -60,8 +60,17 @@ def test_sliding_window():
         _, _, xfit, yfit = fit(extract(window))
         p = peaks(yfit)
         print p
+
         if p:
-            plt.plot(xfit, yfit, xfit[p], yfit[p], 'b+')
+            span = (xfit[-1] - xfit[p[0]]) / 60
+            print span
+            if 30 < span < 50:
+                plt.plot(xfit, yfit, xfit[p], yfit[p], 'b+')
+                print "### PEAK ###"
+                print xfit[p[0]]
+                print xfit[-1]
+                print (xfit[-1] - xfit[p[0]]) / 60
+
 
         offset += step
     plt.show()
