@@ -1,6 +1,8 @@
 import pytest
 from trading.data import fit, extract, peaks
+from trading.util import toDate
 import matplotlib.pyplot as plt
+
 
 @pytest.mark.fit
 def test_fit():
@@ -16,9 +18,26 @@ def test_fit():
     assert True
 
 
+def ohlc(path):
+    from trading.ohlc import readjsonfile
+    return [record for record in readjsonfile(path)]
+
 def ohlc_1513226220():
     from trading.ohlc import readjsonfile
     return [record for record in readjsonfile("/home/kristian/projects/kraken-bash/ohlc-1513226220.json")]
+
+
+def ohlc_1513269300():
+    from trading.ohlc import readjsonfile
+    return [record for record in readjsonfile("/home/kristian/projects/kraken-bash/ohlc-1513269300.json")]
+
+
+def ohlc_1516217100():
+    return ohlc("/home/kristian/projects/kraken-bash/ohlc-1516217100.json")
+
+
+def ohlc_1516320660():
+    return ohlc("/home/kristian/projects/kraken-bash/ohlc-1516320660.json")
 
 @pytest.mark.range
 def test_range():
@@ -70,7 +89,20 @@ def test_sliding_window():
                 print xfit[p[0]]
                 print xfit[-1]
                 print (xfit[-1] - xfit[p[0]]) / 60
-
-
         offset += step
     plt.show()
+
+
+def test_ohlc_1513226220():
+    print toDate(ohlc_1513226220()[-1][0])
+
+
+def test_ohlc_1513269300():
+    print toDate(ohlc_1513269300()[0][0])
+
+def test_ohlc_1516217100():
+    print toDate(ohlc_1516217100()[-1][0])
+
+
+def test_ohlc_1516320660():
+    print toDate(ohlc_1516320660()[0][0])
