@@ -112,7 +112,17 @@ def test_ohlc_1516320660():
 def test_combined_data():
     part1 = load("/home/kristian/projects/kraken-bash/ohlc-1521494568.json")
     part2 = load("/home/kristian/projects/kraken-bash/ohlc-1521533661.json")
-    date = oc.join([part1, part2])
+    data = oc.join([part2, part1])
+    print data[0]
+
+    x1, y1 = extract(part1)
+    plt.plot(x1, y1)
+    x2, y2 = extract(part2)
+
+    xf, yf = extract(data)
+    plt.plot(xf, yf)
+    plt.plot(x2, y2)
+    plt.show()
 
 def test_date():
     print toDate(1521533580)
