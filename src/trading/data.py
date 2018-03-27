@@ -16,6 +16,29 @@ def peaks(values):
     return peakutils.indexes(values, thres=0.5, min_dist=30)
 
 
+def streamWindow(windowSize, step, data):
+    '''
+    windowSize in seconds
+    step in seconds
+    data: Sequence of ohlc data
+    '''
+    windows = []
+    while True:
+        if not 'start' in locals():
+            start = data[0][0]
+        else:
+            start += step
+        end = start + windowSize
+        windowData = []
+        for dp in data:
+            if start <= dp[0] < end:
+                windowData.append(dp)
+            elif windowData:
+                windows.append(windowData)
+                break
+            else:
+                return windows
+
 def extract(data, xidx=0, yidx=1):
     return [[record[xidx] for record in data],
             [record[yidx] for record in data]]
