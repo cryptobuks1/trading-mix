@@ -30,7 +30,7 @@ def streamWindow(windowSize, step, data):
         end = start + windowSize
         windowData = (stopIter() if dp[0] >= end else dp
                       for dp in data
-                      if start <= dp[0])
+                      if start <= dp[0]) #Collect where start <= dp[0] < end
         if windowData:
             windows.append(windowData)
         else:
