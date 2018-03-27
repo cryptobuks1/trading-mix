@@ -24,17 +24,13 @@ def streamWindow(windowSize, step, data):
     '''
     windows = []
     start = data[0][0] - step
+    stopIter = lambda : (_ for _ in ()).throw(StopIteration) #Hack to stop generator
     while True:
         start += step
         end = start + windowSize
-        windowData = []
-        for dp in data:
-            if dp[0] < start:
-                continue
-            elif dp[0] < end:
-                windowData.append(dp)
-            else:
-                break
+        windowData = (stopIter() if dp[0] >= end else dp
+                      for dp in data
+                      if start <= dp[0])
         if windowData:
             windows.append(windowData)
         else:
