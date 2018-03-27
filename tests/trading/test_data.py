@@ -127,3 +127,6 @@ def test_combined_data():
 
 def test_date():
     print toDate(1521533580)
+
+def test_streamWindow():
+    assert len(streamWindow(3600 * 3, 600 ,ohlc_1513226220())) == 72
