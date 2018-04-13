@@ -60,7 +60,7 @@ def test_sub_fit():
 
 def test_full_fit():
     import numpy as np
-    #data = extract(ohlc_1513226220())
+    # data = extract(ohlc_1513226220())
     data = extract(filter(lambda p: 1513226220 <= p[0] > (1513226220 + (3 * 3600)), ohlc_1513226220()))
     x, y, xfit, yfit = fit(data)
     print(peaks(yfit))
