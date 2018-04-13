@@ -9,7 +9,7 @@ def fit(coord):
     f = np.poly1d(z[0])
     x_new = np.linspace(x[0], x[-1], 50)
     y_new = f(x_new)
-    return [x, y, x_new, y_new]
+    return [x, y, x_new, y_new, f]
 
 
 def peaks(values):
@@ -36,10 +36,21 @@ def streamWindow(windowSize, step, data):
         else:
             return windows
 
-def extract(data, xidx=0, yidx=1):
-    return [[record[xidx] for record in data],
-            [record[yidx] for record in data]]
+def extract(env, xidx=0, yidx=1):
+    return env.copy().update({'xs': [record[xidx] for record in env['data']],
+                              'ys': [record[yidx] for record in env['data']]})
 
+def analyseData(dl):
+    x, y, xfit, yfit, ff = fit(extract(window))
+
+def fitChunks(data):
+    """
+    Parameters
+    ----------
+    data : list
+           list of lists of ohlc data
+    """
+    map(lambda dl: fit(extract(dl)), data)
 
 if __name__ == "__main__":
     from ohlc import readjsonfile
