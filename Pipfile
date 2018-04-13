@@ -4,10 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-
-[packages]
 "e1839a8" = {path = ".", editable = true}
 pytest = "*"
 
+[packages]
+ipython = "*"
+jupyter = "*"
+pyreadline = "*"
+
 [requires]
-python_version = "2.7"
+python_version = "3.5"
