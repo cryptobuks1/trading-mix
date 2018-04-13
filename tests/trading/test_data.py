@@ -63,7 +63,7 @@ def test_full_fit():
     #data = extract(ohlc_1513226220())
     data = extract(filter(lambda p: 1513226220 <= p[0] > (1513226220 + (3 * 3600)), ohlc_1513226220()))
     x, y, xfit, yfit = fit(data)
-    print peaks(yfit)
+    print(peaks(yfit))
 
 
 def test_sliding_window():
@@ -81,40 +81,41 @@ def test_sliding_window():
         window = filter(lambda p: start <= p[0] <= end, data)
         _, _, xfit, yfit = fit(extract(window))
         p = peaks(yfit)
-        print p
+        print(p)
 
         if p:
             span = (xfit[-1] - xfit[p[0]]) / 60
-            print span
+            print(span)
             if 30 < span < 50:
                 plt.plot(xfit, yfit, xfit[p], yfit[p], 'b+')
-                print "### PEAK ###"
-                print xfit[p[0]]
-                print xfit[-1]
-                print (xfit[-1] - xfit[p[0]]) / 60
+                print("### PEAK ###")
+                print(xfit[p[0]])
+                print(xfit[-1])
+                print((xfit[-1] - xfit[p[0]]) / 60)
         offset += step
     plt.show()
 
 
 def test_ohlc_1513226220():
-    print toDate(ohlc_1513226220()[-1][0])
+    print( toDate(ohlc_1513226220()[-1][0]))
 
 
 def test_ohlc_1513269300():
-    print toDate(ohlc_1513269300()[0][0])
+    print(toDate(ohlc_1513269300()[0][0]))
+
 
 def test_ohlc_1516217100():
-    print toDate(ohlc_1516217100()[-1][0])
+    print(toDate(ohlc_1516217100()[-1][0]))
 
 
 def test_ohlc_1516320660():
-    print toDate(ohlc_1516320660()[0][0])
+    print(toDate(ohlc_1516320660()[0][0]))
 
 def test_combined_data():
     part1 = load("/home/kristian/projects/kraken-bash/ohlc-1521494568.json")
     part2 = load("/home/kristian/projects/kraken-bash/ohlc-1521533661.json")
     data = oc.join([part2, part1])
-    print data[0]
+    print(data[0])
 
     x1, y1 = extract(part1)
     plt.plot(x1, y1)
@@ -126,7 +127,7 @@ def test_combined_data():
     plt.show()
 
 def test_date():
-    print toDate(1521533580)
+    print(toDate(1521533580))
 
 def test_streamWindow():
     assert len(streamWindow(3600 * 3, 600 ,ohlc_1513226220())) == 72
