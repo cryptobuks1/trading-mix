@@ -111,6 +111,7 @@ def test_ohlc_1516217100():
 def test_ohlc_1516320660():
     print(toDate(ohlc_1516320660()[0][0]))
 
+
 def test_combined_data():
     part1 = load("/home/kristian/projects/kraken-bash/ohlc-1521494568.json")
     part2 = load("/home/kristian/projects/kraken-bash/ohlc-1521533661.json")
@@ -126,8 +127,10 @@ def test_combined_data():
     plt.plot(x2, y2)
     plt.show()
 
+
 def test_date():
     print(toDate(1521533580))
+
 
 def test_streamWindow():
     assert len(streamWindow(3600 * 3, 600 ,ohlc_1513226220())) == 72
