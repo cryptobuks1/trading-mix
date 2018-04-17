@@ -134,5 +134,3 @@ def test_date():
 
 def test_streamWindow():
     assert len(streamWindow(3600 * 3, 600, ohlc_1513226220())) == 72
-
-
