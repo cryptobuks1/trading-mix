@@ -23,5 +23,5 @@ def join_data(accumList, currentList):
 
 def join(dataLists):
     sortedData = sorted(dataLists, key=lambda dl: dl[0][0])
-    print sortedData[0][0]
+    print(sortedData[0][0])
     return reduce(join_data, sortedData, [])
