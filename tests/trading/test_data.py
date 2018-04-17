@@ -1,5 +1,5 @@
 import pytest
-from trading.data import fit, extract, peaks
+from trading.data import fit, extract, peaks, streamWindow
 from trading.util import toDate
 from trading.ohlc import load
 import trading.ohlc as oc
@@ -133,4 +133,6 @@ def test_date():
 
 
 def test_streamWindow():
-    assert len(streamWindow(3600 * 3, 600 ,ohlc_1513226220())) == 72
+    assert len(streamWindow(3600 * 3, 600, ohlc_1513226220())) == 72
+
+

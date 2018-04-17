@@ -24,17 +24,17 @@ def streamWindow(windowSize, step, data):
     '''
     windows = []
     start = data[0][0] - step
-    stopIter = lambda : (_ for _ in ()).throw(StopIteration) #Hack to stop generator
     while True:
         start += step
         end = start + windowSize
-        windowData = (stopIter() if dp[0] >= end else dp
+        windowData = [dp
                       for dp in data
-                      if start <= dp[0]) #Collect where start <= dp[0] < end
+                      if start <= dp[0] < end]
         if windowData:
             windows.append(windowData)
         else:
             return windows
+
 
 def extract(env, xidx=0, yidx=1):
     return env.copy().update({'xs': [record[xidx] for record in env['data']],
