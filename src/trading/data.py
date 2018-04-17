@@ -18,8 +18,8 @@ def peaks(values):
 
 def streamWindow(windowSize, step, data):
     '''
-    windowSize in seconds
-    step in seconds
+    windowSize: int, in seconds
+    step: int, in seconds
     data: Sequence of ohlc data
     '''
     windows = []
