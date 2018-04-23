@@ -134,3 +134,16 @@ def test_date():
 
 def test_streamWindow():
     assert len(streamWindow(3600 * 3, 600, ohlc_1513226220())) == 72
+
+
+def test_fit_window():
+    data = {'data': ohlc_1513226220()}
+    env = extract(data)
+    plt.plot(env['xs'], env['ys'])
+    plt.show()
+
+
+def test_extracts_x():
+    env = {'data': ohlc_1513226220()}
+    xidx = 0
+    return [record[xidx] for record in env['data']]
