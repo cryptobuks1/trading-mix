@@ -1,0 +1,11 @@
+declare -x HOME="/root"
+declare -x LOGNAME="root"
+declare -x MAKEFLAGS=""
+declare -x MAKELEVEL="1"
+declare -x MFLAGS=""
+declare -x OLDPWD
+declare -x PATH="/usr/bin:/bin"
+declare -x PWD="/home/geekbox/projects/kraken-bash"
+declare -x SHELL="/bin/sh"
+declare -x SHLVL="1"
+{"error":["EService:Unavailable"]}
