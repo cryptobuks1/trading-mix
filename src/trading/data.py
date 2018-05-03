@@ -37,13 +37,13 @@ def streamWindow(windowSize, step, data):
 
 
 def extract(env, xidx=0, yidx=1):
-    result = env.copy()
-    result.update({'xs': [record[xidx] for record in env['data']],
-                   'ys': [record[yidx] for record in env['data']]})
-    return result
+    return [[record[xidx] for record in env],
+            [record[yidx] for record in env]]
+
 
 def analyseData(dl):
     x, y, xfit, yfit, ff = fit(extract(window))
+
 
 def fitChunks(data):
     """
