@@ -12,6 +12,9 @@ pytest = "*"
 ipython = "*"
 jupyter = "*"
 pyreadline = "*"
+"e1839a8" = {editable = true, path = "."}
+sqlitebiter = "*"
+jx-sqlite = "*"
 
 [requires]
 python_version = "3.5"
