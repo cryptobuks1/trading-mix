@@ -15,6 +15,7 @@ pyreadline = "*"
 "e1839a8" = {editable = true, path = "."}
 sqlitebiter = "*"
 jx-sqlite = "*"
+krakenex = "*"
 
 [requires]
 python_version = "3.5"
