@@ -1,11 +1,15 @@
 import pytest
 from trading.data import fit, extract, peaks, streamWindow
 from trading.util import toDate
-from trading.ohlc import load
+from trading.ohlc import load, readjsonfile
 import trading.ohlc as oc
 import matplotlib.pyplot as plt
+from os.path import dirname as d
+from os.path import abspath, join
 
 
+# root_dir = d(d(abspath(__file__)))
+# sys.path.append(root_dir)
 @pytest.mark.fit
 def test_fit():
     from trading.ohlc import readjsonfile
@@ -21,16 +25,13 @@ def test_fit():
 
 
 def ohlc(path):
-    from trading.ohlc import readjsonfile
     return [record for record in readjsonfile(path)]
 
 def ohlc_1513226220():
-    from trading.ohlc import readjsonfile
-    return [record for record in readjsonfile("/home/kristian/projects/kraken-bash/ohlc-1513226220.json")]
+    return [record for record in readjsonfile(join('/', 'home','kristian','projects','trading','data', 'ohlc-1513226220.json'))]
 
 
 def ohlc_1513269300():
-    from trading.ohlc import readjsonfile
     return [record for record in readjsonfile("/home/kristian/projects/kraken-bash/ohlc-1513269300.json")]
 
 
@@ -138,8 +139,8 @@ def test_streamWindow():
 
 def test_fit_window():
     data = {'data': ohlc_1513226220()}
-    env = extract(data)
-    plt.plot(env['xs'], env['ys'])
+    xs, ys = extract(data)
+    plt.plot(xs, ys)
     plt.show()
 
 
