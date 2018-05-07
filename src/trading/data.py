@@ -37,8 +37,8 @@ def streamWindow(windowSize, step, data):
 
 
 def extract(env, xidx=0, yidx=1):
-    return [[record[xidx] for record in env],
-            [record[yidx] for record in env]]
+    return [[int(record[xidx]) for record in env],
+            [float(record[yidx]) for record in env]]
 
 
 def analyseData(dl):
