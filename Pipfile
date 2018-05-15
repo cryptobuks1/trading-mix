@@ -16,6 +16,8 @@ pyreadline = "*"
 sqlitebiter = "*"
 jx-sqlite = "*"
 krakenex = "*"
+pykrakenapi = "*"
+ipywidgets = "*"
 
 [requires]
 python_version = "3.5"
