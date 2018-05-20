@@ -18,6 +18,11 @@ jx-sqlite = "*"
 krakenex = "*"
 pykrakenapi = "*"
 ipywidgets = "*"
+jedi = "*"
+"flake8" = "*"
+"autopep8" = "*"
+yapf = "*"
+rope = "*"
 
 [requires]
 python_version = "3.5"
