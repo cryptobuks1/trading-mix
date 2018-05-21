@@ -23,6 +23,7 @@ jedi = "*"
 "autopep8" = "*"
 yapf = "*"
 rope = "*"
+flask = "*"
 
 [requires]
 python_version = "3.5"
