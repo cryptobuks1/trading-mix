@@ -54,13 +54,14 @@ def run(data):
     ax.figure.canvas.draw()
     ps = peaks(y_new)
     if ps:
+        print("Peak")
         print(ps)
-        print(x_new[ps])
-        print(x_new[ps][0])
+        print(y_new[ps])
+        print(y_new[ps][0])
         print(last_peak)
-    if ps and (not last_peak == x_new[ps][0]):
+    if ps and (not abs(last_peak - y_new[ps][0]) <= 5):
         goon = False
-        last_peak = x_new[ps][0]
+        last_peak = y_new[ps][0]
     if goon:
         windowpos += 600
 
