@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "323d72737da2f1a6eee83ab1dd1965fa1b6545e1b20ffe87fb25f50e3565cc83"
+            "sha256": "40d74029faf227e5e2ef5c7c141e4c77286438d8e883d1b8439bb0058bf887f0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -303,6 +303,13 @@
             ],
             "version": "==0.6.1"
         },
+        "metakernel": {
+            "hashes": [
+                "sha256:7bff02ba49fdf19fe5ce294cd514d436a0efd26ef45cfb353e4583430ca2ad2c",
+                "sha256:8b4dd1c8a06760a2317f9ac4363abef01b42cab9c136975353a768b959a69c60"
+            ],
+            "version": "==0.20.14"
+        },
         "mistune": {
             "hashes": [
                 "sha256:b4c512ce2fc99e5a62eb95a4aba4b73e5f90264115c40b70a21e1f7d4e0eac91",
@@ -438,6 +445,21 @@
             ],
             "version": "==1.14.3"
         },
+        "oct2py": {
+            "hashes": [
+                "sha256:07cbcee467f6bd7bd2430d2ae270fcc035acf2c8ad35f6ad9bb6f7b0f915e179",
+                "sha256:ec7996cd442a5b468e472e9917294121dc40330858ec30a19b1a6bf90517db03"
+            ],
+            "index": "pypi",
+            "version": "==4.0.6"
+        },
+        "octave-kernel": {
+            "hashes": [
+                "sha256:a06601ce7703272c8ef47d77ebf87bc21b0afe33ae19fec605bbc80c4c4e0c5e",
+                "sha256:a8015b2ad64c11bd4855926aebc3af4fa799734d37c09f4e27ac5eeb3debe2c9"
+            ],
+            "version": "==0.28.3"
+        },
         "pandas": {
             "hashes": [
                 "sha256:295cf212054b28f1d111f3ffff932a012601558424ec892f2450d6197f6eeb92",
@@ -519,6 +541,7 @@
                 "sha256:e64193f0047ad603b71f202332ab5527c5e52aa7c8b609704fc28c0dc20c4365",
                 "sha256:e8c43b5eee76b2083a9badde89fd1bbce6c8942d1045146e100b7b5e014f4f1a"
             ],
+            "markers": "os_name != 'nt'",
             "version": "==0.5.2"
         },
         "pycodestyle": {
