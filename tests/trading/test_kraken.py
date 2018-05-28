@@ -78,8 +78,8 @@ def run(data):
     ax.set_ylim(min(ys), max(ys))
     ax.grid(True)
     ax.figure.canvas.draw()
-    ps = peaks(y_new)
-    ps = octave.findpeaks(y_new, nout=2)
+    #ps = peaks(y_new)
+    ps = octave.findpeaks(y_new, "DoubleSided",  nout=2)
     if ps[1] and not isinstance(ps[1], list):
         ps = [[ps[0]], [ps[1]]]
     print(isinstance(ps[1], list))
