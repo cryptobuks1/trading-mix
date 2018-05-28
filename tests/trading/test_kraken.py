@@ -9,7 +9,7 @@ import sqlite3
 from flask import Flask
 from oct2py import octave
 # from werkzeug.serving import run_simple
-
+octave.eval("pkg load signal")
 app = Flask(__name__)
 print(join('/home/kristian/projects/trading/data', 'alldata.sqlite'))
 con = sqlite3.connect(join('/home/kristian/projects/trading/data',
@@ -79,7 +79,11 @@ def run(data):
     ax.grid(True)
     ax.figure.canvas.draw()
     #ps = peaks(y_new)
-    ps = octave.findpeaks(y_new, "DoubleSided",  nout=2)
+    octave
+    ps = octave.findpeaks(y_new, 'DoubleSided',
+                          'MinPeakHeight', 0.04,
+                          'MinPeakDistance', 30,
+                          'MinPeakWidth', 0, nout=2)
     if ps[1] and not isinstance(ps[1], list):
         ps = [[ps[0]], [ps[1]]]
     print(isinstance(ps[1], list))
