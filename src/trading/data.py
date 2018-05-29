@@ -54,6 +54,7 @@ def fitChunks(data):
     """
     map(lambda dl: fit(extract(dl)), data)
 
+
 if __name__ == "__main__":
     from ohlc import readjsonfile
     ohlc_1513226220 = [record for record in readjsonfile("/home/kristian/projects/kraken-bash/ohlc-1513226220.json")]
