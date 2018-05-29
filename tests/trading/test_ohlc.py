@@ -24,4 +24,5 @@ def sql():
         print("Exception")
         print(e)
     ohlc.to_sql('ohlc', conn, index=False)
-    print(type(ohlc))
+    cur.execute("SELECT * FROM sqlite_master WHERE type='table';")
+    print(cur.fetchall())
