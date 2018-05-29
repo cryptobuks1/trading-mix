@@ -11,11 +11,17 @@ from trading.kraken import get_rate
 
 
 def memdb():
-    return sqlite3.connect(":memory:")
+    con = sqlite3.connect(":memory:")
+    cur = con.cursor()
+    return con, cur
 
 
 def sql():
-    conn = memdb()
-    ohlc, last = get_rate()
+    conn, cur = memdb()
+    try:
+        ohlc, last = get_rate()
+    except Exception as e:
+        print("Exception")
+        print(e)
     ohlc.to_sql('ohlc', conn, index=False)
     print(type(ohlc))
