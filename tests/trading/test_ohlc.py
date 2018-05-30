@@ -1,19 +1,5 @@
-import sqlite3
 from trading.kraken import get_rate
-
-
-# def get_rate():
-#     api = krakenex.API()
-#     k = KrakenAPI(api)
-#     #ohlc, last = k.get_ohlc_data("BCHUSD")
-#     #ohlc, last = k.get_ohlc_data("XXMRZEUR")
-#     return k.get_ohlc_data("XXMRZEUR")
-
-
-def memdb():
-    con = sqlite3.connect(":memory:")
-    cur = con.cursor()
-    return con, cur
+from trading.sql import memdb
 
 
 def sql():
