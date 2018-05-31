@@ -8,6 +8,7 @@ from os.path import join
 import sqlite3
 from flask import Flask
 from oct2py import octave
+from enum import Enum
 # from werkzeug.serving import run_simple
 octave.eval("pkg load signal")
 app = Flask(__name__)
@@ -70,6 +71,21 @@ def transform(i):
     return int(i)
 
 
+class TradeCommand(Enum):
+    sell = 1
+    buy = 2
+
+
+def how_to_trade(peak_list, ys):
+    peak = peak_list[0]
+    before = peak - 5
+    after = peak + 5
+    if ys[before] < ys[peak] > ys[after]:
+        return TradeCommand.sell
+    else:
+        return TradeCommand.buy
+
+
 def run(data):
     global ticks, fitted, psl, ax, goon, windowpos, last_peak
 
@@ -83,13 +99,17 @@ def run(data):
     ps = octave.findpeaks(y_new, 'DoubleSided',
                           'MinPeakHeight', 0.04,
                           'MinPeakDistance', 30,
-                          'MinPeakWidth', 0, nout=2)
+                          'MinPeakWidth', 0, nout=3)
     if ps[1] and not isinstance(ps[1], list):
+        print(ps[2])
+        print(ps[2]['parabol'])
         ps = [[ps[0]], [ps[1]]]
+
     print(isinstance(ps[1], list))
     ps[1] = list(map(transform, ps[1]))
 
     if(new_peakP(ps, y_new)):
+        print(how_to_trade(ps[1], y_new))
         print("New peak")
         last_peak = ps[0][0]
         goon = False
@@ -125,8 +145,13 @@ def test_animation():
                                  x_new[ps],
                                  y_new[ps], 'b+')
 
-    ani = animation.FuncAnimation(fig, run, data_gen, blit=False, interval=500,
-                                  repeat=False, init_func=init)
+    ani = animation.FuncAnimation(fig,
+                                  run,
+                                  data_gen,
+                                  blit=False,
+                                  interval=500,
+                                  repeat=False,
+                                  init_func=init)
 
     plt.show(block = False)
     #start_server()
