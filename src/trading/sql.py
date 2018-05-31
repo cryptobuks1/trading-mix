@@ -14,3 +14,11 @@ def memdb():
     con = sqlite3.connect(":memory:")
     cur = con.cursor()
     return con, cur
+
+
+def min_max(cur, time_column='time', table='ohlc'):
+    cur.execute("SELECT min({}) FROM {}".format(time_column, table))
+    start = int(cur.fetchall()[0][0])
+    cur.execute("SELECT max({}) FROM {}".format(time_column, table))
+    end = int(cur.fetchall()[0][0])
+    return start, end
