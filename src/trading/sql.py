@@ -15,7 +15,7 @@ def memdb():
     return con, cur
 
 
-def min_max(cur, time_column='time', table='ohlc'):
+def time_range(cur, time_column='time', table='ohlc'):
     cur.execute("SELECT min({}) FROM {}".format(time_column, table))
     start = int(cur.fetchall()[0][0])
     cur.execute("SELECT max({}) FROM {}".format(time_column, table))
