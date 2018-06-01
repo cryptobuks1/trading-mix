@@ -50,7 +50,7 @@ def init():
 def data_gen(t=0):
     global windowpos, windowsize
     while True:
-        yield window(con, windowpos, windowpos + windowsize)
+        yield window(cur, windowpos, windowpos + windowsize)
 
 
 last_peak = -1
@@ -135,7 +135,7 @@ def test_animation():
     start = int(cur.fetchall()[0][0])
     windowpos = start
     windowsize = 10800
-    data = window(con, windowpos, windowpos + windowsize)
+    data = window(cur, windowpos, windowpos + windowsize)
     xs, ys, x_new, y_new, f = fit(extract(data))
     ps = peaks(y_new)
     ticks, fitted, psl = ax.plot(xs,
@@ -178,7 +178,7 @@ def test_octave():
     print(start)
     windowpos = start + 3600
     windowsize = 10800
-    data = window(con, windowpos, windowpos + windowsize)
+    data = window(cur, windowpos, windowpos + windowsize)
     xs, ys, x_new, y_new, f = fit(extract(data))
     print(y_new)
     octave.eval("pkg load signal")
