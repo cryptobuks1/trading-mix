@@ -41,8 +41,8 @@ def extract(env, xidx=0, yidx=1):
             [float(record[yidx]) for record in env]]
 
 
-def analyseData(dl, peakConf):
-    x, y, xfit, yfit, ff = fit(extract(dl))
+def analyseData(peakConf, data):
+    x, y, xfit, yfit, ff = fit(extract(data))
     peakFn, indexPos = [peakConf[k] for k in ('fn', 'indexPos')]
     peaks = peakFn(yfit)
     peaksIndex = peaks[indexPos]
