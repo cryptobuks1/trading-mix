@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import peakutils
+from enum import Enum
 
 
 def fit(coord):
@@ -51,8 +52,24 @@ def analyseData(peakConf, data):
             'xfit': xfit,
             'yfit': yfit,
             'xpeak': xfit[peaksIndex],
-            'ypeak': yfit[peaksIndex]}
+            'ypeak': yfit[peaksIndex],
+            'tradeAdvise': how_to_trade(peaksIndex, yfit)}
 
+
+class TradeCommand(Enum):
+    sell = 1
+    buy = 2
+    wait = 3
+
+
+def how_to_trade(peak_list, ys):
+    peak = peak_list[0]
+    before = peak - 5
+    after = peak + 5
+    if ys[before] < ys[peak] > ys[after]:
+        return TradeCommand.sell
+    else:
+        return TradeCommand.buy
 
 def fitChunks(data):
     """

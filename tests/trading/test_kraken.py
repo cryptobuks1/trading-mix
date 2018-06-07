@@ -1,14 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from trading.data import fit, extract, peaks
+from trading.data import fit, extract, peaks, how_to_trade
 from trading.sql import window
 from os import getenv
 from os.path import join
 import sqlite3
 from flask import Flask
 from oct2py import octave
-from enum import Enum
+
 # from werkzeug.serving import run_simple
 octave.eval("pkg load signal")
 app = Flask(__name__)
@@ -69,21 +69,6 @@ def new_peakP(plist, y_new, valuepos=0, idxpos=1):
 def transform(i):
     print(i)
     return int(i)
-
-
-class TradeCommand(Enum):
-    sell = 1
-    buy = 2
-
-
-def how_to_trade(peak_list, ys):
-    peak = peak_list[0]
-    before = peak - 5
-    after = peak + 5
-    if ys[before] < ys[peak] > ys[after]:
-        return TradeCommand.sell
-    else:
-        return TradeCommand.buy
 
 
 def run(data):
