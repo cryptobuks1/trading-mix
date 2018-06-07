@@ -16,3 +16,8 @@ def peaks(values):
         ps = [[ps[0]], [ps[1]]]
     ps[1] = list(map(transform, ps[1]))
     return ps
+
+
+conf = {"fn": peaks,
+        "valuePos": 0,
+        "indexPos": 1}
