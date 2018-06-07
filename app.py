@@ -1,6 +1,7 @@
 from trading.kraken import ohlc
 from trading.sql import window, time_range
-from trading.data import fit, extract
+from trading.data import analyseData
+from trading.misc import desctructDict
 from trading.octave import peaks
 import matplotlib.pyplot as plt
 
@@ -10,8 +11,12 @@ def main():
     latest_data_cur = ohlc()
     start, end = time_range(latest_data_cur)
     data = window(latest_data_cur, end - 3600 * 3, end)
-    xs, ys, x_new, y_new, f = fit(extract(data))
-    ps = peaks(y_new)
-    print(ps[1][0])
-    ax.plot(x_new, y_new, x_new[ps[1][0]], y_new[ps[1][0]], "r+")
+    result = analyseData(data, {"fn": peaks,
+                                "valuePos": 0,
+                                "indexPos": 1})
+    xfit, yfit, xpeak, ypeak = desctructDict(result, ("xfit",
+                                                      "yfit",
+                                                      "xpeak",
+                                                      "ypeak"))
+    ax.plot(xfit, yfit, xpeak, ypeak, 'r+')
     plt.show()

@@ -41,8 +41,17 @@ def extract(env, xidx=0, yidx=1):
             [float(record[yidx]) for record in env]]
 
 
-def analyseData(dl):
-    x, y, xfit, yfit, ff = fit(extract(window))
+def analyseData(dl, peakConf):
+    x, y, xfit, yfit, ff = fit(extract(dl))
+    peakFn, indexPos = [peakConf[k] for k in ('fn', 'indexPos')]
+    peaks = peakFn(yfit)
+    peaksIndex = peaks[indexPos]
+    return {'x': x,
+            'y': y,
+            'xfit': xfit,
+            'yfit': yfit,
+            'xpeak': xfit[peaksIndex],
+            'ypeak': yfit[peaksIndex]}
 
 
 def fitChunks(data):
