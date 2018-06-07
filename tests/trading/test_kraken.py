@@ -153,7 +153,7 @@ def test_animation():
                                   repeat=False,
                                   init_func=init)
 
-    plt.show(block = False)
+    plt.show(block=False)
     #start_server()
 
 

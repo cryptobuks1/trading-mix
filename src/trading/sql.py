@@ -1,10 +1,12 @@
 import sqlite3
 
 
-def window(cur, start, end):
+def window(cur, start, end, time_column='time', table='ohlc'):
     start = int(start)
     end = int(end)
-    cur.execute("SELECT timestamp, open FROM ohlc WHERE timestamp >= ? AND timestamp < ? ", (start, end))
+    cur.execute("""SELECT {0}, open
+    FROM {1}
+    WHERE {0} >= ? AND {0} < ? """.format(time_column, table), (start, end))
     result = cur.fetchall()
     return result
 
