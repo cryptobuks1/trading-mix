@@ -68,8 +68,10 @@ def how_to_trade(peak_list, ys):
     after = peak + 5
     if ys[before] < ys[peak] > ys[after]:
         return TradeCommand.sell
-    else:
+    elif ys[before] > ys[peak] < ys[after]:
         return TradeCommand.buy
+    else:
+        return TradeCommand.wait
 
 def fitChunks(data):
     """
