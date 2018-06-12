@@ -23,15 +23,19 @@ def get_rate():
     return k.get_ohlc_data("XXMRZEUR")
 
 
-def to_sql(panda, table_name):
-    conn, cur = memdb()
+def to_sql(panda, table_name, **kwargs):
+    if 'connection' not in kwargs and 'cursor' not in kwargs:
+        conn, cur = memdb()
+    else:
+        conn = kwargs['connection']
+        cur = kwargs['cursor']
     panda.to_sql(table_name, conn, index=False)
     return cur
 
 
-def get_orders():
+def get_orders(**kwargs):
     orders, matches_cnt = k.get_trades_history()
-    return to_sql(orders, 'orders')
+    return to_sql(orders, 'orders', **kwargs)
 
 
 def ohlc():
