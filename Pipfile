@@ -25,6 +25,7 @@ yapf = "*"
 rope = "*"
 flask = "*"
 "oct2py" = "*"
+sqlalchemy = "*"
 
 [requires]
 python_version = "3.5"
