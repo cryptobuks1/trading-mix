@@ -62,16 +62,22 @@ class TradeCommand(Enum):
     wait = 3
 
 
+class DoNotKnowHowToTrade(Exception):
+    pass
+
+
 def how_to_trade(peak_list, ys):
+    if not peak_list:
+        return TradeCommand.wait
     peak = peak_list[0]
-    before = peak - 5
-    after = peak + 5
+    before = peak - 1
+    after = peak + 1
     if ys[before] < ys[peak] > ys[after]:
         return TradeCommand.sell
     elif ys[before] > ys[peak] < ys[after]:
         return TradeCommand.buy
-    else:
-        return TradeCommand.wait
+    raise DoNotKnowHowToTrade
+
 
 def fitChunks(data):
     """
