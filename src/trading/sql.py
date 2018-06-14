@@ -1,5 +1,20 @@
 import sqlite3
+from sqlalchemy import MetaData, create_engine
 from sqlalchemy.sql import select
+
+
+def connect(connect_string):
+    connection = create_engine(connect_string)
+    return {"connection": connection,
+            "cursor": connection,
+            "meta_data": meta(connection)}
+
+
+def meta(connection):
+    meta = MetaData()
+    meta.reflect(bind=connection)
+    return meta
+    # return Table('orders', meta, autoload=True, autoload_with=connection)
 
 
 def window(cur, start, end, time_column='time', table='ohlc'):
@@ -25,6 +40,7 @@ def time_range(cur=None, time_column='time', table='ohlc', **kwargs):
         cur.execute("SELECT max({}) FROM {}".format(time_column, table))
         end = int(cur.fetchall()[0][0])
     else:
+
         start = 0
         end = 1
     return start, end
