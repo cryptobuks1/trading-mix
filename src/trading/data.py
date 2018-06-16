@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import peakutils
 from enum import Enum
+from trading.sql import window, time_range
+from trading.octave import conf as peakConf
+from trading.control import handleError
 
 
 def fit(coord):
@@ -47,7 +50,6 @@ def analyseData(peakConf, data):
     peakFn, indexPos = [peakConf[k] for k in ('fn', 'indexPos')]
     peaks = peakFn(yfit)
     peaksIndex = peaks[indexPos]
-    print(peaksIndex)
     return {'x': x,
             'y': y,
             'xfit': xfit,
@@ -73,10 +75,11 @@ def how_to_trade(peak_list, ys):
     peak = peak_list[0]
     before = peak - 1
     after = peak + 1
-    print(ys[before], ys[peak], ys[after])
-    if ys[before] < ys[peak] > ys[after]:
+    if (before >= 0 and ys[before] < ys[peak]) or \
+       (after < len(ys) and ys[after] < ys[peak]):
         return TradeCommand.sell
-    elif ys[before] > ys[peak] < ys[after]:
+    elif (before >= 0 and ys[before] > ys[peak]) or \
+         (after < len(ys) and ys[after] > ys[peak]):
         return TradeCommand.buy
     raise DoNotKnowHowToTrade
 
@@ -89,6 +92,31 @@ def fitChunks(data):
            list of lists of ohlc data
     """
     map(lambda dl: fit(extract(dl)), data)
+
+
+def window_generator(window_size, step_size, **kwargs):
+    start, end = time_range(**kwargs)
+    pos = 0
+    while start + pos < end:
+        step_start = start + pos
+        span = {"start": step_start,
+                "end": step_start + window_size}
+        env = {**kwargs, **span}
+        pos += step_size
+        result = window(**env)
+        if result:
+            yield result
+
+
+def next_peak(**kwargs):
+    for data in window_generator(3600 * 3, 600, **kwargs):
+        try:
+            result = analyseData(peakConf, data)
+        except DoNotKnowHowToTrade as e:
+            handleError(e)
+        else:
+            if result["xpeak"]:
+                yield result
 
 
 if __name__ == "__main__":

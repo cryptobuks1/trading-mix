@@ -2,6 +2,7 @@ import sqlite3
 from sqlalchemy import MetaData, create_engine, func
 from sqlalchemy.sql import select
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql import select
 
 def connect(connect_string):
     connection = create_engine(connect_string)
@@ -11,20 +12,36 @@ def connect(connect_string):
             "session": sessionmaker(bind=connection)()}
 
 
-def meta(connection):
+def meta(connection, **kwargs):
     meta = MetaData()
     meta.reflect(bind=connection)
     return meta
     # return Table('orders', meta, autoload=True, autoload_with=connection)
 
 
-def window(cur, start, end, time_column='time', table='ohlc'):
+def window(cursor,
+           start,
+           end,
+           time_column='time',
+           table='ohlc',
+           connection=None,
+           meta_data=None,
+           **kwargs):
     start = int(start)
     end = int(end)
-    cur.execute("""SELECT {0}, open
-    FROM {1}
-    WHERE {0} >= ? AND {0} < ? """.format(time_column, table), (start, end))
-    result = cur.fetchall()
+    if not connection:
+        cursor.execute("""SELECT {0}, open
+        FROM {1}
+        WHERE {0} >= ? AND {0} < ? """.format(time_column,
+                                              table), (start,
+                                                       end))
+        result = cursor.fetchall()
+    else:
+        table = meta_data.tables[table]
+        s = select([table.c[time_column],
+                    table.c.open]).where(table.c[time_column].between(start,
+                                                                      end))
+        result = connection.execute(s).fetchall()
     return result
 
 
