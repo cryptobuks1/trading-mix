@@ -47,3 +47,8 @@ def ohlc():
     conn, cur = memdb()
     ohlc.to_sql('ohlc', conn, index=False)
     return cur
+
+
+orders_table = "ohlc"
+table_mapping = {orders_table: {"table": orders_table,
+                                "time_column": "timestamp"}}

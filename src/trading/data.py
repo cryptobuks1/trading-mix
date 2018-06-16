@@ -47,6 +47,7 @@ def analyseData(peakConf, data):
     peakFn, indexPos = [peakConf[k] for k in ('fn', 'indexPos')]
     peaks = peakFn(yfit)
     peaksIndex = peaks[indexPos]
+    print(peaksIndex)
     return {'x': x,
             'y': y,
             'xfit': xfit,
@@ -72,6 +73,7 @@ def how_to_trade(peak_list, ys):
     peak = peak_list[0]
     before = peak - 1
     after = peak + 1
+    print(ys[before], ys[peak], ys[after])
     if ys[before] < ys[peak] > ys[after]:
         return TradeCommand.sell
     elif ys[before] > ys[peak] < ys[after]:

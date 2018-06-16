@@ -1,13 +1,14 @@
 import sqlite3
-from sqlalchemy import MetaData, create_engine
+from sqlalchemy import MetaData, create_engine, func
 from sqlalchemy.sql import select
-
+from sqlalchemy.orm import sessionmaker
 
 def connect(connect_string):
     connection = create_engine(connect_string)
     return {"connection": connection,
             "cursor": connection,
-            "meta_data": meta(connection)}
+            "meta_data": meta(connection),
+            "session": sessionmaker(bind=connection)()}
 
 
 def meta(connection):
@@ -40,9 +41,14 @@ def time_range(cur=None, time_column='time', table='ohlc', **kwargs):
         cur.execute("SELECT max({}) FROM {}".format(time_column, table))
         end = int(cur.fetchall()[0][0])
     else:
-
-        start = 0
-        end = 1
+        session = kwargs['session']
+        meta_data = meta(kwargs['connection'])
+        orders_tables = meta_data.tables[table]
+        print(orders_tables.columns)
+        result = session.query(func.max(orders_tables.columns[time_column]),
+                               func.min(orders_tables.columns[time_column]))
+        end = int(result.all()[0][0])
+        start = int(result.all()[0][1])
     return start, end
 
 
