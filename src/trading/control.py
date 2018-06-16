@@ -1,9 +1,8 @@
-import pickle
 from os.path import join
 
+
 def handleError(e):
-    print("HHH")
-    print(e)
+    raise e
 
 
 def writeData(dataDir, data):
