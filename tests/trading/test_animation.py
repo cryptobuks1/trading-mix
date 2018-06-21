@@ -36,9 +36,11 @@ def update(frame, plots, ax):
                                                              "tradeAdvise"))
     ax.set_xlim(min(xs), max(xs))
     ax.set_ylim(min(ys), max(ys))
-    ticks.set_data([], [])
+    ticks.set_data(xs, ys)
     fitted.set_data(xfit, yfit)
-    psl.set_data([], [])
+    psl.set_data(xpeak, ypeak)
+    if xpeak:
+        print(trade)
     return ticks, fitted, psl
 
 
