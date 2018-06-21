@@ -108,6 +108,16 @@ def window_generator(window_size, step_size, **kwargs):
             yield result
 
 
+def pause_frame_generator(state, generator):
+    for frame in generator:
+        if state['continue']:
+            print("Continue")
+            yield frame
+        else:
+            while not state['continue']:
+                yield frame
+
+
 def next_peak(**kwargs):
     for data in window_generator(3600 * 3, 600, **kwargs):
         try:

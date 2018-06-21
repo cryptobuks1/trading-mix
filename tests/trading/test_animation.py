@@ -1,9 +1,8 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from trading.data import window_generator, analyseData
+from trading.data import window_generator, pause_frame_generator, analyseData
 from trading.sql import connect
 from trading.kraken import table_mapping, orders_table
-from trading.plot import pause_frame_generator
 from trading.octave import conf as peakConf
 from trading.misc import desctructDict
 from os.path import join
