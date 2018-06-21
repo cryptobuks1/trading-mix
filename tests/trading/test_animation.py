@@ -44,18 +44,24 @@ def update(frame, plots, ax, state):
         state["continue"] = False
     return ticks, fitted, psl
 
-def pause_plot(state, generator):
-    while state['continue']:
-        yield next(generator)
-
+def pause_frame_generator(state, generator):
+    for frame in generator:
+        if state['continue']:
+            print("Continue")
+            yield frame
+        else:
+            while not state['continue']:
+                yield frame
+state = {"continue": True}
 def test_animation():
+    global state
     db = connect("sqlite:///" + join('/home/kristian/projects/trading/data',
                                      'alldata.sqlite'))
     env = {**db, **table_mapping[orders_table]}
     fig, ax = plt.subplots()
     plots = {}
-    state = {"continue": True}
+
     init_fn = partial(init, plots, ax)
-    frame_fn = pause_plot(state, window_generator(3600 * 3, 600, **env))
+    frame_fn = pause_frame_generator(state, window_generator(3600 * 3, 600, **env))
     ani = animation.FuncAnimation(fig, update, frame_fn, init_fn, (plots, ax, state))
     plt.show(block=False)
