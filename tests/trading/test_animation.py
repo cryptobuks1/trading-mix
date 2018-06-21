@@ -21,7 +21,7 @@ def init(plots, ax):
     return ticks, fitted, psl
 
 
-def update(frame, plots, ax):
+def update(frame, plots, ax, state):
     ticks, fitted, psl = desctructDict(plots, ('ticks',
                                                'fitted',
                                                'psl'))
@@ -41,8 +41,12 @@ def update(frame, plots, ax):
     psl.set_data(xpeak, ypeak)
     if xpeak:
         print(trade)
+        state["continue"] = False
     return ticks, fitted, psl
 
+def pause_plot(state, generator):
+    while state['continue']:
+        yield next(generator)
 
 def test_animation():
     db = connect("sqlite:///" + join('/home/kristian/projects/trading/data',
@@ -50,6 +54,8 @@ def test_animation():
     env = {**db, **table_mapping[orders_table]}
     fig, ax = plt.subplots()
     plots = {}
+    state = {"continue": True}
     init_fn = partial(init, plots, ax)
-    ani = animation.FuncAnimation(fig, update, window_generator(3600 * 3, 600, **env), init_fn, (plots, ax))
+    frame_fn = pause_plot(state, window_generator(3600 * 3, 600, **env))
+    ani = animation.FuncAnimation(fig, update, frame_fn, init_fn, (plots, ax, state))
     plt.show(block=False)
