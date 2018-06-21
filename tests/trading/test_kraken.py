@@ -36,6 +36,7 @@ ticks, fitted, psl = [], [], []
 ax = False
 goon = True
 
+
 def init():
     global ticks, fitted, psl,windowpos, windowsize
     data = window(con, windowpos, windowpos + windowsize)
@@ -47,7 +48,7 @@ def init():
     return ticks, fitted, psl
 
 
-def data_gen(t=0):
+def data_gen():
     global windowpos, windowsize
     while True:
         yield window(cur, windowpos, windowpos + windowsize)
@@ -120,7 +121,7 @@ def test_animation():
     start = int(cur.fetchall()[0][0])
     windowpos = start
     windowsize = 10800
-    data = window(cur, windowpos, windowpos + windowsize)
+    data = window(cur, windowpos, windowpos + windowsize, time_column='timestamp')
     xs, ys, x_new, y_new, f = fit(extract(data))
     ps = peaks(y_new)
     ticks, fitted, psl = ax.plot(xs,
