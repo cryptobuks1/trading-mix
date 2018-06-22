@@ -26,7 +26,7 @@ rope = "*"
 flask = "*"
 "oct2py" = "*"
 sqlalchemy = "*"
-pypubsub = "*"
+blinker = "*"
 
 [requires]
 python_version = "3.5"

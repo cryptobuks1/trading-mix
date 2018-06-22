@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "52cf2e9571708962c5ccd2c08bfe075918d452d455e7d35d6c9407126e24f31e"
+            "sha256": "385aa74c0ea54f59476025ca85a7faeecad58a59172b5afe20432970d72430bf"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -51,6 +51,13 @@
                 "sha256:eb7386f632349d10d9ce9d4a838b134d4731571851149f9cc2c05a9a837a9a44"
             ],
             "version": "==2.1.3"
+        },
+        "blinker": {
+            "hashes": [
+                "sha256:471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6"
+            ],
+            "index": "pypi",
+            "version": "==1.4"
         },
         "certifi": {
             "hashes": [
@@ -518,7 +525,6 @@
                 "sha256:2a8e88259839571d1251d278476f3eec5db26deb73a70be5ed5dc5435e418aba",
                 "sha256:3fbd41d4caf27fa4a377bfd16fef87271099463e6fa73e92a52f92dfee5d425b"
             ],
-            "markers": "sys_platform != 'win32'",
             "version": "==4.6.0"
         },
         "pickleshare": {
@@ -538,10 +544,11 @@
         },
         "ptyprocess": {
             "hashes": [
-                "sha256:e64193f0047ad603b71f202332ab5527c5e52aa7c8b609704fc28c0dc20c4365",
-                "sha256:e8c43b5eee76b2083a9badde89fd1bbce6c8942d1045146e100b7b5e014f4f1a"
+                "sha256:923f299cc5ad920c68f2bc0bc98b75b9f838b93b599941a6b63ddbc2476394c0",
+                "sha256:d7cc528d76e76342423ca640335bd3633420dc1366f258cb31d05e865ef5ca1f"
             ],
-            "version": "==0.5.2"
+            "markers": "os_name != 'nt'",
+            "version": "==0.6.0"
         },
         "pycodestyle": {
             "hashes": [
@@ -582,14 +589,6 @@
                 "sha256:fee43f17a9c4087e7ed1605bd6df994c6173c1e977d7ade7b651292fab2bd010"
             ],
             "version": "==2.2.0"
-        },
-        "pypubsub": {
-            "hashes": [
-                "sha256:430d60d76e56e19eaa1422579941caf9d3b392cfb8d10a17678a5c9f7ee830ba",
-                "sha256:7a15723835d1e55c67ed3329a009c18d2f2ff7b8d73cf0e01f3295781e0b5807"
-            ],
-            "index": "pypi",
-            "version": "==4.0.0"
         },
         "pyreadline": {
             "hashes": [
