@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import peakutils
+from blinker import signal
 from enum import Enum
 from trading.sql import window, time_range
 from trading.octave import conf as peakConf
@@ -45,18 +46,25 @@ def extract(env, xidx=0, yidx=1):
             [float(record[yidx]) for record in env]]
 
 
-def analyseData(peakConf, data):
+foundPeakEvent = 'foundPeak'
+
+
+def analyseData(peakConf, data, **kwargs):
     x, y, xfit, yfit, ff = fit(extract(data))
     peakFn, indexPos = [peakConf[k] for k in ('fn', 'indexPos')]
     peaks = peakFn(yfit)
     peaksIndex = peaks[indexPos]
-    return {'x': x,
-            'y': y,
-            'xfit': xfit,
-            'yfit': yfit,
-            'xpeak': xfit[peaksIndex],
-            'ypeak': yfit[peaksIndex],
-            'tradeAdvise': how_to_trade(peaksIndex, yfit)}
+    result = {'x': x,
+              'y': y,
+              'xfit': xfit,
+              'yfit': yfit,
+              'xpeak': xfit[peaksIndex],
+              'ypeak': yfit[peaksIndex],
+              'tradeAdvise': how_to_trade(peaksIndex, yfit)}
+    if result['xpeak']:
+        event = signal(foundPeakEvent)
+        event.send('none', data=result)
+    return result
 
 
 class TradeCommand(Enum):
@@ -111,7 +119,6 @@ def window_generator(window_size, step_size, **kwargs):
 def pause_frame_generator(state, generator):
     for frame in generator:
         if state['continue']:
-            print("Continue")
             yield frame
         else:
             while not state['continue']:
