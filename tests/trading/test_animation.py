@@ -45,7 +45,7 @@ def update(frame, plots, ax):
     return ticks, fitted, psl
 
 
-def onFoundPeak(state, sender, **kwargs):
+def onFoundPeak(state, sender, data):
     state['continue'] = False
 
 
