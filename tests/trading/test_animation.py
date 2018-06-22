@@ -10,6 +10,10 @@ from blinker import signal
 from os.path import join
 from functools import partial
 
+from tkinter import *
+
+from tkinter import messagebox
+
 
 def init(plots, ax):
     ticks, fitted, psl = ax.plot([],
@@ -49,14 +53,22 @@ def onFoundPeak(state, sender, data):
     state['continue'] = False
 
 
+def controlPlot(state, play=True):
+    state['continue'] = True
+
+
+state = {"continue": True}
+
+
 def test_animation():
+    global state
     db = connect("sqlite:///" + join('/home/kristian/projects/trading/data',
                                      'alldata.sqlite'))
     env = {**db, **table_mapping[orders_table]}
     fig, ax = plt.subplots()
     plots = {}
 
-    state = {"continue": True}
+
     onFoundPeak_fn = partial(onFoundPeak, state)
 
     # def onFoundPeak_fn(data):
@@ -71,5 +83,13 @@ def test_animation():
                                                       **env))
     ani = animation.FuncAnimation(fig, update, frame_fn, init_fn, (plots, ax))
     # plt.show(block=False)
-    plt.show()
-    print(ani)
+    # plt.show()
+    top = Tk()
+    top.geometry("100x100")
+    def helloCallBack():
+        controlPlot(state)
+
+    B = Button(top, text = "Hello", command = helloCallBack)
+    B.place(x = 50,y = 50)
+    plt.show(block=False)
+    top.mainloop()
