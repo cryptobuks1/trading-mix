@@ -6,13 +6,12 @@ from trading.sql import connect
 from trading.kraken import table_mapping, orders_table
 from trading.octave import conf as peakConf
 from trading.misc import desctructDict
+from trading.recorder import record_event
 from blinker import signal
 from os.path import join
 from functools import partial
 
-from tkinter import *
-
-from tkinter import messagebox
+from tkinter import Tk, Button
 
 
 def init(plots, ax):
@@ -75,6 +74,8 @@ def test_animation():
     #     onFoundPeak(state, data)
     event = signal(foundPeakEvent)
     event.connect(onFoundPeak_fn)
+    recordEvent = signal('record')
+    fns = record_event(event, recordEvent)
 
     init_fn = partial(init, plots, ax)
     frame_fn = pause_frame_generator(state,
@@ -86,10 +87,17 @@ def test_animation():
     # plt.show()
     top = Tk()
     top.geometry("100x100")
+
     def helloCallBack():
         controlPlot(state)
 
-    B = Button(top, text = "Hello", command = helloCallBack)
-    B.place(x = 50,y = 50)
+    def recordCallback():
+        print("record")
+        recordEvent.send('ui')
+
+    B = Button(top, text="Hello", command=helloCallBack)
+    B.place(x=50, y=0)
+    RB = Button(top, text="Record", command=recordCallback)
+    RB.place(x=50, y=50)
     plt.show(block=False)
     top.mainloop()
