@@ -11,8 +11,8 @@ from trading.control import handleError
 def fit(coord):
     x, y = coord
     z = np.polyfit(x, y, 2, full=True)
-    print("Fit")
-    print(z)
+    # print("Fit")
+    # print(z)
     f = np.poly1d(z[0])
     x_new = np.linspace(x[0], x[-1], 50)
     y_new = f(x_new)
