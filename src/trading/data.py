@@ -65,7 +65,7 @@ def analyseData(peakConf, data, **kwargs):
               'tradeAdvise': how_to_trade(peaksIndex, yfit)}
     if result['xpeak']:
         event = signal(foundPeakEvent)
-        event.send('none', data=result)
+        event.send('none', data={'data': data, 'result': result})
     return result
 
 
