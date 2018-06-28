@@ -1,14 +1,17 @@
 from functools import partial
+import pickle
+import tempfile
 
 
 def recordData(store, sender, data):
-    print("Record")
     store['data'] = data
 
 
 def persistData(store, sender):
-    print("persistData")
-    print(store)
+    with tempfile.NamedTemporaryFile(prefix='pickle', delete=False) as f:
+        print(pickle)
+        pickle.dump(store['data'], f, pickle.HIGHEST_PROTOCOL)
+        print(f.name)
 
 
 def record_event(dataEvent, recordEvent):
