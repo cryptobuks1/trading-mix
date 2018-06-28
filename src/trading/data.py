@@ -16,7 +16,7 @@ def fit(coord):
     f = np.poly1d(z[0])
     x_new = np.linspace(x[0], x[-1], 50)
     y_new = f(x_new)
-    return [x, y, x_new, y_new, f]
+    return [x, y, x_new, y_new, f, z]
 
 
 def peaks(values):
@@ -52,7 +52,7 @@ foundPeakEvent = 'foundPeak'
 
 
 def analyseData(peakConf, data, **kwargs):
-    x, y, xfit, yfit, ff = fit(extract(data))
+    x, y, xfit, yfit, ff, z = fit(extract(data))
     peakFn, indexPos = [peakConf[k] for k in ('fn', 'indexPos')]
     peaks = peakFn(yfit)
     peaksIndex = peaks[indexPos]
@@ -62,6 +62,7 @@ def analyseData(peakConf, data, **kwargs):
               'yfit': yfit,
               'xpeak': xfit[peaksIndex],
               'ypeak': yfit[peaksIndex],
+              'z': z,
               'tradeAdvise': how_to_trade(peaksIndex, yfit)}
     if result['xpeak']:
         event = signal(foundPeakEvent)
