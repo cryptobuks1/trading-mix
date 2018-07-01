@@ -49,6 +49,7 @@ def extract(env, xidx=0, yidx=1):
 
 
 foundPeakEvent = 'foundPeak'
+noPeakEvent = 'noPeak'
 
 
 def analyseData(peakConf, data, **kwargs):
@@ -66,7 +67,9 @@ def analyseData(peakConf, data, **kwargs):
               'tradeAdvise': how_to_trade(peaksIndex, yfit)}
     if result['xpeak']:
         event = signal(foundPeakEvent)
-        event.send('none', data={'data': data, 'result': result})
+    else:
+        event = signal(noPeakEvent)
+    event.send('analyse', data={'data': data, 'result': result})
     return result
 
 

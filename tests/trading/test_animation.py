@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from trading.data import window_generator, pause_frame_generator
-from trading.data import analyseData, foundPeakEvent
+from trading.data import analyseData, foundPeakEvent, noPeakEvent
 from trading.sql import connect
 from trading.kraken import table_mapping, orders_table
 from trading.octave import conf as peakConf
@@ -52,8 +52,13 @@ def onFoundPeak(state, sender, data):
     state['continue'] = False
 
 
+def onNoPeak(state, sender):
+    print("No peak")
+    state['continue'] = False
+
+
 def controlPlot(state, play=True):
-    state['continue'] = True
+    state['continue'] = not state['continue']
 
 
 state = {"continue": True}
@@ -67,13 +72,15 @@ def test_animation():
     fig, ax = plt.subplots()
     plots = {}
 
-
     onFoundPeak_fn = partial(onFoundPeak, state)
+    onNoPeak_fn = partial(onNoPeak, state)
 
     # def onFoundPeak_fn(data):
     #     onFoundPeak(state, data)
     event = signal(foundPeakEvent)
     event.connect(onFoundPeak_fn)
+    npevent = signal(noPeakEvent)
+    npevent.connect(onNoPeak_fn)
     recordEvent = signal('record')
     fns = record_event(event, recordEvent)
 
@@ -86,7 +93,7 @@ def test_animation():
     # plt.show(block=False)
     # plt.show()
     top = Tk()
-    top.geometry("100x100")
+    top.geometry("150x100")
 
     def helloCallBack():
         controlPlot(state)
