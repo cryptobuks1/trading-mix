@@ -3,6 +3,7 @@ import numpy as np
 import peakutils
 from blinker import signal
 from enum import Enum
+from collections import namedtuple
 from trading.sql import window, time_range
 from trading.octave import conf as peakConf
 from trading.control import handleError
@@ -47,9 +48,6 @@ def extract(env, xidx=0, yidx=1):
     return [[int(record[xidx]) for record in env],
             [float(record[yidx]) for record in env]]
 
-
-foundPeakEvent = 'foundPeak'
-noPeakEvent = 'noPeak'
 
 
 def analyseData(peakConf, data, **kwargs):
