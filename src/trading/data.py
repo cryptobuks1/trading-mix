@@ -7,7 +7,7 @@ from collections import namedtuple
 from trading.sql import window, time_range
 from trading.octave import conf as peakConf
 from trading.control import handleError
-
+import pickle
 
 def fit(coord):
     x, y = coord
@@ -138,6 +138,12 @@ def next_peak(**kwargs):
         else:
             if result["xpeak"]:
                 yield result
+
+
+def file_loader(path):
+        with open(path, 'rb') as f:
+            lp = pickle.load(f)
+            return lp
 
 
 if __name__ == "__main__":
