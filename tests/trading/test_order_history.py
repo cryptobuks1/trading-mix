@@ -3,6 +3,8 @@ from trading.sql import time_range
 from trading.data import file_loader
 from os.path import join
 from os import getcwd
+from trading.sql import connect, latest, meta
+from trading.kraken import to_sql
 
 
 def test_orders():
@@ -14,4 +16,7 @@ def test_orders():
 def load_orders():
     path = join(getcwd(), 'data', 'orders.sqlite')
     orders = file_loader(path)
-    print(orders)
+    db = connect('sqlite://')
+    to_sql(orders, 'ohlc', **db)
+    db['meta_data'] = meta(db['connection'])
+    print(latest(**db))

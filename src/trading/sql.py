@@ -61,7 +61,6 @@ def time_range(cur=None, time_column='time', table='ohlc', **kwargs):
         session = kwargs['session']
         meta_data = meta(kwargs['connection'])
         orders_tables = meta_data.tables[table]
-        print(orders_tables.columns)
         result = session.query(func.max(orders_tables.columns[time_column]),
                                func.min(orders_tables.columns[time_column]))
         end = int(result.all()[0][0])
@@ -69,6 +68,16 @@ def time_range(cur=None, time_column='time', table='ohlc', **kwargs):
     return start, end
 
 
-def latest(cur, time_column='time', table='ohlc'):
-    start, end = time_range(cur, time_column, table)
-    return cur.execute("SELECT {0}, open ")
+def latest(connection, meta_data, table_name='ohlc', time_column='time',
+           **kwargs):
+    db = kwargs.copy()
+    db.update({'connection': connection,
+               'meta_data': meta_data})
+    start, end = time_range(**db)
+    table = meta_data.tables[table_name]
+    # time_range returns int
+    query = select([table]).where(table.c[time_column] >= end)
+    result = connection.execute(query).fetchall()
+    return result[0]
+    # start, end = time_range(cur, time_column, table)
+    # cur.execute("SELECT * from {}, open ")
