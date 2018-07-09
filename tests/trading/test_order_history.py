@@ -19,4 +19,5 @@ def load_orders():
     db = connect('sqlite://')
     to_sql(orders, 'ohlc', **db)
     db['meta_data'] = meta(db['connection'])
-    print(latest(**db))
+    latest_order = latest(**db)
+    print(latest_order.time)
