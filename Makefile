@@ -6,6 +6,7 @@ create-sqlite:
 
 
 .PHONY:
+test-mark-fixture:
 test-mark-:
 .PHONY: test-mark-%
 test-mark-%:
