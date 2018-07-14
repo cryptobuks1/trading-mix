@@ -6,8 +6,6 @@ name = "pypi"
 [dev-packages]
 pytest = "*"
 "flake8" = "*"
-"e1839a8" = {editable = true, path = "."}
-tox = "*"
 
 [packages]
 ipython = "*"
@@ -27,6 +25,7 @@ flask = "*"
 "oct2py" = "*"
 sqlalchemy = "*"
 blinker = "*"
+"e1839a8" = {editable = true, path = "."}
 
 [requires]
 python_version = "3.5"
