@@ -53,7 +53,7 @@ def onFoundPeak(state, sender, data):
     state['continue'] = False
 
 
-def onNoPeak(state, sender):
+def onNoPeak(state, sender, data):
     print("No peak")
     state['continue'] = False
 
