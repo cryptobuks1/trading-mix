@@ -1,8 +1,8 @@
 import pytest
-from trading.data import foundPeakEvent, analyseData
+from trading.data import analyseData
+from trading.events import tradingEvents
 from trading.octave import conf as peakConf
 from trading.core import advice, TradeCommand
-from blinker import signal
 
 
 def validate_peak(peak_data, expected_advice):
@@ -10,7 +10,7 @@ def validate_peak(peak_data, expected_advice):
     def onPeak(sender, data):
         assert advice(data['result']) == expected_advice
 
-    event = signal(foundPeakEvent)
+    event = tradingEvents.foundPeak
     event.connect(onPeak)
     analyseData(peakConf, peak_data)
 

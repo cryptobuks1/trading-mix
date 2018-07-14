@@ -4,6 +4,7 @@ from trading.recorder import record_event
 from trading.misc import is_sequence
 from collections import namedtuple
 
+
 def static_fn(sender):
     print(sender)
 

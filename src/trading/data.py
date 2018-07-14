@@ -49,7 +49,6 @@ def extract(env, xidx=0, yidx=1):
             [float(record[yidx]) for record in env]]
 
 
-
 def analyseData(peakConf, data, **kwargs):
     x, y, xfit, yfit, ff, z = fit(extract(data))
     peakFn, indexPos = [peakConf[k] for k in ('fn', 'indexPos')]
@@ -64,9 +63,16 @@ def analyseData(peakConf, data, **kwargs):
               'z': z,
               'tradeAdvise': how_to_trade(peaksIndex, yfit)}
     if result['xpeak']:
-        event = signal(foundPeakEvent)
+        try:
+            event = kwargs['foundPeakEvent']
+        except Exception:
+            event = signal('foundPeak')
     else:
-        event = signal(noPeakEvent)
+        try:
+            event = kwargs['noPeakEvent']
+        except Exception:
+            event = signal('noPeak')
+
     event.send('analyse', data={'data': data, 'result': result})
     return result
 
@@ -140,7 +146,7 @@ def next_peak(**kwargs):
                 yield result
 
 
-def file_loader(path):
+def load_data_from_file(path):
         with open(path, 'rb') as f:
             lp = pickle.load(f)
             return lp

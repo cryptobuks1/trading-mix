@@ -1,11 +1,16 @@
 from trading.octave import conf as peakConf
-from trading.data import foundPeakEvent, analyseData
-from trading.core import isNewPeak
+from trading.events import tradingEvents, defaultEventBindings, bindEvents
+from trading.data import analyseData
+import pytest
 
 
+@pytest.mark.newpeak
 def test_new_peak(high_peak):
 
-    def onPeak(sender, peakEvent):
-        isNewPeak(peakEvent)
+    def onPeak(sender, data):
+        assert True
+
+    reactions = defaultEventBindings._replace(foundPeak=onPeak)
+    bindEvents(tradingEvents, reactions)
 
     analyseData(peakConf, high_peak['data'])

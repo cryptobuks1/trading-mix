@@ -1,12 +1,13 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from trading.data import window_generator, pause_frame_generator
-from trading.data import analyseData, foundPeakEvent, noPeakEvent
+from trading.data import analyseData
 from trading.sql import connect
 from trading.kraken import table_mapping, orders_table
 from trading.octave import conf as peakConf
 from trading.misc import desctructDict
 from trading.recorder import record_event
+from trading.events import tradingEvents
 from blinker import signal
 from os.path import join
 from functools import partial
@@ -77,12 +78,12 @@ def test_animation():
 
     # def onFoundPeak_fn(data):
     #     onFoundPeak(state, data)
-    event = signal(foundPeakEvent)
+    event = tradingEvents.foundPeak
     event.connect(onFoundPeak_fn)
-    npevent = signal(noPeakEvent)
+    npevent = tradingEvents.noPeak
     npevent.connect(onNoPeak_fn)
     recordEvent = signal('record')
-    fns = record_event(event, recordEvent)
+    recordData_fn, persistData_fn = record_event(event, recordEvent)
 
     init_fn = partial(init, plots, ax)
     frame_fn = pause_frame_generator(state,

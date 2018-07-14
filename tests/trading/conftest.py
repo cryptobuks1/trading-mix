@@ -1,25 +1,16 @@
 import pytest
 from os import getcwd
 from os.path import join
-import pickle
+from trading.data import load_data_from_file
 
 
 @pytest.fixture
-def load_peak():
-    def peak_loader(path):
-        with open(path, 'rb') as f:
-            lp = pickle.load(f)
-            return lp
-    return peak_loader
-
-
-@pytest.fixture
-def low_peak(load_peak):
+def low_peak():
     path = join(getcwd(), 'data', 'low_pickle.byte')
-    return load_peak(path)
+    return load_data_from_file(path)
 
 
 @pytest.fixture
-def high_peak(load_peak):
+def high_peak():
     path = join(getcwd(), 'data', 'high_pickle.byte')
-    return load_peak(path)
+    return load_data_from_file(path)
