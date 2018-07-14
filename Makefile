@@ -13,4 +13,4 @@ create-sqlite:
 test-mark-:
 .PHONY: test-mark-%
 test-mark-%:
-	tox -- -m $(*)
+	pipenv run tox -- -m $(*)
