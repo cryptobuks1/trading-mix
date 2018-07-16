@@ -29,6 +29,8 @@ def test_event_dispatch():
     event.connect(part)
 
     event.connect(lambda sender: print("inline lambda"))
+    event.connect(lambda sender: print("inline lambda, strong ref"),
+                  weak=False)
     event.connect(partial(static_data_fn, 'inline partial'))
     event.send('hest')
 
