@@ -1,8 +1,8 @@
 from blinker import signal
 from functools import partial
 from trading.recorder import record_event
-from trading.misc import is_sequence
-from collections import namedtuple
+from trading.events import tradingEvents, bind
+import pytest
 
 
 def static_fn(sender):
@@ -12,7 +12,7 @@ def static_fn(sender):
 def static_data_fn(data, sender):
     print(data)
 
-
+@pytest.mark.event
 def test_event_dispatch():
     event = signal('event')
     event.connect(static_fn)
@@ -43,37 +43,19 @@ def test_sub_part():
     recordEvent.send('record')
 
 
-foundPeakEvent = 'foundPeak'
-noPeakEvent = 'noPeak'
-newPeakEvent = 'newPeak'
-TradingEvents = namedtuple('TradingEvents', ['foundPeak', 'noPeak', 'newPeak'])
-tradingEvents = TradingEvents(signal('foundPeak'),
-                              signal('noPeak'),
-                              signal('newPeak'))
+@pytest.mark.event
+def test_bind():
+    class GotPeaked(Exception):
+        pass
+
+    def onPeak(**kwargs):
+        raise GotPeaked
 
 
-DefaultEventBindings = namedtuple('EventBindings', TradingEvents._fields)
-bindings = [[] for x in DefaultEventBindings._fields]
-defaultEventBindings = DefaultEventBindings(*bindings)
-
-
-def reaction(sender, data):
-    print(data)
-
-
-def reaction2(sender, data):
-    print("sender", data)
-
-
-def bindEvents(events, bindings):
-    for key in events._fields:
-        event = getattr(events, key)
-        binding = getattr(bindings, key)
-        if callable(binding):
-            event.connect(binding)
-        elif is_sequence(binding):
-            for b in binding:
-                print("seq")
-                event.connect(b)
-        else:
-            raise Exception('Illegal binding')
+    bind(tradingEvents.newPeak, onPeak)
+    try:
+        tradingEvents.newPeak.send(test_bind, data="onPeakEvent")
+    except GotPeaked:
+        assert True
+    else:
+        assert False
