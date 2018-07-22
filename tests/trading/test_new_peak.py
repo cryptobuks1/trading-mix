@@ -3,6 +3,7 @@ from trading.events import tradingEvents
 from trading.events import bind, emit
 from trading.data import analyseData
 from trading.core import advice, TradeCommand
+from trading.strategy.simple import check_peak
 from functools import partial
 import pytest
 import logging
@@ -20,12 +21,6 @@ def is_new_peak(latest_order_epoc, analysis):
     peakEpoc = analysis['xpeak'][0]
     timeDiff = abs(peakEpoc - latest_order_epoc)
     return timeDiff < 1200  # within 20 minutes
-
-
-def check_peak(is_new_peak_fn, data):
-    logging.debug("Got Peak")
-    if is_new_peak_fn(data['result']):
-        tradingEvents.newPeak.send(check_peak, peak_analysis=data['result'])
 
 
 def trigger_trade_advise(peak_analysis):
