@@ -46,9 +46,8 @@ def window(cursor,
 
 
 def memdb():
-    con = sqlite3.connect(":memory:")
-    cur = con.cursor()
-    return con, cur
+    return connect('sqlite://')
+
 
 
 def time_range(cur=None, time_column='time', table='ohlc', **kwargs):
