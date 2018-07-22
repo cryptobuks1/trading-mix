@@ -7,7 +7,6 @@ from sqlalchemy.sql import select
 def connect(connect_string):
     connection = create_engine(connect_string)
     return {"connection": connection,
-            "cursor": connection,
             "meta_data": meta(connection),
             "session": sessionmaker(bind=connection)()}
 
