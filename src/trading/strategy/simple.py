@@ -16,3 +16,7 @@ def check_peak(is_new_peak_fn, data):
 def trigger_trade_advise(peak_analysis):
     logging.debug('Trade advice')
     emit(tradingEvents.advice, advice(peak_analysis))
+
+
+def processAdvice(commands, advice):
+    (commands[advice])()

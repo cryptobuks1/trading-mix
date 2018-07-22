@@ -4,6 +4,7 @@ from trading.events import bind
 from trading.data import analyseData, is_new_peak
 from trading.core import TradeCommand
 from trading.strategy.simple import check_peak, trigger_trade_advise
+from trading.strategy.simple import processAdvice
 from functools import partial
 import pytest
 import logging
@@ -15,10 +16,6 @@ tradeCommands = {
     TradeCommand.sell: lambda: logging.debug(sell),
     TradeCommand.buy: lambda: logging.debug(buy)
 }
-
-
-def processAdvice(commands, advice):
-    (commands[advice])()
 
 
 @pytest.mark.newpeak
