@@ -23,13 +23,12 @@ def get_rate():
 
 
 def to_sql(panda, table_name, **kwargs):
-    if 'connection' not in kwargs and 'cursor' not in kwargs:
-        conn, cur = memdb()
-    else:
-        conn = kwargs['connection']
-        cur = kwargs['cursor']
-    panda.to_sql(table_name, conn, index=False)
-    return cur
+    env = kwargs.copy()
+    if 'connection' not in env:
+        env.update(memdb())
+    con = env['connection']
+    panda.to_sql(table_name, con, index=False)
+    return con
 
 
 def get_orders(**kwargs):
@@ -43,9 +42,7 @@ def ohlc():
     except Exception as e:
         print("Exception")
         print(e)
-    conn, cur = memdb()
-    ohlc.to_sql('ohlc', conn, index=False)
-    return cur
+    return to_sql(ohlc, 'ohlc')
 
 
 orders_table = "ohlc"
