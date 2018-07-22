@@ -146,6 +146,12 @@ def next_peak(**kwargs):
                 yield result
 
 
+def is_new_peak(latest_order_epoc, analysis):
+    peakEpoc = analysis['xpeak'][0]
+    timeDiff = abs(peakEpoc - latest_order_epoc)
+    return timeDiff < 1200  # within 20 minutes
+
+
 def load_data_from_file(path):
         with open(path, 'rb') as f:
             lp = pickle.load(f)
