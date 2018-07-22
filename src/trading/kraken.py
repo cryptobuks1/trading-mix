@@ -18,7 +18,6 @@ api = krakenex.API(creds_dict['APIKEY'],
 k = KrakenAPI(api)
 
 
-
 def get_rate():
     return k.get_ohlc_data("XXMRZEUR")
 
