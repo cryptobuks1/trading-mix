@@ -1,2 +1,5 @@
 * Issues
 ** fix time_range
+** fit to_sql
+** IN-PROGRESS fix memdb
+   - State "IN-PROGRESS" from ""           [2018-07-22 Sun 13:14]
