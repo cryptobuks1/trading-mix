@@ -5,7 +5,8 @@ from trading.misc import is_sequence, throw
 TradingEvents = namedtuple('TradingEvents', ['foundPeak',
                                              'noPeak',
                                              'newPeak',
-                                             'tradeAdvise'])
+                                             'tradeAdvise',
+                                             'advice'])
 
 tradingEvents = TradingEvents(*[signal(k) for k in TradingEvents._fields])
 
@@ -33,3 +34,10 @@ def bind(event, subscriber, includeSender=False, keep_ref=True):
         lambda: throw(BindError(argument_error))
     }
     cases[(includeSender, keep_ref)]()
+
+
+def emit(event, data=None, sender='anonymous'):
+    if data:
+        event.send(sender, **{event.name: data})
+    else:
+        event.send(sender)
