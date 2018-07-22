@@ -16,11 +16,15 @@ tradeCommands = {
 }
 
 
-def check_peak(latest_order_epoc, data):
-    logging.debug("Got Peak")
-    peakEpoc = data['result']['xpeak'][0]
+def is_new_peak(latest_order_epoc, analysis):
+    peakEpoc = analysis['xpeak'][0]
     timeDiff = abs(peakEpoc - latest_order_epoc)
-    if timeDiff < 1200:  # within 20 minutes
+    return timeDiff < 1200  # within 20 minutes
+
+
+def check_peak(is_new_peak_fn, data):
+    logging.debug("Got Peak")
+    if is_new_peak_fn(data['result']):
         tradingEvents.newPeak.send(check_peak, peak_analysis=data['result'])
 
 
@@ -36,7 +40,7 @@ def processAdvice(commands, advice):
 @pytest.mark.newpeak
 def test_new_high_peak(high_peak, high_peak_order_epoc, caplog):
     def onPeak(**kwargs):
-        check_peak(high_peak_order_epoc, **kwargs)
+        check_peak(partial(is_new_peak, high_peak_order_epoc), **kwargs)
 
     bind(tradingEvents.foundPeak, onPeak)
     bind(tradingEvents.newPeak, trigger_trade_advise)
@@ -50,7 +54,8 @@ def test_new_high_peak(high_peak, high_peak_order_epoc, caplog):
 @pytest.mark.newpeak
 def test_new_low_peak(low_peak, low_peak_order_epoc, caplog):
     def onPeak(**kwargs):
-        check_peak(low_peak_order_epoc, **kwargs)
+        check_peak(partial(is_new_peak, low_peak_order_epoc), **kwargs)
+
 
     bind(tradingEvents.foundPeak, onPeak)
     bind(tradingEvents.newPeak, trigger_trade_advise)
