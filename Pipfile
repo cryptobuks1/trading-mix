@@ -23,6 +23,8 @@ ipywidgets = "*"
 sqlalchemy = "*"
 blinker = "*"
 "e1839a8" = {editable = true, path = "."}
+toml = "*"
+gnupg = "*"
 
 [requires]
 python_version = "3.5"
