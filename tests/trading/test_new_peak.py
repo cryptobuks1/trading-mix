@@ -1,11 +1,7 @@
 from trading.octave import conf as peakConf
-from trading.events import tradingEvents
-from trading.events import bind
-from trading.data import analyseData, is_new_peak
 from trading.core import TradeCommand
-from trading.strategy.simple import check_peak, trigger_trade_advise
-from trading.strategy.simple import processAdvice, run
-from functools import partial
+from trading.strategy.simple import run
+
 import pytest
 import logging
 
