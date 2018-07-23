@@ -4,7 +4,7 @@ from trading.events import bind
 from trading.data import analyseData, is_new_peak
 from trading.core import TradeCommand
 from trading.strategy.simple import check_peak, trigger_trade_advise
-from trading.strategy.simple import processAdvice
+from trading.strategy.simple import processAdvice, run
 from functools import partial
 import pytest
 import logging
@@ -20,27 +20,13 @@ tradeCommands = {
 
 @pytest.mark.newpeak
 def test_new_high_peak(high_peak, high_peak_order_epoc, caplog):
-    def onPeak(**kwargs):
-        check_peak(partial(is_new_peak, high_peak_order_epoc), **kwargs)
-
-    bind(tradingEvents.foundPeak, onPeak)
-    bind(tradingEvents.newPeak, trigger_trade_advise)
-    bind(tradingEvents.advice, partial(processAdvice, tradeCommands))
     with caplog.at_level(logging.DEBUG):
-        analyseData(peakConf, high_peak['data'],
-                    foundPeakEvent=tradingEvents.foundPeak)
+        run(high_peak_order_epoc, tradeCommands, high_peak['data'])
     assert sell in caplog.text
 
 
 @pytest.mark.newpeak
 def test_new_low_peak(low_peak, low_peak_order_epoc, caplog):
-    def onPeak(**kwargs):
-        check_peak(partial(is_new_peak, low_peak_order_epoc), **kwargs)
-
-    bind(tradingEvents.foundPeak, onPeak)
-    bind(tradingEvents.newPeak, trigger_trade_advise)
-    bind(tradingEvents.advice, partial(processAdvice, tradeCommands))
     with caplog.at_level(logging.DEBUG):
-        analyseData(peakConf, low_peak['data'],
-                    foundPeakEvent=tradingEvents.foundPeak)
+        run(low_peak_order_epoc, tradeCommands, low_peak['data'])
     assert buy in caplog.text
