@@ -25,6 +25,7 @@ blinker = "*"
 "e1839a8" = {editable = true, path = "."}
 toml = "*"
 gnupg = "*"
+aioxmpp = "*"
 
 [requires]
 python_version = "3.5"
