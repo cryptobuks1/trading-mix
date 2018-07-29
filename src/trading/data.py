@@ -20,6 +20,12 @@ def fit(coord):
     return [x, y, x_new, y_new, f, z]
 
 
+class TradeCommand(Enum):
+    sell = 1
+    buy = 2
+    wait = 3
+
+
 def peaks(values):
     return peakutils.indexes(values, thres=0.5, min_dist=30)
 
