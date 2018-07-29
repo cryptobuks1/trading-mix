@@ -82,17 +82,6 @@ def analyseData(peakConf, data, **kwargs):
     return result
 
 
-class TradeCommand(Enum):
-    sell = 1
-    buy = 2
-    wait = 3
-
-
-class DoNotKnowHowToTrade(Exception):
-    pass
-
-
-
 def fitChunks(data):
     """
     Parameters
@@ -128,13 +117,10 @@ def pause_frame_generator(state, generator):
 
 def next_peak(**kwargs):
     for data in window_generator(3600 * 3, 600, **kwargs):
-        try:
-            result = analyseData(peakConf, data)
-        except DoNotKnowHowToTrade as e:
-            handleError(e)
-        else:
-            if result["xpeak"]:
-                yield result
+        result = analyseData(peakConf, data)
+        if result["xpeak"]:
+            yield result
+
 
 
 def is_new_peak(latest_order_epoc, analysis):
