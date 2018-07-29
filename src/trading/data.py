@@ -66,8 +66,7 @@ def analyseData(peakConf, data, **kwargs):
               'yfit': yfit,
               'xpeak': xfit[peaksIndex],
               'ypeak': yfit[peaksIndex],
-              'z': z,
-              'tradeAdvise': how_to_trade(peaksIndex, yfit)}
+              'z': z}
     if result['xpeak']:
         try:
             event = kwargs['foundPeakEvent']
@@ -92,20 +91,6 @@ class TradeCommand(Enum):
 class DoNotKnowHowToTrade(Exception):
     pass
 
-
-def how_to_trade(peak_list, ys):
-    if not peak_list:
-        return TradeCommand.wait
-    peak = peak_list[0]
-    before = peak - 1
-    after = peak + 1
-    if (before >= 0 and ys[before] < ys[peak]) or \
-       (after < len(ys) and ys[after] < ys[peak]):
-        return TradeCommand.sell
-    elif (before >= 0 and ys[before] > ys[peak]) or \
-         (after < len(ys) and ys[after] > ys[peak]):
-        return TradeCommand.buy
-    raise DoNotKnowHowToTrade
 
 
 def fitChunks(data):

@@ -33,14 +33,13 @@ def update(frame, plots, ax):
                                                'fitted',
                                                'psl'))
     result = analyseData(peakConf, frame)
-    xs, ys, xfit, yfit, xpeak, ypeak, trade = desctructDict(result,
-                                                            ("x",
-                                                             "y",
-                                                             "xfit",
-                                                             "yfit",
-                                                             "xpeak",
-                                                             "ypeak",
-                                                             "tradeAdvise"))
+    xs, ys, xfit, yfit, xpeak, ypeak = desctructDict(result,
+                                                     ("x",
+                                                      "y",
+                                                      "xfit",
+                                                      "yfit",
+                                                      "xpeak",
+                                                      "ypeak"))
     ax.set_xlim(min(xs), max(xs))
     ax.set_ylim(min(ys), max(ys))
     ticks.set_data(xs, ys)

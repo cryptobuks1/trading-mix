@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from trading.data import fit, extract, peaks, how_to_trade
+from trading.data import fit, extract, peaks
 from trading.sql import window
 from os import getenv
 from os.path import join
@@ -95,7 +95,6 @@ def run(data):
     ps[1] = list(map(transform, ps[1]))
 
     if(new_peakP(ps, y_new)):
-        print(how_to_trade(ps[1], y_new))
         print("New peak")
         last_peak = ps[0][0]
         goon = False
