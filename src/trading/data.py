@@ -8,6 +8,8 @@ from trading.sql import window, time_range
 from trading.octave import conf as peakConf
 from trading.control import handleError
 import pickle
+import logging
+
 
 def fit(coord):
     x, y = coord
@@ -125,8 +127,11 @@ def next_peak(**kwargs):
 
 def is_new_peak(latest_order_epoc, analysis):
     peakEpoc = analysis['xpeak'][0]
+    logging.debug("Peak at: %s", str(peakEpoc))
+    logging.debug("Latest order epoc: %s", latest_order_epoc)
     timeDiff = abs(peakEpoc - latest_order_epoc)
-    return timeDiff < 1200  # within 20 minutes
+    logging.debug("Diff between latest order and current peak: %s", timeDiff)
+    return timeDiff > 1200  # within 20 minutes
 
 
 def load_data_from_file(path):
