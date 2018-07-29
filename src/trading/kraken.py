@@ -36,13 +36,13 @@ def get_orders(**kwargs):
     return to_sql(orders, 'orders', **kwargs)
 
 
-def ohlc():
+def ohlc(**kwargs):
     try:
         ohlc, last = get_rate()
     except Exception as e:
         print("Exception")
         print(e)
-    return to_sql(ohlc, 'ohlc')
+    return to_sql(ohlc, 'ohlc', **kwargs)
 
 
 orders_table = "ohlc"
