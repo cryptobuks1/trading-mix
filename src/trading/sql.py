@@ -36,7 +36,8 @@ def window(cursor,
                                                        end))
         result = cursor.fetchall()
     else:
-        table = meta_data.tables[table]
+
+        table = meta(connection).tables[table]
         s = select([table.c[time_column],
                     table.c.open]).where(table.c[time_column].between(start,
                                                                       end))
@@ -70,12 +71,16 @@ def latest(connection, meta_data, table_name='ohlc', time_column='time',
            **kwargs):
     db = kwargs.copy()
     db.update({'connection': connection,
-               'meta_data': meta_data})
+               'meta_data': meta_data,
+               'table': table_name,
+               'time_column': time_column})
     start, end = time_range(**db)
+    print(end)
     table = meta_data.tables[table_name]
     # time_range returns int
-    query = select([table]).where(table.c[time_column] >= end)
+    query = select([table])
     result = connection.execute(query).fetchall()
+    print(result)
     return result[0]
     # start, end = time_range(cur, time_column, table)
     # cur.execute("SELECT * from {}, open ")
