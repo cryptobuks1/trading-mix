@@ -43,6 +43,7 @@ def test_sub_part():
     recordEvent.send('record')
 
 
+@pytest.mark.regression
 @pytest.mark.event
 def test_bind():
     class GotPeaked(Exception):

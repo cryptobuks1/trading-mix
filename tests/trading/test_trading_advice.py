@@ -15,11 +15,13 @@ def validate_peak(peak_data, expected_advice):
     analyseData(peakConf, peak_data)
 
 
+@pytest.mark.regression
 @pytest.mark.trading
 def test_trading_low(low_peak):
     validate_peak(low_peak['data'], TradeCommand.buy)
 
 
+@pytest.mark.regression
 @pytest.mark.trading
 def test_trading_high(high_peak):
     validate_peak(high_peak['data'], TradeCommand.sell)

@@ -12,6 +12,7 @@ tradeCommands = {
 }
 
 
+@pytest.mark.regression
 @pytest.mark.newpeak
 def test_new_high_peak(high_peak, high_peak_order_epoc, caplog):
     with caplog.at_level(logging.DEBUG):
@@ -22,6 +23,7 @@ def test_new_high_peak(high_peak, high_peak_order_epoc, caplog):
     assert sell in caplog.text
 
 
+@pytest.mark.regression
 @pytest.mark.newpeak
 def test_new_low_peak(low_peak, low_peak_order_epoc, caplog):
     with caplog.at_level(logging.DEBUG):

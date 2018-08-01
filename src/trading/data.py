@@ -58,6 +58,7 @@ def extract(env, xidx=0, yidx=1):
 
 
 def analyseData(peakConf, data, **kwargs):
+    logging.debug("Start analysis")
     x, y, xfit, yfit, ff, z = fit(extract(data))
     peakFn, indexPos = [peakConf[k] for k in ('fn', 'indexPos')]
     peaks = peakFn(yfit)
