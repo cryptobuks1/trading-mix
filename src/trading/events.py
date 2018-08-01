@@ -1,4 +1,4 @@
-from blinker import signal
+from blinker import signal, Signal
 from collections import namedtuple
 from trading.misc import is_sequence, throw
 
@@ -9,6 +9,10 @@ TradingEvents = namedtuple('TradingEvents', ['foundPeak',
                                              'advice'])
 
 tradingEvents = TradingEvents(*[signal(k) for k in TradingEvents._fields])
+
+
+def create_trading_events():
+    return TradingEvents(*[Signal() for k in TradingEvents._fields])
 
 
 class BindError(Exception):
@@ -38,6 +42,6 @@ def bind(event, subscriber, includeSender=False, keep_ref=True):
 
 def emit(event, data=None, sender='anonymous'):
     if data:
-        event.send(sender, **{event.name: data})
+        event.send(sender, **{'data': data})
     else:
         event.send(sender)

@@ -1,4 +1,4 @@
-from trading.strategy.simple import run
+from trading.strategy.simple import create
 from trading.core import TradeCommand
 from trading.kraken import ohlc, get_orders
 from trading.sql import memdb, meta, latest, time_range, window
@@ -18,6 +18,7 @@ def test_notify(high_peak, caplog):
         send(message,
              conf['mail']['username'],
              conf['mail']['password'])
+        logging.debug("Message sent")
 
     db = memdb()
     tradeCommands = {
@@ -32,8 +33,9 @@ def test_notify(high_peak, caplog):
     latestOrder = latest(**env)
     start, end = time_range(**db)
     with caplog.at_level(logging.DEBUG):
-        run(latestOrder.time, tradeCommands, high_peak['data'])
-    assert "Found peak" in caplog.text
+        engine, events = create(latestOrder.time, tradeCommands, high_peak['data'])
+        engine()
+    assert "Message sent" in caplog.text
 
 
 def make_message(advice):

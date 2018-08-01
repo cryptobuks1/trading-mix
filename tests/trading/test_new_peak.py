@@ -1,7 +1,5 @@
-from trading.octave import conf as peakConf
 from trading.core import TradeCommand
-from trading.strategy.simple import run
-
+from trading.strategy.simple import create
 import pytest
 import logging
 
@@ -17,12 +15,18 @@ tradeCommands = {
 @pytest.mark.newpeak
 def test_new_high_peak(high_peak, high_peak_order_epoc, caplog):
     with caplog.at_level(logging.DEBUG):
-        run(high_peak_order_epoc, tradeCommands, high_peak['data'])
+        engine, events = create(high_peak_order_epoc,
+                                tradeCommands,
+                                high_peak['data'])
+        engine()
     assert sell in caplog.text
 
 
 @pytest.mark.newpeak
 def test_new_low_peak(low_peak, low_peak_order_epoc, caplog):
     with caplog.at_level(logging.DEBUG):
-        run(low_peak_order_epoc, tradeCommands, low_peak['data'])
+        engine, events = create(low_peak_order_epoc,
+                                tradeCommands,
+                                low_peak['data'])
+        engine()
     assert buy in caplog.text
