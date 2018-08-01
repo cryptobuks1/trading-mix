@@ -2,7 +2,7 @@ from trading.kraken import get_rate, to_sql
 from trading.sql import memdb
 import pytest
 
-
+@pytest.mark.regression
 @pytest.mark.ohlc
 def test_sql():
     try:

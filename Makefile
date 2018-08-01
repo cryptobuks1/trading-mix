@@ -8,3 +8,5 @@ test-mark-newpeak:
 test-mark-event:
 test-mark-%:
 	pipenv run pytest -m $(*)
+
+regression-test: test-mark-regression
