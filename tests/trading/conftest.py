@@ -30,9 +30,9 @@ def latest_order():
 
 @pytest.fixture
 def high_peak_order_epoc(high_peak):
-    return high_peak['result']['xpeak'][0]
+    return high_peak['result']['xpeak'][0] + 1800
 
 
 @pytest.fixture
 def low_peak_order_epoc(low_peak):
-    return low_peak['result']['xpeak'][0]
+    return low_peak['result']['xpeak'][0] + 1800
