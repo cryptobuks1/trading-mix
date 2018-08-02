@@ -11,7 +11,8 @@ from trading.events import tradingEvents
 from blinker import signal
 from os.path import join
 from functools import partial
-
+from datetime import datetime
+import pytest
 from tkinter import Tk, Button
 
 
@@ -40,11 +41,14 @@ def update(frame, plots, ax):
                                                       "yfit",
                                                       "xpeak",
                                                       "ypeak"))
-    ax.set_xlim(min(xs), max(xs))
+    xd = [datetime.fromtimestamp(x) for x in xs]
+    xfd = [datetime.fromtimestamp(x) for x in xfit]
+    xpd = [datetime.fromtimestamp(x) for x in xpeak]
+    ax.set_xlim(min(xd), max(xd))
     ax.set_ylim(min(ys), max(ys))
-    ticks.set_data(xs, ys)
-    fitted.set_data(xfit, yfit)
-    psl.set_data(xpeak, ypeak)
+    ticks.set_data(xd, ys)
+    fitted.set_data(xfd, yfit)
+    psl.set_data(xpd, ypeak)
     return ticks, fitted, psl
 
 
@@ -63,7 +67,7 @@ def controlPlot(state, play=True):
 
 state = {"continue": True}
 
-
+@pytest.mark.animation
 def test_animation():
     global state
     db = connect("sqlite:///" + join('/home/kristian/projects/trading/data',
