@@ -5,3 +5,11 @@
 * Why sqlite
   The reason for sqlite: kraken returns pandas which can probably be
   queried, but sqlite is more general and not all APIs return pandas
+
+#+begin_src python :prologue (progn (pyvenv-workon 'trading-xHDJ7tx5) "")
+  from trading.kraken import ohlc
+  return ohlc()
+#+end_src
+
+#+RESULTS:
+: Engine(sqlite://)
