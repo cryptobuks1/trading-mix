@@ -1,3 +1,14 @@
+* Trading
+
+** Installation
+All python dependencies can be installed with pipenv.
+But fist pipenv needs to be installed:
+#+BEGIN_SRC sh
+pip3 install -U --user pipenv
+#+END_SRC
+
+#+RESULTS:
+
 * Three generator functions
 ** data/window_generator
 ** data/streamWindow
@@ -16,3 +27,7 @@
 :RESULTS:
 Engine(sqlite://)
 :END:
+
+# Local Variables:
+# org-use-property-inheritance: t
+# End:
