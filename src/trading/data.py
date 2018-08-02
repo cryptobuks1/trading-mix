@@ -104,7 +104,7 @@ def window_generator(window_size, step_size, **kwargs):
                 "end": step_start + window_size}
         env = {**kwargs, **span}
         pos += step_size
-        result = window(**env)
+        result = window(env['connection'], **env)
         if result:
             yield result
 
