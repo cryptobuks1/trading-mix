@@ -5,14 +5,12 @@ from trading.data import analyseData
 from trading.sql import connect
 from trading.kraken import table_mapping, orders_table
 from trading.octave import conf as peakConf
-from trading.misc import desctructDict
 from trading.recorder import record_event
 from trading.events import tradingEvents
 from trading.plot import axis_with_dates_x, update_with_fit_and_peak
 from blinker import signal
 from os.path import join
 from functools import partial
-from datetime import datetime
 import pytest
 from tkinter import Tk, Button
 
