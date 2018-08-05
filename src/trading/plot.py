@@ -1,7 +1,9 @@
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.animation as animation
 from trading.misc import desctructDict
 from datetime import datetime
+from functools import partial
 
 
 def axis_with_dates_x():
@@ -46,3 +48,15 @@ def init_with_fit_and_peak(plots, ax):
     plots['fitted'] = fitted
     plots['psl'] = psl
     return ticks, fitted, psl
+
+
+def create_plot_with_fit_and_peak(analysis_fns, frame_fn):
+    fig, ax = axis_with_dates_x()
+    plots = {}
+    init_fn = partial(init_with_fit_and_peak, plots, ax)
+    return animation.FuncAnimation(fig,
+                                   partial(update_with_fit_and_peak,
+                                           analysis_fns),
+                                   frame_fn,
+                                   init_fn,
+                                   (plots, ax))

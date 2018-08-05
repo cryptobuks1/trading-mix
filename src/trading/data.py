@@ -105,6 +105,7 @@ def window_generator(window_size, step_size, **kwargs):
         env = {**kwargs, **span}
         pos += step_size
         result = window(env['connection'], **env)
+        logging.debug("Found Result")
         if result:
             yield result
 
