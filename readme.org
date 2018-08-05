@@ -1,4 +1,7 @@
 * Trading
+  :PROPERTIES:
+  :header-args: python :prologue (progn (pipenv-activate) (pyvenv-activate python-shell-virtualenv-root) "")
+  :END:
 
 ** Installation
 All python dependencies can be installed with pipenv.
@@ -9,14 +12,13 @@ pip3 install -U --user pipenv
 
 #+RESULTS:
 
-* Three generator functions
-** data/window_generator
-** data/streamWindow
-** test_kraken/data_gen
-* Why sqlite
+** Three generator functions
+*** data/window_generator
+*** data/streamWindow
+*** test_kraken/data_gen
+** Why sqlite
   The reason for sqlite: kraken returns pandas which can probably be
   queried, but sqlite is more general and not all APIs return pandas
-#+header: :prologue (progn (pipenv-activate) (pyvenv-activate python-shell-virtualenv-root) "")
 #+header: :results drawer
 #+begin_src python
   from trading.kraken import ohlc
