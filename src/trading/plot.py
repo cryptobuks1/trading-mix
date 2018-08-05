@@ -33,3 +33,16 @@ def update_with_fit_and_peak(analysis_fns, frame, plots, ax):
     fitted.set_data(xfd, yfit)
     psl.set_data(xpd, ypeak)
     return ticks, fitted, psl
+
+
+def init_with_fit_and_peak(plots, ax):
+    ticks, fitted, psl = ax.plot([],
+                                 [],
+                                 [],
+                                 [],
+                                 [],
+                                 [], 'b+')
+    plots['ticks'] = ticks
+    plots['fitted'] = fitted
+    plots['psl'] = psl
+    return ticks, fitted, psl
