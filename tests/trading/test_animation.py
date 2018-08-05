@@ -8,6 +8,7 @@ from trading.octave import conf as peakConf
 from trading.misc import desctructDict
 from trading.recorder import record_event
 from trading.events import tradingEvents
+from trading.plot import axis_with_dates_x
 from blinker import signal
 from os.path import join
 from functools import partial
@@ -73,7 +74,7 @@ def test_animation():
     db = connect("sqlite:///" + join('/home/kristian/projects/trading/data',
                                      'alldata.sqlite'))
     env = {**db, **table_mapping[orders_table]}
-    fig, ax = plt.subplots()
+    fig, ax = axis_with_dates_x()
     plots = {}
 
     onFoundPeak_fn = partial(onFoundPeak, state)
