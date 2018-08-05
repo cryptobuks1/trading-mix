@@ -9,11 +9,11 @@ from trading.recorder import record_event
 from trading.events import tradingEvents
 from trading.plot import axis_with_dates_x, update_with_fit_and_peak
 from trading.plot import init_with_fit_and_peak
+from trading.ui import show_control_window
 from blinker import signal
 from os.path import join
 from functools import partial
 import pytest
-from tkinter import Tk, Button
 
 
 def onFoundPeak(state, sender, data):
@@ -69,16 +69,3 @@ def test_animation():
     top = Tk()
     top.geometry("150x100")
 
-    def helloCallBack():
-        controlPlot(state)
-
-    def recordCallback():
-        print("record")
-        recordEvent.send('ui')
-
-    B = Button(top, text="Hello", command=helloCallBack)
-    B.place(x=50, y=0)
-    RB = Button(top, text="Record", command=recordCallback)
-    RB.place(x=50, y=50)
-    plt.show(block=False)
-    top.mainloop()
