@@ -8,7 +8,7 @@ from trading.octave import conf as peakConf
 from trading.misc import desctructDict
 from trading.recorder import record_event
 from trading.events import tradingEvents
-from trading.plot import axis_with_dates_x
+from trading.plot import axis_with_dates_x, update_with_fit_and_peak
 from blinker import signal
 from os.path import join
 from functools import partial
@@ -28,30 +28,6 @@ def init(plots, ax):
     plots['fitted'] = fitted
     plots['psl'] = psl
     return ticks, fitted, psl
-
-
-def update(frame, plots, ax):
-    ticks, fitted, psl = desctructDict(plots, ('ticks',
-                                               'fitted',
-                                               'psl'))
-    result = analyseData(peakConf, frame)
-    xs, ys, xfit, yfit, xpeak, ypeak = desctructDict(result,
-                                                     ("x",
-                                                      "y",
-                                                      "xfit",
-                                                      "yfit",
-                                                      "xpeak",
-                                                      "ypeak"))
-    xd = [datetime.fromtimestamp(x) for x in xs]
-    xfd = [datetime.fromtimestamp(x) for x in xfit]
-    xpd = [datetime.fromtimestamp(x) for x in xpeak]
-    ax.set_xlim(min(xd), max(xd))
-    ax.set_ylim(min(ys), max(ys))
-    ticks.set_data(xd, ys)
-    fitted.set_data(xfd, yfit)
-    psl.set_data(xpd, ypeak)
-    return ticks, fitted, psl
-
 
 def onFoundPeak(state, sender, data):
     state['continue'] = False
@@ -94,7 +70,13 @@ def test_animation():
                                      window_generator(3600 * 3,
                                                       600,
                                                       **env))
-    ani = animation.FuncAnimation(fig, update, frame_fn, init_fn, (plots, ax))
+    ani = animation.FuncAnimation(fig,
+                                  partial(update_with_fit_and_peak,
+                                          partial(analyseData,
+                                                  peakConf)),
+                                  frame_fn,
+                                  init_fn,
+                                  (plots, ax))
     # plt.show(block=False)
     # plt.show()
     top = Tk()
