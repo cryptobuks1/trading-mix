@@ -7,7 +7,7 @@ from trading.octave import conf as peakConf
 from functools import partial
 
 
-def create(latest_order_epoc, tradeCommands, data):
+def create(latest_order_epoc, tradeCommands):
     tradingEvents = create_trading_events()
 
     def onPeak(**kwargs):
@@ -20,7 +20,7 @@ def create(latest_order_epoc, tradeCommands, data):
     bind(tradingEvents.newPeak, partial(trigger_trade_advise, tradingEvents))
     bind(tradingEvents.advice, partial(processAdvice, tradeCommands))
 
-    def start():
+    def start(data):
         analyseData(peakConf, data,
                     foundPeakEvent=tradingEvents.foundPeak)
 

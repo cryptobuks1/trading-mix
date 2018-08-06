@@ -33,8 +33,8 @@ def test_notify(high_peak, caplog):
     latestOrder = latest(**env)
     start, end = time_range(**db)
     with caplog.at_level(logging.DEBUG):
-        engine, events = create(latestOrder.time, tradeCommands, high_peak['data'])
-        engine()
+        engine, events = create(latestOrder.time, tradeCommands)
+        engine(high_peak['data'])
     assert "Message sent" in caplog.text
 
 

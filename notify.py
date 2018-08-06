@@ -1,4 +1,4 @@
-from trading.strategy.simple import run
+from trading.strategy.simple import create
 from trading.core import TradeCommand
 from trading.kraken import ohlc, get_orders
 from trading.sql import memdb, meta, latest, time_range, window
@@ -28,9 +28,10 @@ def main():
                 'table_name': 'orders'})
     latestOrder = latest(**env)
     start, end = time_range(**db)
-    run(latestOrder.time, tradeCommands, window(None,
-                                                end - 3600 * 3,
-                                                end, **db))
+    engine, events = create(latestOrder.time, tradeCommands)
+    engine(window(None,
+                  end - 3600 * 3,
+                  end, **db))
 
 
 def make_message(advice):

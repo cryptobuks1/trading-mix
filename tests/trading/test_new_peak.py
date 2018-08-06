@@ -17,9 +17,8 @@ tradeCommands = {
 def test_new_high_peak(high_peak, high_peak_order_epoc, caplog):
     with caplog.at_level(logging.DEBUG):
         engine, events = create(high_peak_order_epoc,
-                                tradeCommands,
-                                high_peak['data'])
-        engine()
+                                tradeCommands)
+        engine(high_peak['data'])
     assert sell in caplog.text
 
 
@@ -28,7 +27,6 @@ def test_new_high_peak(high_peak, high_peak_order_epoc, caplog):
 def test_new_low_peak(low_peak, low_peak_order_epoc, caplog):
     with caplog.at_level(logging.DEBUG):
         engine, events = create(low_peak_order_epoc,
-                                tradeCommands,
-                                low_peak['data'])
-        engine()
+                                tradeCommands)
+        engine(low_peak['data'])
     assert buy in caplog.text
