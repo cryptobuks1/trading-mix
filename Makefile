@@ -6,6 +6,7 @@ test-mark-fixture:
 test-mark-notify:
 test-mark-newpeak:
 test-mark-event:
+test-make-peakdiff:
 test-mark-%:
 	~/.local/bin/pipenv run pytest -m $(*)
 
