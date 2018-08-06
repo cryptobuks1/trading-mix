@@ -6,12 +6,17 @@ def transform(i):
     return int(i)
 
 
-def peaks(values):
+def peaks(values, **kwargs):
+    if 'peak_params' in kwargs:
+        peak_params = kwargs['peak_params']
+    else:
+        peak_params = ('DoubleSided',
+                       'MinPeakHeight', 0.04,
+                       'MinPeakDistance', 30,
+                       'MinPeakWidth', 0)
     ps = octave.findpeaks(values,
-                          'DoubleSided',
-                          'MinPeakHeight', 0.04,
-                          'MinPeakDistance', 30,
-                          'MinPeakWidth', 0, nout=3)
+                          *peak_params,
+                          nout=3)
     if ps[1] and not isinstance(ps[1], list):
         ps = [[ps[0]], [ps[1]]]
     ps[1] = list(map(transform, ps[1]))

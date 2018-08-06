@@ -18,7 +18,8 @@ def test_new_high_peak(high_peak, high_peak_order_epoc, caplog):
     with caplog.at_level(logging.DEBUG):
         engine, events = create(high_peak_order_epoc,
                                 tradeCommands)
-        engine(high_peak['data'])
+        # Testing octave with no extra parameters
+        engine(high_peak['data'], ** {'peak_params': ()})
     assert sell in caplog.text
 
 

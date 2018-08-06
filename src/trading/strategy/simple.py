@@ -20,9 +20,10 @@ def create(latest_order_epoc, tradeCommands):
     bind(tradingEvents.newPeak, partial(trigger_trade_advise, tradingEvents))
     bind(tradingEvents.advice, partial(processAdvice, tradeCommands))
 
-    def start(data):
+    def start(data, **kwargs):
         analyseData(peakConf, data,
-                    foundPeakEvent=tradingEvents.foundPeak)
+                    foundPeakEvent=tradingEvents.foundPeak,
+                    **kwargs)
 
     return start, tradingEvents
 

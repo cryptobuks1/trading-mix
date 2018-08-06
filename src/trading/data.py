@@ -61,7 +61,7 @@ def analyseData(peakConf, data, **kwargs):
     logging.debug("Start analysis")
     x, y, xfit, yfit, ff, z = fit(extract(data))
     peakFn, indexPos = [peakConf[k] for k in ('fn', 'indexPos')]
-    peaks = peakFn(yfit)
+    peaks = peakFn(yfit, **kwargs)
     peaksIndex = peaks[indexPos]
     result = {'x': x,
               'y': y,
