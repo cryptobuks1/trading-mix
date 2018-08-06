@@ -7,6 +7,6 @@ test-mark-notify:
 test-mark-newpeak:
 test-mark-event:
 test-mark-%:
-	pipenv run pytest -m $(*)
+	~/.local/bin/pipenv run pytest -m $(*)
 
 regression-test: test-mark-regression
