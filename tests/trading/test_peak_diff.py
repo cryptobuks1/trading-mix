@@ -38,8 +38,7 @@ def test_peak_diff(all_data):
                                               peak_analysis['ypeak'][0])))
     for window in window_generator(3600 * 3,
                                    600,
-                                   **{**all_data,
-                                      **{'time_column': 'timestamp'}}):
+                                   **all_data):
         engine(window)
         if(len(peaks) == 100):
             break

@@ -39,5 +39,7 @@ def low_peak_order_epoc(low_peak):
 
 @pytest.fixture
 def all_data():
-    return connect("sqlite:///" + join('/home/kristian/projects/trading/data',
+    db = connect("sqlite:///" + join('/home/kristian/projects/trading/data',
                                        'alldata.sqlite'))
+    db['time_column'] = 'timestamp'
+    return db
