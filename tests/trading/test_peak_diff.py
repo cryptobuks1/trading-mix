@@ -13,35 +13,42 @@ tradeCommands = {
 }
 
 
-def collectPeak(peaks, data):
-    peaks.append(data['result']['xpeak'][0])
+def collectPeak(peaks, results, data):
+    peaks.append((data['result']['xpeak'][0],
+                  data['result']['ypeak'][0]))
+    results.append(data['result'])
 
 
 @pytest.mark.peakdiff
 def test_peak_diff(all_data):
-    engine, events = create(0,
+    latest_order_epoc = {'epoc': 0}
+    speaks = []
+
+    def update_order_epoc(latest_order_epoc, peak_analysis):
+        latest_order_epoc['epoc'] = peak_analysis['xpeak']
+
+    engine, events = create(lambda: latest_order_epoc['epoc'],
                             tradeCommands)
     peaks = []
-    bind(events.foundPeak, partial(collectPeak, peaks))
+    results = []
+    bind(events.foundPeak, partial(collectPeak, peaks, results))
+    bind(events.newPeak, partial(update_order_epoc, latest_order_epoc))
+    bind(events.newPeak,
+         lambda peak_analysis: speaks.append((peak_analysis['xpeak'][0],
+                                              peak_analysis['ypeak'][0])))
     for window in window_generator(3600 * 3,
                                    600,
                                    **{**all_data,
-                                      **{"time_column": "timestamp"}}):
+                                      **{'time_column': 'timestamp'}}):
         engine(window)
         if(len(peaks) == 100):
             break
-    curpeak = None
-    newpeaks = []
-    for peak in peaks:
-        if not curpeak or 1200 < abs(peak - curpeak):
-            curpeak = peak
-            newpeaks.append(curpeak)
+
     curpeak = None
     peakdiff = []
-    for peak in newpeaks:
+    for peak in [p[0] for p in speaks]:
         if not curpeak:
             curpeak = peak
         else:
             peakdiff.append(abs(peak - curpeak))
-    print(min(peakdiff))
-    assert [] == newpeaks
+    assert 8620.408163309097 == min(peakdiff)

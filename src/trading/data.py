@@ -131,7 +131,7 @@ def is_new_peak(latest_order_epoc, analysis):
     peakEpoc = analysis['xpeak'][0]
     logging.debug("Peak at: %s", str(peakEpoc))
     logging.debug("Latest order epoc: %s", latest_order_epoc)
-    timeDiff = abs(peakEpoc - latest_order_epoc)
+    timeDiff = abs(peakEpoc - latest_order_epoc())
     logging.debug("Diff between latest order and current peak: %s", timeDiff)
     return timeDiff > 1200  # within 20 minutes
 
