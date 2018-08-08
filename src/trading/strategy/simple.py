@@ -10,13 +10,10 @@ from functools import partial
 def create(latest_order_epoc, tradeCommands):
     tradingEvents = create_trading_events()
 
-    def onPeak(**kwargs):
-        check_peak(tradingEvents,
-                   partial(is_new_peak,
-                           latest_order_epoc),
-                   **kwargs)
-
-    bind(tradingEvents.foundPeak, onPeak)
+    bind(tradingEvents.foundPeak, partial(check_peak,
+                                          tradingEvents,
+                                          partial(is_new_peak,
+                                                  latest_order_epoc)))
     bind(tradingEvents.newPeak, partial(trigger_trade_advise, tradingEvents))
     bind(tradingEvents.advice, partial(processAdvice, tradeCommands))
 
@@ -28,7 +25,7 @@ def create(latest_order_epoc, tradeCommands):
     return start, tradingEvents
 
 
-def check_peak(tradingEvents, is_new_peak_fn, data):
+def check_peak(tradingEvents, is_new_peak_fn, data, **kwargs):
     logging.debug("Got Peak")
     if is_new_peak_fn(data['result']):
         tradingEvents.newPeak.send(check_peak, peak_analysis=data['result'])
