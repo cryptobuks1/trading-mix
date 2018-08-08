@@ -26,12 +26,13 @@ def test_peak_diff(all_data):
     bind(events.newPeak,
          lambda peak_analysis: speaks.append(peak_analysis['xpeak'][0]))
 
-    for window in  window_generator(3600 * 3,
+    for window in  (w if len(speaks) < 20
+                    else (_ for _ in ()).throw(StopIteration())
+                    for w in window_generator(3600 * 3,
                                     600,
-                                    **all_data):
+                                    **all_data)):
         engine(window)
-        if len(speaks) == 20:
-            break
+
 
     curpeak = None
     peakdiff = []
