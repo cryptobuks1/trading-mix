@@ -5,6 +5,7 @@ from trading.events import bind
 from functools import partial
 import pytest
 import logging
+from eventhelpers import update_order_with_peak
 
 
 tradeCommands = {
@@ -18,19 +19,16 @@ def test_peak_diff(all_data):
     latest_order_epoc = {'epoc': 0}
     speaks = []
 
-    def update_order_epoc(latest_order_epoc, peak_analysis):
-        latest_order_epoc['epoc'] = peak_analysis['xpeak']
-
     engine, events = create(lambda: latest_order_epoc['epoc'],
                             tradeCommands)
-    results = []
-    bind(events.newPeak, partial(update_order_epoc, latest_order_epoc))
+
+    update_order_with_peak(events, latest_order_epoc)
     bind(events.newPeak,
          lambda peak_analysis: speaks.append(peak_analysis['xpeak'][0]))
 
     for window in  window_generator(3600 * 3,
-                                                600,
-                                                **all_data):
+                                    600,
+                                    **all_data):
         engine(window)
         if len(speaks) == 20:
             break

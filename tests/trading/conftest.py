@@ -1,11 +1,12 @@
 import pytest
 from os import getcwd
-from os.path import join
+from os.path import join, dirname
+from sys import path
 from trading.data import load_data_from_file
 from trading.sql import connect, meta, latest
 from trading.kraken import to_sql
 
-
+path.append(join(dirname(__file__), 'helpers'))
 @pytest.fixture
 def low_peak():
     path = join(getcwd(), 'data', 'low_pickle.byte')
