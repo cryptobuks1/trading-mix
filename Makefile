@@ -7,6 +7,7 @@ test-mark-notify:
 test-mark-newpeak:
 test-mark-event:
 test-mark-peakdiff:
+test-mark-profit:
 test-mark-%:
 	pipenv run pytest -m $(*)
 
