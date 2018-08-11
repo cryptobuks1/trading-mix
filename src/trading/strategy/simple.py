@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import logging
 from trading.events import create_trading_events, emit
 from trading.core import advice
@@ -33,8 +35,10 @@ def check_peak(tradingEvents, is_new_peak_fn, data, **kwargs):
 
 
 def trigger_trade_advise(tradingEvents, peak_analysis):
-    logging.debug('Trade advice')
-    emit(tradingEvents.advice, advice(peak_analysis))
+    tradeAdvice = advice(peak_analysis)
+    logging.debug('Ƀ Trade advice {}'.format(tradeAdvice))
+    emit(tradingEvents.advice, {'advice': tradeAdvice,
+                                'analysis': peak_analysis})
 
 
 def processAdvice(commands, data):
