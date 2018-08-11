@@ -19,17 +19,32 @@ pip3 install -U --user pipenv
 ** Why sqlite
   The reason for sqlite: kraken returns pandas which can probably be
   queried, but sqlite is more general and not all APIs return pandas
+
+#+name localvenv
+#+BEGIN_SRC emacs-lisp
+(progn (pipenv-activate) (pyvenv-activate python-shell-virtualenv-root) "")
+#+END_SRC
+
+#+RESULTS:
+
 #+header: :results drawer
 #+begin_src python
   from trading.kraken import ohlc
-  return ohlc()
+  ohlc()
 #+end_src
 
 #+RESULTS:
 :RESULTS:
-Engine(sqlite://)
+None
 :END:
 
 # Local Variables:
 # org-use-property-inheritance: t
 # End:
+** Scratch
+#+BEGIN_SRC ipython
+  def hest(hjort):
+      pass
+
+  hest.
+#+END_SRC
