@@ -134,7 +134,7 @@ def is_new_peak(latest_order_epoc, analysis):
     logging.debug("Latest order epoc: {}".format(toDate(latest_order_epoc())))
     timeDiff = abs(peakEpoc - latest_order_epoc())
     logging.debug("Diff between latest order and current peak: {}".format(toDate(timeDiff)))
-    return timeDiff > 1200  # within 20 minutes
+    return timeDiff > 1200 * 4  # within 20 minutes
 
 
 def load_data_from_file(path):
