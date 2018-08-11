@@ -22,8 +22,8 @@ def onFoundPeak(state, sender, data):
 
 
 def onNoPeak(state, sender, data):
-    print("No peak")
-    state['continue'] = False
+    logging.warn("No peak")
+    #state['continue'] = False
 
 
 def controlPlot(state, play=True):
