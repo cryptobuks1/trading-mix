@@ -5,6 +5,7 @@ from trading.data import is_new_peak, analyseData
 from trading.events import bind
 from trading.octave import conf as peakConf
 from functools import partial
+import inspect
 
 
 def create(latest_order_epoc, tradeCommands):
@@ -38,4 +39,8 @@ def trigger_trade_advise(tradingEvents, peak_analysis):
 
 def processAdvice(commands, data):
     logging.debug("Call callback")
-    (commands[data])()
+    cmd = commands[data['advice']]
+    if 0 == inspect.signature(cmd).parameters.keys():
+        cmd()
+    else:
+        cmd(data['analysis'])
