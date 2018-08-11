@@ -7,6 +7,7 @@ from collections import namedtuple
 from trading.sql import window, time_range
 from trading.octave import conf as peakConf
 from trading.control import handleError
+from trading.util import toDate
 import pickle
 import logging
 
@@ -129,10 +130,10 @@ def next_peak(**kwargs):
 
 def is_new_peak(latest_order_epoc, analysis):
     peakEpoc = analysis['xpeak'][0]
-    logging.debug("Peak at: %s", str(peakEpoc))
-    logging.debug("Latest order epoc: %s", latest_order_epoc)
+    logging.debug("Peak at: {}".format(toDate(peakEpoc)))
+    logging.debug("Latest order epoc: {}".format(toDate(latest_order_epoc())))
     timeDiff = abs(peakEpoc - latest_order_epoc())
-    logging.debug("Diff between latest order and current peak: %s", timeDiff)
+    logging.debug("Diff between latest order and current peak: {}".format(toDate(timeDiff)))
     return timeDiff > 1200  # within 20 minutes
 
 
