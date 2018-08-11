@@ -61,12 +61,12 @@ def test_profit(all_data, caplog):
         TradeCommand.buy: buy
     }
 
-    run, events = take(4,
+    run, events = take(7,
                        tradeCommands,
-                       window_generator(3600 * 3,
+                       window_generator(3600 * 4,
                                         600,
                                         **all_data))
-    with caplog.at_level(logging.DEBUG):
-        run()
+    # with caplog.at_level(logging.DEBUG):
+    run()
     plt.show()
     assert xmrs == euros
