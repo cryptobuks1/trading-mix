@@ -12,7 +12,11 @@ def take(count, tradeCommands, gen):
     update_order_with_peak(events, latest_order_epoc)
     bind(events.newPeak,
          lambda peak_analysis: speaks.append(peak_analysis['xpeak'][0]))
-    for window in (w if len(speaks) < count
-                   else (_ for _ in ()).throw(StopIteration())
-                   for w in gen):
-        engine(window)
+
+    def run():
+        nonlocal speaks, gen, engine
+        for window in (w if len(speaks) < count
+                       else (_ for _ in ()).throw(StopIteration())
+                       for w in gen):
+            engine(window)
+    return run, events
