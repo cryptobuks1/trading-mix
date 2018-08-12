@@ -2,6 +2,9 @@
 create-sqlite:
 	cd data;find . -name "ohlc-*" -exec jq -r '.["result"]|.["XXMRZEUR"][]|@csv' {} \; > alldata.csv
 
+notebook:
+	pipenv run jupyter notebook
+
 test-mark-fixture:
 test-mark-notify:
 test-mark-newpeak:
