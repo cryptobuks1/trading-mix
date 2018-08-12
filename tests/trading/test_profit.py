@@ -13,27 +13,28 @@ import logging
 
 @pytest.mark.profit
 def test_profit(all_data, caplog):
-    euros = -1
-    xmrs = -1
+    newMoney = 0
+    newXMR = 0
+    euros = 0
+    xmrs = 0
     rate = -1
     firstOrder = True
 
     fig, ax = axis_with_dates_x()
 
     def plotAnalysis(analysis):
-        nonlocal ax
         ax.plot([datetime.fromtimestamp(x) for x in analysis['x']], analysis['y'],
                 [datetime.fromtimestamp(x) for x in analysis['xfit']], analysis['yfit'])
         ax.axvline(x=datetime.fromtimestamp(analysis['xpeak'][0]))
 
     def sell(analysis):
-        nonlocal euros, xmrs, rate, firstOrder, ax
-        logging.warn("XPeak {}".format(analysis['xpeak']))
+        nonlocal euros, xmrs, rate, firstOrder, ax, newMoney
         rate = analysis['y'][-1]
-        ax.plot([datetime.fromtimestamp(x) for x in analysis['x']], analysis['y'],
-                [datetime.fromtimestamp(x) for x in analysis['xfit']], analysis['yfit'])
-        ax.axvline(x=datetime.fromtimestamp(analysis['xpeak'][0]))
+        plotAnalysis(analysis)
         if firstOrder:
+            logging.warn("Selling on first order")
+            extraMoney = 5 * rate
+            newMoney += extraMoney
             xmrs = 5
             euros = 0
             firstOrder = False
@@ -42,14 +43,13 @@ def test_profit(all_data, caplog):
         xmrs = 0
 
     def buy(analysis):
-        nonlocal euros, xmrs, rate, firstOrder, ax
+        nonlocal euros, xmrs, rate, firstOrder, ax, newMoney
         rate = analysis['y'][-1]
-        ax.plot([datetime.fromtimestamp(x) for x in analysis['x']], analysis['y'],
-                [datetime.fromtimestamp(x) for x in analysis['xfit']], analysis['yfit'])
-        ax.axvline(x=datetime.fromtimestamp(analysis['xpeak'][0]))
-        if firstOrder:
-            xmrs = 0
-            euros = 5 * rate
+        plotAnalysis(analysis)
+        if euros == 0:
+            extraMoney = 5 * rate
+            newMoney =+ extraMoney
+            euros = extraMoney
             firstOrder = False
 
         xmrs += euros / rate
@@ -68,5 +68,9 @@ def test_profit(all_data, caplog):
                                         **all_data))
     # with caplog.at_level(logging.DEBUG):
     run()
+    currentValueInEUROS = (xmrs * rate) + euros
+    logging.warn("portfolio value {}".format(currentValueInEUROS - newMoney))
+    logging.warn("Money {}".format(newMoney))
     plt.show()
-    assert xmrs == euros
+    assert  False
+    #assert (xmrs * rate) + euros > newMoney * 3
