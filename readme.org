@@ -48,3 +48,221 @@ None
 
   hest.
 #+END_SRC
+*** Kraken help
+#+NAME: kraken-help
+#+HEADER: :results drawer value
+#+BEGIN_SRC ipython
+import krakenex
+from pykrakenapi import KrakenAPI
+from trading.kraken import credentials
+creds_dict = credentials()
+api = krakenex.API(creds_dict['APIKEY'],
+                   creds_dict['PRIVATEKEY'])
+k = KrakenAPI(api)
+help(KrakenAPI)
+#+END_SRC
+
+#+RESULTS: kraken-help
+:RESULTS:
+# Out[8]:
+:END:
+**** create order documentation
+class KrakenAPI(builtins.object)
+ |  A python implementation of the Kraken API.
+ |
+ |  Implements the Kraken API methods using the low-level krakenex python
+ |  package. See
+ |  https://www.kraken.com/help/api
+ |  and
+ |  https://github.com/veox/python3-krakenex
+ |
+ |  Parameters
+ |  ----------
+ |  api : krakenex.API
+ |      An instance of the krakenex.API class. A reference to the input
+ |      is created and accessible via ``KrakenAPI.api``.
+ |
+ |  tier : int, optional (default=3)
+ |      Your Kraken tier level, used to adjust the limit of the call rate to
+ |      the Kraken API in order to prevent 15 minute temporary lockouts. See
+ |      https://support.kraken.com/hc/en-us/articles/206548367.
+ |      Set tier=0 to disable the call rate limiter.
+ |
+ |  retry : float, optional (default=.5)
+ |      Sleep for ``retry`` seconds after an HTTPError/KrakenAPIError occurred
+ |      and retry the query until it is succesful (or the call rate limiter was
+ |      triggered). If ``retry`` is set to 0, raise a potential
+ |      HTTPError/KrakenAPIError instead of retrying the query.
+ |
+ |  crl_sleep : int, optional (default=5)
+ |      Sleep for ``crl_sleep`` seconds after a CallRateLimitError occurred,
+ |      then retry the query. If ``crl_sleep`` is set to 0, raise a potential
+ |      CallRateLimitError instead of sleeping and retrying.
+ |
+ |  Attributes
+ |  ----------
+ |  api : krakenex.API
+ |      See Parameters.
+ |
+ |  Methods defined here:
+ |
+ |  __init__(self, api, tier=3, retry=0.5, crl_sleep=5)
+ |      Initialize self.  See help(type(self)) for accurate signature.
+ |
+ |  add_standard_order(self, pair, type, ordertype, volume, price=None, price2=None, leverage=None, oflags=None, starttm=0, expiretm=0, userref=None, validate=True, close_ordertype=None, close_price=None, close_price2=None, otp=None, trading_agreement='agree')
+ |      Add a standard order.
+ |
+ |      Add a standard order and return an order description info and an array
+ |      of transaction ids for the order (if succesfull).
+ |
+ |      Parameters
+ |      ----------
+ |      pair : str
+ |          Asset pair.
+ |
+ |      type : str
+ |          Type of order (buy/sell).
+ |
+ |      ordertype : str
+ |          Order type, one of:
+ |          market
+ |          limit (price = limit price)
+ |          stop-loss (price = stop loss price)
+ |          take-profit (price = take profit price)
+ |          stop-loss-profit (price = stop loss price, price2 = take profit
+ |              price)
+ |          stop-loss-profit-limit (price = stop loss price, price2 = take
+ |              profit price)
+ |          stop-loss-limit (price = stop loss trigger price, price2 =
+ |              triggered limit price)
+ |          take-profit-limit (price = take profit trigger price, price2 =
+ |              triggered limit price)
+ |          trailing-stop (price = trailing stop offset)
+ |          trailing-stop-limit (price = trailing stop offset, price2 =
+ |              triggered limit offset)
+ |          stop-loss-and-limit (price = stop loss price, price2 = limit price)
+ |          settle-position
+ |
+ |      volume : str
+ |          Order volume in lots. For minimum order sizes, see
+ |          https://support.kraken.com/hc/en-us/articles/205893708
+ |
+ |      price : str, optional (default=None)
+ |          Price (optional). Dependent upon ordertype
+ |
+ |      price2 : str, optional (default=None)
+ |          Secondary price (optional). Dependent upon ordertype
+ |
+ |      leverage : str, optional (default=None)
+ |          Amount of leverage desired (optional). Default = none
+ |
+ |      oflags : str, optional (default=None)
+ |          Comma delimited list of order flags:
+ |          viqc = volume in quote currency (not available for leveraged
+ |              orders)
+ |          fcib = prefer fee in base currency
+ |          fciq = prefer fee in quote currency
+ |          nompp = no market price protection
+ |          post = post only order (available when ordertype = limit)
+ |
+ |      starttm : int, optional (default=None)
+ |          Scheduled start time:
+ |          0 = now (default)
+ |          +<n> = schedule start time <n> seconds from now
+ |          <n> = unix timestamp of start time
+ |
+ |      expiretm : int, optional (default=None)
+ |          Expiration time:
+ |          0 = no expiration (default)
+ |          +<n> = expire <n> seconds from now
+ |          <n> = unix timestamp of expiration time
+ |
+ |      userref : int, optional (default=None)
+ |          User reference id.  32-bit signed number.
+ |
+ |      validate : bool, optional (default=True)
+ |          Validate inputs only.  Do not submit order (default).
+ |
+ |      optional closing order to add to system when order gets filled:
+ |          close[ordertype] = order type
+ |          close[price] = price
+ |          close[price2] = secondary price
+ |
+ |      otp : str
+ |          Two-factor password (if two-factor enabled, otherwise not required)
+ |
+ |      Returns
+ |      -------
+ |      res : dict
+ |          res['descr'] = order description info
+ |              order = order description
+ |              close = conditional close order description (if conditional
+ |                  close set)
+ |          res['txid'] = array of transaction ids for order (if order was
+ |              added successfully)
+ |
+ |      Raises
+ |      ------
+ |      HTTPError
+ |          An HTTP error occurred.
+ |
+ |      KrakenAPIError
+ |          A kraken.com API error occurred.
+ |          Errors: errors include (but are not limited to):
+ |          EGeneral:Invalid arguments
+ |          EService:Unavailable
+ |          ETrade:Invalid request
+ |          EOrder:Cannot open position
+ |          EOrder:Cannot open opposing position
+ |          EOrder:Margin allowance exceeded
+ |          EOrder:Margin level too low
+ |          EOrder:Insufficient margin (exchange does not have sufficient funds
+ |              to allow margin trading)
+ |          EOrder:Insufficient funds (insufficient user funds)
+ |          EOrder:Order minimum not met (volume too low)
+ |          EOrder:Orders limit exceeded
+ |          EOrder:Positions limit exceeded
+ |          EOrder:Rate limit exceeded
+ |          EOrder:Scheduled orders limit exceeded
+ |          EOrder:Unknown position
+ |
+ |      Notes
+ |      -----
+ |      See get_tradable_asset_pairs for specifications on asset pair prices,
+ |      lots, and leverage.
+ |
+ |      Prices can be preceded by +, -, or # to signify the price as a relative
+ |      amount (with the exception of trailing stops, which are always
+ |      relative). + adds the amount to the current offered price. - subtracts
+ |      the amount from the current offered price. # will either add or
+ |      subtract the amount to the current offered price, depending on the type
+ |      and order type used. Relative prices can be suffixed with a % to
+ |      signify the relative amount as a percentage of the offered price.
+ |
+ |      For orders using leverage, 0 can be used for the volume to auto-fill
+ |      the volume needed to close out your position.
+ |
+ |      If you receive the error "EOrder:Trading agreement required", refer to
+ |      your API key management page for further details.
+*** Kraken create order
+#+NAME: kraken-create-order
+#+HEADER: :results drawer value
+#+BEGIN_SRC ipython
+  import krakenex
+  from pykrakenapi import KrakenAPI
+  from trading.kraken import credentials
+  creds_dict = credentials()
+  api = krakenex.API(creds_dict['APIKEY'],
+                     creds_dict['PRIVATEKEY'])
+  k = KrakenAPI(api)
+  k.add_standard_order("XXMRZEUR", 'buy', 'market', "1")
+#+END_SRC
+
+#+RESULTS: kraken-create-order
+:RESULTS:
+# Out[11]:
+: {'descr': {'order': 'buy 1.00000000 XMREUR @ market'}}
+:END:
+
+#+RESULTS:
+: # Out[1]:
