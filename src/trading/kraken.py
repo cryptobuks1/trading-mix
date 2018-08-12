@@ -13,9 +13,17 @@ def credentials(separator = '='):
 
 
 creds_dict = credentials()
+
 api = krakenex.API(creds_dict['APIKEY'],
                    creds_dict['PRIVATEKEY'])
 k = KrakenAPI(api)
+
+
+def connect():
+    api = krakenex.API(creds_dict['APIKEY'],
+                   creds_dict['PRIVATEKEY'])
+    k = KrakenAPI(api)
+    return k
 
 
 def get_rate():
@@ -48,3 +56,7 @@ def ohlc(**kwargs):
 orders_table = "ohlc"
 table_mapping = {orders_table: {"table": orders_table,
                                 "time_column": "timestamp"}}
+
+
+def create_order(k, otp):
+    return k.add_standard_order("XMREUR", 'buy', 'market', "1", validate=False)
