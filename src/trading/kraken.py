@@ -44,6 +44,15 @@ def get_orders(**kwargs):
     return to_sql(orders, 'orders', **kwargs)
 
 
+def get_latest_order_epoc(**kwargs):
+    if 'kraken' in kwargs.keys():
+        k = kwargs['kraken']
+    else:
+        k = connect()
+    orders, _ = k.get_trades_history()
+    return orders.iloc[0].time
+
+
 def ohlc(**kwargs):
     try:
         ohlc, last = get_rate()
