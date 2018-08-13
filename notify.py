@@ -25,7 +25,7 @@ def main():
     start, end = time_range(**db)
     engine, events = create(get_latest_order_epoc, tradeCommands)
     engine(window(None,
-                  end - 3600 * 3,
+                  end - 3600 * 4,
                   end, **db))
 
 
