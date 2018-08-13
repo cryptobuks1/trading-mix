@@ -41,6 +41,18 @@ None
 # Local Variables:
 # org-use-property-inheritance: t
 # End:
+** COMMENT Strategy
+#+BEGIN_SRC ipython
+  import pytest
+  pytest.main(["-m" "profit"])
+
+#+END_SRC
+
+#+RESULTS:
+: # Out[1]:
+: : 1
+: : <matplotlib.figure.Figure at 0x7f567dbef0f0>
+
 ** Scratch
 #+BEGIN_SRC ipython
   def hest(hjort):
