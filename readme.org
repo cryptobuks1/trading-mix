@@ -13,13 +13,21 @@ pip3 install -U --user pipenv
 
 #+RESULTS:
 
-** Three generator functions
-*** data/window_generator
-*** data/streamWindow
-*** test_kraken/data_gen
-** Why sqlite
-  The reason for sqlite: kraken returns pandas which can probably be
-  queried, but sqlite is more general and not all APIs return pandas
+** OHLC
+#+BEGIN_SRC ipython
+  from trading.kraken import ohlc
+  from trading.sql import connect
+  import tempfile
+
+  with tempfile.NamedTemporaryFile(prefix='pickle', delete=False) as f:
+      db = connect('sqlite:///' + f.name)
+      ohlc(**db)
+      print(f.name)
+#+END_SRC
+
+#+RESULTS:
+: # Out[10]:
+
 
 #+name localvenv
 #+BEGIN_SRC emacs-lisp
@@ -28,7 +36,7 @@ pip3 install -U --user pipenv
 
 #+RESULTS:
 
-#+header: :results drawer
+#+header: :results value drawer
 #+begin_src python
   from trading.kraken import ohlc
   ohlc()
@@ -48,9 +56,9 @@ None
 #+END_SRC
 
 #+RESULTS:
-: # Out[1]:
+: # Out[13]:
 : : 1
-: : <matplotlib.figure.Figure at 0x7f567dbef0f0>
+: [[file:./obipy-resources/29698o5M.png]]
 
 ** Scratch
 #+BEGIN_SRC ipython
@@ -280,3 +288,10 @@ class KrakenAPI(builtins.object)
 
 #+RESULTS:
 : # Out[1]:
+** Three generator functions
+*** data/window_generator
+*** data/streamWindow
+*** test_kraken/data_gen
+** Why sqlite
+  The reason for sqlite: kraken returns pandas which can probably be
+  queried, but sqlite is more general and not all APIs return pandas
