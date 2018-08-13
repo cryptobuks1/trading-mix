@@ -1,3 +1,4 @@
+# -*- org-use-property-inheritance: t; org-confirm-babel-evaluate: nil;-*-
 * Trading
   :PROPERTIES:
   :header-args: python :prologue (progn (pipenv-activate) (pyvenv-activate python-shell-virtualenv-root) "")
@@ -38,9 +39,7 @@ pip3 install -U --user pipenv
 None
 :END:
 
-# Local Variables:
-# org-use-property-inheritance: t
-# End:
+
 ** Strategy
 #+BEGIN_SRC ipython
   import pytest
