@@ -41,7 +41,7 @@ None
 # Local Variables:
 # org-use-property-inheritance: t
 # End:
-** COMMENT Strategy
+** Strategy
 #+BEGIN_SRC ipython
   import pytest
   pytest.main(["-m" "profit"])
