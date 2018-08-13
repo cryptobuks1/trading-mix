@@ -66,6 +66,7 @@ help(KrakenAPI)
 :RESULTS:
 # Out[8]:
 :END:
+*** Kraken create order
 **** create order documentation
 class KrakenAPI(builtins.object)
  |  A python implementation of the Kraken API.
@@ -244,7 +245,7 @@ class KrakenAPI(builtins.object)
  |
  |      If you receive the error "EOrder:Trading agreement required", refer to
  |      your API key management page for further details.
-*** Kraken create order
+**** code
 #+NAME: kraken-create-order
 #+HEADER: :results drawer value
 #+BEGIN_SRC ipython
