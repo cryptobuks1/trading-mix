@@ -1,6 +1,6 @@
 from trading.strategy.simple import create
 from trading.core import TradeCommand
-from trading.kraken import ohlc, get_orders
+from trading.kraken import ohlc, get_orders, get_latest_order_epoc
 from trading.sql import memdb, meta, latest, time_range, window
 from trading.mail import send, create_message
 from toml import load
@@ -21,14 +21,9 @@ def main():
         TradeCommand.sell: partial(send_mail, make_message("Sell")),
         TradeCommand.buy: partial(send_mail, make_message("Buy"))
     }
-    get_orders(**db)
     ohlc(**db)
-    env = db.copy()
-    env.update({'meta_data': meta(db['connection']),
-                'table_name': 'orders'})
-    latestOrder = latest(**env)
     start, end = time_range(**db)
-    engine, events = create(latestOrder.time, tradeCommands)
+    engine, events = create(get_latest_order_epoc, tradeCommands)
     engine(window(None,
                   end - 3600 * 3,
                   end, **db))
