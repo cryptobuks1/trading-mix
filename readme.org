@@ -1531,23 +1531,29 @@ None
 
 ** Strategy
 
-** Order log
+*** Order log
 #+BEGIN_SRC ipython
   from sqlalchemy import MetaData, create_engine, Table, Column
   from sqlalchemy.types import DateTime, Integer
-  engine = create_engine('sqlite:///:memory:')
+  from os.path import expanduser, exists, join
+  from os import makedirs
+
+  data_dir = expanduser('~/.local/lib/trading/data')
+  if not exists(data_dir):
+      makedirs(data_dir)
+  engine = create_engine('sqlite:///' + join(data_dir, 'orderlog.sqlite'))
 
   metadata = MetaData()
 
-  user = Table('orderlog', metadata,
-               Column('id', Integer, primary_key=True),
-               Column('datedime', DateTime, nullable=False))
+  orderlog_table = Table('orderlog', metadata,
+                         Column('id', Integer, primary_key=True),
+                         Column('datetime', DateTime, nullable=False))
 
-  metadata.create_all(engine)
+  orderlog_table.create(engine)
 #+END_SRC
 
 #+RESULTS:
-: # Out[1]:
+: # Out[3]:
 
 ** Test profit
 #+BEGIN_SRC ipython
