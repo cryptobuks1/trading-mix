@@ -4,5 +4,6 @@
 .tox
 .ipynb_checkpoints
 octave-workspace
+obipy-resources
 
 
