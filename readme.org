@@ -14,6 +14,28 @@ pip3 install -U --user pipenv
 #+RESULTS:
 
 
+** Application
+#+BEGIN_SRC ipython
+  from trading.core import TradeCommand
+  from trading.sql import memdb, time_range, window
+  from trading.kraken import ohlc, get_latest_order_epoc
+  from trading.strategy.simple import create
+
+
+  def main():
+      tradeCommands = {
+          TradeCommand.sell: True,
+          TradeCommand.buy: True
+      }
+
+      db = memdb()
+      ohlc(**db)
+      start, end = time_range(**db)
+      engine, events = create(get_latest_order_epoc, tradeCommands)
+      engine(window(None,
+                    end - 3600 * 4,
+                    end, **db))
+#+END_SRC
 ** Kraken
 *** Kraken help
 #+NAME: kraken-help
@@ -1477,6 +1499,7 @@ None
 :END:
 
 *** Balance
+**** Balance panda
 #+NAME: get-kraken-balance
 #+HEADER: :results drawer value
 #+BEGIN_SRC ipython
@@ -1494,7 +1517,39 @@ None
 : 2025.4876
 :END:
 
+**** Currency balance
+
+#+BEGIN_SRC ipython
+  from trading.kraken import get_currency_balance
+  get_currency_balance()
+
+#+END_SRC
+
+#+RESULTS:
+: # Out[2]:
+: : 2025.4876
+
 ** Strategy
+
+** Order log
+#+BEGIN_SRC ipython
+  from sqlalchemy import MetaData, create_engine, Table, Column
+  from sqlalchemy.types import DateTime, Integer
+  engine = create_engine('sqlite:///:memory:')
+
+  metadata = MetaData()
+
+  user = Table('orderlog', metadata,
+               Column('id', Integer, primary_key=True),
+               Column('datedime', DateTime, nullable=False))
+
+  metadata.create_all(engine)
+#+END_SRC
+
+#+RESULTS:
+: # Out[1]:
+
+** Test profit
 #+BEGIN_SRC ipython
   import pytest
   pytest.main(["-m" "profit"])
