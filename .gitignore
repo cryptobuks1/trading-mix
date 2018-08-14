@@ -3,4 +3,6 @@
 .pytest_cache
 .tox
 .ipynb_checkpoints
+octave-workspace
+
 
