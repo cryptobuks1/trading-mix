@@ -53,6 +53,12 @@ def get_latest_order_epoc(**kwargs):
     return orders.iloc[0].time
 
 
+def get_currency_balance(currency='ZEUR', **kwargs):
+    k = connect()
+    balance_panda = k.get_account_balance()
+    return balance_panda.loc[currency]['vol']
+
+
 def ohlc(**kwargs):
     try:
         ohlc, last = get_rate()
