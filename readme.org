@@ -1532,25 +1532,30 @@ None
 ** Strategy
 
 *** Order log
+#+NAME: create-orderlog-table
 #+BEGIN_SRC ipython
-  from sqlalchemy import MetaData, create_engine, Table, Column
-  from sqlalchemy.types import DateTime, Integer
-  from os.path import expanduser, exists, join
-  from os import makedirs
+    from sqlalchemy import MetaData, create_engine, Table, Column
+    from sqlalchemy.types import DateTime, Integer, String
+    from os.path import expanduser, exists, join
+    from os import makedirs
 
-  data_dir = expanduser('~/.local/lib/trading/data')
-  if not exists(data_dir):
-      makedirs(data_dir)
-  engine = create_engine('sqlite:///' + join(data_dir, 'orderlog.sqlite'))
+    data_dir = expanduser('~/.local/lib/trading/data')
+    if not exists(data_dir):
+        makedirs(data_dir)
+    engine = create_engine('sqlite:///' + join(data_dir, 'orderlog.sqlite'))
 
-  metadata = MetaData()
+    metadata = MetaData()
 
-  orderlog_table = Table('orderlog', metadata,
-                         Column('id', Integer, primary_key=True),
-                         Column('datetime', DateTime, nullable=False))
+    orderlog_table = Table('orderlog', metadata,
+                           Column('id', Integer, primary_key=True),
+                           Column('currency', String, nullable=False),
+                           Column('datetime', DateTime, nullable=False))
 
-  orderlog_table.create(engine)
+    orderlog_table.create(engine)
 #+END_SRC
+
+#+RESULTS: create-orderlog-table
+: # Out[2]:
 
 #+RESULTS:
 : # Out[3]:
