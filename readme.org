@@ -37,6 +37,32 @@ pip3 install -U --user pipenv
                     end, **db))
 #+END_SRC
 ** Kraken
+*** OHLC panda
+#+NAME: kraken-ohcl-panda
+#+BEGIN_SRC ipython
+  from trading.kraken import connect
+  k = connect()
+  ohlc, _ = k.get_ohlc_data("XXMRZEUR")
+  type(ohlc.iloc[0].open)
+#+END_SRC
+
+#+RESULTS: kraken-ohcl-panda
+=# Out[7]:
+: numpy.float64
+==# Out[6]:
+#+BEGIN_EXAMPLE
+  time      1.534359e+09
+  open      8.191000e+01
+  high      8.191000e+01
+  low       8.191000e+01
+  close     8.191000e+01
+  vwap      0.000000e+00
+  volume    0.000000e+00
+  count     0.000000e+00
+  Name: 2018-08-15 18:46:00, dtype: float64
+#+END_EXAMPLE
+=#+end_example
+
 *** Kraken help
 #+NAME: kraken-help
 #+HEADER: :results drawer output
@@ -1533,32 +1559,63 @@ None
 
 *** Order log
 #+NAME: create-orderlog-table
-#+BEGIN_SRC ipython
-    from sqlalchemy import MetaData, create_engine, Table, Column
-    from sqlalchemy.types import DateTime, Integer, String
-    from os.path import expanduser, exists, join
-    from os import makedirs
+#+BEGIN_SRC ipython :tangle yes
+  from sqlalchemy import MetaData, create_engine, Table, Column
+  from sqlalchemy.types import DateTime, Integer, String, Float
+  from sqlalchemy.sql import func
+  from os.path import expanduser, exists, join
+  from os import makedirs
 
-    data_dir = expanduser('~/.local/lib/trading/data')
-    if not exists(data_dir):
-        makedirs(data_dir)
-    engine = create_engine('sqlite:///' + join(data_dir, 'orderlog.sqlite'))
+  data_dir = expanduser('~/.local/lib/trading/data')
+  if not exists(data_dir):
+      makedirs(data_dir)
+  engine = create_engine('sqlite:///' + join(data_dir, 'orderlog.sqlite'))
 
-    metadata = MetaData()
+  metadata = MetaData()
 
-    orderlog_table = Table('orderlog', metadata,
-                           Column('id', Integer, primary_key=True),
-                           Column('currency', String, nullable=False),
-                           Column('datetime', DateTime, nullable=False))
+  orderlog_table = Table('orderlog', metadata,
+                         Column('id', Integer, primary_key=True),
+                         Column('currency', String, nullable=False),
+                         Column('amount', String, nullable=False),
+                         Column('datetime', DateTime,
+                                nullable=False,
+                                server_default=func.now()))
 
-    orderlog_table.create(engine)
+  orderlog_table.create(engine)
 #+END_SRC
 
 #+RESULTS: create-orderlog-table
-: # Out[2]:
+: # Out[4]:
 
-#+RESULTS:
-: # Out[3]:
+#+NAME: create-orderlog-table-as-pickle
+#+HEADER: :tangle yes
+#+BEGIN_SRC ipython
+  from sqlalchemy import MetaData, Table, Column
+  from sqlalchemy.types import DateTime, Integer, PickleType
+  from os.path import expanduser, exists, dirname
+  from os import makedirs
+  from trading.sql import connect
+
+  db_path = expanduser('~/.local/lib/trading/data/orderlog.sqlite')
+  db_dir = dirname(db_path)
+
+  if not exists(db_dir):
+      makedirs(db_dir)
+
+  db = connect('sqlite:///' + db_path)
+
+  metadata = MetaData()
+
+  orderlog_table = Table('orderlog', metadata,
+                         Column('id', Integer, primary_key=True),
+                         Column('payload', PickleType, nullable=False)
+                         Column('datetime', DateTime,
+                                nullable=False,
+                                server_default=func.now()))
+#+END_SRC
+
+#+RESULTS: create-orderlog-table-as-pickle
+: # Out[2]:
 
 ** Test profit
 #+BEGIN_SRC ipython
