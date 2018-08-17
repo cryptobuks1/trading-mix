@@ -1590,6 +1590,7 @@ None
 : # Out[4]:
 
 **** Schema less (pickle)
+Store pickled data in a topic on a append log
 #+NAME: create-orderlog-table-as-pickle
 #+HEADER: :tangle src/trading/storage.py
 #+BEGIN_SRC ipython
