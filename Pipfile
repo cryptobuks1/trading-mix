@@ -26,6 +26,7 @@ blinker = "*"
 toml = "*"
 gnupg = "*"
 aioxmpp = "*"
+numpy = "*"
 
 [requires]
 python_version = "3.5"

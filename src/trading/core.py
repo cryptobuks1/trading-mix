@@ -13,5 +13,3 @@ def advice(analysis):
         return TradeCommand.buy
     else:
         return TradeCommand.sell
-
-def default_db_path():

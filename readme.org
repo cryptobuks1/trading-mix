@@ -1558,6 +1558,8 @@ None
 ** Strategy
 
 *** Order log
+
+**** Schema
 #+NAME: create-orderlog-table
 #+BEGIN_SRC ipython :tangle yes
   from sqlalchemy import MetaData, create_engine, Table, Column
@@ -1587,35 +1589,123 @@ None
 #+RESULTS: create-orderlog-table
 : # Out[4]:
 
+**** Schema less (pickle)
 #+NAME: create-orderlog-table-as-pickle
-#+HEADER: :tangle yes
+#+HEADER: :tangle src/trading/storage.py
 #+BEGIN_SRC ipython
-  from sqlalchemy import MetaData, Table, Column
+  from sqlalchemy import MetaData, Table, Column, desc
   from sqlalchemy.types import DateTime, Integer, PickleType
+  from sqlalchemy.sql import func, select
   from os.path import expanduser, exists, dirname
   from os import makedirs
   from trading.sql import connect
+  import pickle
+  import logging
 
-  db_path = expanduser('~/.local/lib/trading/data/orderlog.sqlite')
-  db_dir = dirname(db_path)
 
-  if not exists(db_dir):
-      makedirs(db_dir)
+  def save(topic, data, **kwargs):
+      connection, topic_table = get_table(topic)
+      logging.warn(topic_table)
+      connection.execute(topic_table.insert().values(payload=pickle.dumps(data)))
 
-  db = connect('sqlite:///' + db_path)
 
-  metadata = MetaData()
+  def load(topic):
+      db = get_pickle_log_db()
+      topic_table = get_pickle_log_table_def(topic, **db)
+      query = select([topic_table]).order_by(desc(topic_table.c['id']))
+      return pickle.loads(db['connection'].execute(query).fetchone()['payload'])
 
-  orderlog_table = Table('orderlog', metadata,
-                         Column('id', Integer, primary_key=True),
-                         Column('payload', PickleType, nullable=False)
-                         Column('datetime', DateTime,
-                                nullable=False,
-                                server_default=func.now()))
+
+  def get_pickle_log_db():
+      db_path = expanduser('~/.local/lib/trading/data/state.sqlite')
+      db_dir = dirname(db_path)
+
+      if not exists(db_dir):
+          makedirs(db_dir)
+
+      return connect('sqlite:///' + db_path)
+
+
+  def get_pickle_log_table_def(table_name, *, connection, **kwargs):
+      metadata = MetaData()
+      metadata.reflect(bind=connection)
+      return metadata.tables[table_name]
+
+
+  def get_table(table_name):
+      db_path = expanduser('~/.local/lib/trading/data/state.sqlite')
+      db_dir = dirname(db_path)
+
+      if not exists(db_dir):
+          makedirs(db_dir)
+
+      db = connect('sqlite:///' + db_path)
+
+      metadata = MetaData()
+      metadata.reflect(bind=db['connection'])
+
+      if not db['connection'].dialect.has_table(db['connection'], table_name):
+          orderlog_table = Table(table_name, metadata,
+                                 Column('id', Integer, primary_key=True),
+                                 Column('payload', PickleType, nullable=False),
+                                 Column('datetime', DateTime,
+                                        server_default=func.now()))
+          orderlog_table.create(db['connection'])
+      else:
+          orderlog_table = metadata.tables[table_name]
+
+      return db['connection'], orderlog_table
+
 #+END_SRC
 
 #+RESULTS: create-orderlog-table-as-pickle
+: # Out[5]:
+
+***** Test
+#+NAME: test-pickle-state
+#+BEGIN_SRC ipython :tangle tests/trading/test_storage.py
+  import pytest
+  from trading.storage import save, load
+  import logging
+
+  @pytest.mark.storage
+  def test_storage(caplog):
+      balance_in1 = {'euros': 1,
+                     'xmr': 1}
+      balance_in2 = {'euros': 2,
+                     'xmr': 2}
+      balance_in3 = {'euros': 3,
+                     'xmr': 3}
+      with caplog.at_level(logging.DEBUG):
+          save('balance', balance_in1)
+          save('balance', balance_in2)
+          save('balance', balance_in3)
+          balance_out = load('balance')
+      assert balance_in3 == balance_out
+#+END_SRC
+
+
+#+NAME: test-mark-python
+#+BEGIN_SRC ipython :session storage
+  import pytest
+  pytest.main(["-m", "storage"])
+#+END_SRC
+
+#+RESULTS: test-mark-python
 : # Out[2]:
+: : 1
+
+#+NAME: reload-storage
+#+BEGIN_SRC ipython :session storage
+  from importlib import reload
+  import trading.storage
+  reload(trading.storage)
+#+END_SRC
+
+#+RESULTS: reload-storage
+: # Out[1]:
+: : <module 'trading.storage' from '/home/kristian/projects/trading/src/trading/storage.py'>
+
 
 ** Test profit
 #+BEGIN_SRC ipython
