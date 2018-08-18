@@ -1611,10 +1611,12 @@ Store pickled data in a topic on a append log
 
 
   def load(topic):
-      db = get_pickle_log_db()
-      topic_table = get_pickle_log_table_def(topic, **db)
+      connection, topic_table = get_table(topic)
       query = select([topic_table]).order_by(desc(topic_table.c['id']))
-      return pickle.loads(db['connection'].execute(query).fetchone()['payload'])
+      message = connection.execute(query).fetchone()
+      if message:
+          message = pickle.loads(message['payload'])
+      return message
 
 
   def get_pickle_log_db():
