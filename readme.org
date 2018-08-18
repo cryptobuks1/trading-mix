@@ -54,39 +54,47 @@ pip3 install -U --user pipenv
   @pytest.mark.profit_persist
   def test_profit(all_data, caplog):
       newMoney = 0
-      newXMR = 0
       euros = 0
       xmrs = 0
       rate = -1
-      firstOrder = True
+
       topic = "trading"
       state = load(topic)
       if not state:
           state = {}
+          firstOrder = True
 
 
       def sell(analysis):
           nonlocal euros, xmrs, rate, firstOrder, newMoney, state
           rate = analysis['y'][-1]
           if firstOrder:
+              firstOrder = False
               logging.warn("Selling on first order")
-              extraMoney = 5 * rate
-              newMoney += extraMoney
+              newMonero = 5
               xmrs = 5
               euros = 0
-              firstOrder = False
+
+              state['newMonero'] = state['newMonero'] + 5
+              state['xmrs'] = 5
           euros += xmrs * rate
           logging.warn("at {} selling: {} xmr at rate {} for {} euros".format(toDate(analysis['x'][-1]), xmrs, rate, euros))
           xmrs = 0
+          # sell here
+          state['xmrs'] = 0
+          state['euros'] = state['euros'] * rate
+          save(state)
 
       def buy(analysis):
           nonlocal euros, xmrs, rate, firstOrder, newMoney, state
           rate = analysis['y'][-1]
           if euros == 0:
+              firstOrder = False
               extraMoney = 5 * rate
               newMoney =+ extraMoney
               euros = extraMoney
-              firstOrder = False
+              state['euros'] = 5 * rate
+              state['newMoney'] = state['newMoney'] + state['euros']
 
           xmrs += euros / rate
           logging.warn("at {} buying: {} xmr at rate {} for {} euros".format(toDate(analysis['x'][-1]), xmrs, rate, euros))
@@ -119,9 +127,47 @@ pip3 install -U --user pipenv
   pytest.main(["-m" "profit_persist"])
 #+END_SRC
 
-#+RESULTS:
-: # Out[5]:
-: : 1
+#+NAME: exec-test-profit
+#+HEADER: :session test-profit
+#+HEADER: :results drawer replace
+#+BEGIN_SRC sh
+  pipenv run pytest -m profit_persist
+#+END_SRC
+
+#+RESULTS: exec-test-profit
+:RESULTS:
+[32m[22mCourtesy Notice[39m[22m: Pipenv found itself running within a virtual environment, so it will automatically use that environment, instead of creating its own for any project. You can set [39m[1mPIPENV_IGNORE_VIRTUALENVS=1[39m[22m to force pipenv to ignore that environment and create its own instead.
+============================ test session starts ============================
+platform linux -- Python 3.5.3, pytest-3.6.3, py-1.5.4, pluggy-0.6.0
+rootdir: /home/kristian/projects/trading, inifile:
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+collecting 0 items                                                          collecting 1 item                                                           collecting 2 items                                                          collecting 16 items                                                         collecting 19 items                                                         collecting 20 items                                                         collecting 22 items                                                         collecting 24 items                                                         collecting 25 items                                                         collecting 27 items                                                         collecting 28 items                                                         collecting 29 items                                                         collecting 30 items                                                         collecting 31 items                                                         collecting 32 items                                                         collecting 33 items                                                         collecting 34 items                                                         collecting 35 items                                                         collecting 36 items                                                         collecting 38 items                                                         collected 38 items / 37 deselected
+]
+
+================================= FAILURES ==================================
+________________________________ test_profit ________________________________
+}
+@pytest.mark.profit_persist
+    def test_profit(all_data, caplog):
+        newMoney = 0
+        newXMR = 0
+        euros = 0
+        xmrs = 0
+        rate = -1
+        firstOrder = True
+        topic = "trading"
+        state = load(topic)
+assert {} == state
+E       assert {} == None
+
+tests/trading/test_profit_persist.py:21: AssertionError
+================== 1 failed, 37 deselected in 3.79 seconds ==================
+:END:
 
 ** Kraken
 *** OHLC panda
@@ -1749,7 +1795,7 @@ Store pickled data in a topic on a append log
 #+END_SRC
 
 #+RESULTS: create-orderlog-table-as-pickle
-: # Out[5]:
+: # Out[10]:
 
 ***** Test
 #+NAME: test-pickle-state
