@@ -11,6 +11,7 @@ test-mark-newpeak:
 test-mark-event:
 test-mark-peakdiff:
 test-mark-profit:
+test-make-profit_persist:
 test-mark-strategyhelper:
 test-mark-%:
 	pipenv run pytest -m $(*)
