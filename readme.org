@@ -15,6 +15,7 @@ pip3 install -U --user pipenv
 
 
 ** Application
+#+NAME: app
 #+BEGIN_SRC ipython
   from trading.core import TradeCommand
   from trading.sql import memdb, time_range, window
