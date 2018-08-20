@@ -1627,6 +1627,8 @@ class KrakenAPI(builtins.object)
 *** OHLC
 
 **** Save latest ohlc data
+#+NAME: latest-kraken-ohlc-file
+#+HEADER: :results drawer raw
 #+BEGIN_SRC ipython
   from trading.kraken import ohlc
   from trading.sql import connect
@@ -1638,8 +1640,24 @@ class KrakenAPI(builtins.object)
       print(f.name)
 #+END_SRC
 
+#+RESULTS: latest-kraken-ohlc-file
+:RESULTS:
+/tmp/picklem2bi7yg6
+:END:
+
 #+RESULTS:
-: # Out[10]:
+: # Out[1]:
+
+
+**** import latest ohlc data
+#+NAME: import-latest-kraken-ohlc-file
+#+BEGIN_SRC sh :var ohlc_data_file=latest-kraken-ohlc-file
+  echo "$ohlc_data_file" | awk '{print $1}'
+  # cat ${ohcl_data_file} > data/ohcl-`date +%F-%H-%M-%S`.sqlite
+#+END_SRC
+
+#+RESULTS: import-latest-kraken-ohlc-file
+: /tmp/pickleobbx203j
 
 **** Stuff
 #+name localvenv
