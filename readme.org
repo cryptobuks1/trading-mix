@@ -16,17 +16,19 @@ pip3 install -U --user pipenv
 
 ** Application
 #+NAME: app
+#+HEADER: :tangle trader.py :session app
 #+BEGIN_SRC ipython
   from trading.core import TradeCommand
+  from trading.storage import save, load
   from trading.sql import memdb, time_range, window
-  from trading.kraken import ohlc, get_latest_order_epoc
+  from trading.kraken import ohlc, get_latest_order_epoc, create_order
   from trading.strategy.simple import create
 
 
   def main():
       tradeCommands = {
-          TradeCommand.sell: True,
-          TradeCommand.buy: True
+          TradeCommand.sell: lambda: create_order('sell', 5),
+          TradeCommand.buy: lambda: create_order('buy', 5)
       }
 
       db = memdb()
