@@ -1,6 +1,7 @@
 import krakenex
 from pykrakenapi import KrakenAPI
 from trading.sql import memdb
+import logging
 
 
 def credentials(separator = '='):
@@ -73,5 +74,7 @@ table_mapping = {orders_table: {"table": orders_table,
                                 "time_column": "timestamp"}}
 
 
-def create_order(k, otp):
-    return k.add_standard_order("XMREUR", 'buy', 'market', "1", validate=False)
+def create_order(command, amount):
+    k = connect()
+    logging.warn(command)
+    return k.add_standard_order("XMREUR", command, 'market', str(amount), validate=False)
