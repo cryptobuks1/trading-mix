@@ -1887,6 +1887,15 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 #+END_SRC
 
+** Working with data
+#+NAME: ask-for-datafile
+#+BEGIN_SRC emacs-lisp
+(read-file-name "Enter file name:")
+#+END_SRC
+
+#+RESULTS: ask-for-datafile
+: /home/kristian/projects/trading/data/ohcl-2018-08-22-00:17:13.sqlite
+
 ** Test
 
 *** Test mark
