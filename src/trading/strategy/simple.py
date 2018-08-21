@@ -2,8 +2,7 @@
 
 import logging
 from trading.events import create_trading_events, emit
-from trading.core import advice
-from trading.data import is_new_peak, analyseData
+from trading.data import is_new_peak, analyseData, advice
 from trading.events import bind
 from trading.octave import conf as peakConf
 from functools import partial
@@ -43,6 +42,15 @@ def trigger_trade_advise(tradingEvents, peak_analysis):
 
 def processAdvice(commands, data):
     logging.debug("Call callback")
+    logging.debug(type(data['advice']))
+    advice = data['advice']
+    logging.debug(advice)
+    for idx in commands.keys():
+        logging.debug(idx)
+        if advice == idx:
+            logging.debug("Index found")
+        logging.debug(type(idx))
+        logging.debug(commands[idx])
     cmd = commands[data['advice']]
     if 0 == inspect.signature(cmd).parameters.keys():
         cmd()

@@ -137,6 +137,14 @@ def is_new_peak(latest_order_epoc, analysis):
     return timeDiff > 1200 * 4  # within 20 minutes
 
 
+def advice(analysis):
+    z = analysis['z']
+    if z[0][1] < 0:
+        return TradeCommand.buy
+    else:
+        return TradeCommand.sell
+
+
 def load_data_from_file(path):
         with open(path, 'rb') as f:
             lp = pickle.load(f)

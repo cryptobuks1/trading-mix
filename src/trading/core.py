@@ -1,3 +1,6 @@
+
+from trading.sql import time_range, window
+from trading.strategy.simple import create
 from enum import Enum
 
 
@@ -7,9 +10,18 @@ class TradeCommand(Enum):
     wait = 3
 
 
-def advice(analysis):
-    z = analysis['z']
-    if z[0][1] < 0:
-        return TradeCommand.buy
-    else:
-        return TradeCommand.sell
+def default_kraken_strategy(*, buy_fn, sell_fn, latest_order_epoc_fn):
+    tradeCommands = {
+        TradeCommand.sell: sell_fn,
+        TradeCommand.buy: buy_fn
+    }
+
+    engine, events = create(latest_order_epoc_fn, tradeCommands)
+
+    def strategy(db):
+        start, end = time_range(**db)
+        engine(window(None,
+                      end - 3600 * 4,
+                      end, **db))
+
+    return strategy, events

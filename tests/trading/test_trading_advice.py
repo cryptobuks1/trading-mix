@@ -1,8 +1,8 @@
 import pytest
-from trading.data import analyseData
+from trading.data import analyseData, advice
 from trading.events import tradingEvents
 from trading.octave import conf as peakConf
-from trading.core import advice, TradeCommand
+from trading.core import TradeCommand
 
 
 def validate_peak(peak_data, expected_advice):
