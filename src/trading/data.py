@@ -12,6 +12,12 @@ import pickle
 import logging
 
 
+class TradeCommand(Enum):
+    sell = 1
+    buy = 2
+    wait = 3
+
+
 def fit(coord):
     x, y = coord
     z = np.polyfit(x, y, 2, full=True)
@@ -21,12 +27,6 @@ def fit(coord):
     x_new = np.linspace(x[0], x[-1], 50)
     y_new = f(x_new)
     return [x, y, x_new, y_new, f, z]
-
-
-class TradeCommand(Enum):
-    sell = 1
-    buy = 2
-    wait = 3
 
 
 def peaks(values):
