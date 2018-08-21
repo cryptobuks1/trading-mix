@@ -1,3 +1,4 @@
+
 import pytest
 from os import getcwd
 from os.path import join, dirname
@@ -6,7 +7,11 @@ from trading.data import load_data_from_file
 from trading.sql import connect, meta, latest
 from trading.kraken import to_sql
 
-path.append(join(dirname(__file__), 'helpers'))
+try:
+    path.append(join(dirname(__file__), 'helpers'))
+except NameError:
+    pass
+
 @pytest.fixture
 def low_peak():
     path = join(getcwd(), 'data', 'low_pickle.byte')
@@ -41,6 +46,14 @@ def low_peak_order_epoc(low_peak):
 @pytest.fixture
 def all_data():
     db = connect("sqlite:///" + join('/home/kristian/projects/trading/data',
-                                       'ohlc-2018-08-13-20-37.sqlite'))
+                                       'ohlc-2018-08-19-23:32:55.sqlite'))
+    # db['time_column'] = 'timestamp'
+    return db
+
+
+@pytest.fixture
+def ohlc_12_hour_as_sql():
+    db = connect("sqlite:///" + join('/home/kristian/projects/trading/data',
+                                       'ohlc-2018-08-19-23:32:55.sqlite'))
     # db['time_column'] = 'timestamp'
     return db

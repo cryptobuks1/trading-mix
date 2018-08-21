@@ -40,138 +40,38 @@ pip3 install -U --user pipenv
                     end, **db))
 #+END_SRC
 
-*** Profit
-#+NAME: test-profit
-#+HEADER: :session test-profit
-#+HEADER: :tangle tests/trading/test_profit_persist.py
-#+BEGIN_SRC ipython :session profit
-  from trading.core import TradeCommand
-  from trading.data import window_generator
-  from trading.util import toDate
-  from trading.storage import save, load
-  from strategy_helper import take
-  import pytest
-  import logging
+*** Core
+#+NAME: trading-core
+#+HEADER: :tangle src/trading/core.py
+#+BEGIN_SRC ipython
+  from trading.sql import time_range, window
+  from trading.strategy.simple import create
+  from enum import Enum
 
 
-  @pytest.mark.profit_persist
-  def test_profit(all_data, caplog):
-      newMoney = 0
-      euros = 0
-      xmrs = 0
-      rate = -1
-
-      topic = "trading"
-      state = load(topic)
-      if not state:
-          state = {}
-          firstOrder = True
+  class TradeCommand(Enum):
+      sell = 1
+      buy = 2
+      wait = 3
 
 
-      def sell(analysis):
-          nonlocal euros, xmrs, rate, firstOrder, newMoney, state
-          rate = analysis['y'][-1]
-          if firstOrder:
-              firstOrder = False
-              logging.warn("Selling on first order")
-              newMonero = 5
-              xmrs = 5
-              euros = 0
-
-              state['newMonero'] = state['newMonero'] + 5
-              state['xmrs'] = 5
-          euros += xmrs * rate
-          logging.warn("at {} selling: {} xmr at rate {} for {} euros".format(toDate(analysis['x'][-1]), xmrs, rate, euros))
-          xmrs = 0
-          # sell here
-          state['xmrs'] = 0
-          state['euros'] = state['euros'] * rate
-          save(state)
-
-      def buy(analysis):
-          nonlocal euros, xmrs, rate, firstOrder, newMoney, state
-          rate = analysis['y'][-1]
-          if euros == 0:
-              firstOrder = False
-              extraMoney = 5 * rate
-              newMoney =+ extraMoney
-              euros = extraMoney
-              state['euros'] = 5 * rate
-              state['newMoney'] = state['newMoney'] + state['euros']
-
-          xmrs += euros / rate
-          logging.warn("at {} buying: {} xmr at rate {} for {} euros".format(toDate(analysis['x'][-1]), xmrs, rate, euros))
-          euros = 0
-
+  def default_kraken_strategy(*, buy_fn, sell_fn, latest_order_epoc_fn):
       tradeCommands = {
-          TradeCommand.sell: sell,
-          TradeCommand.buy: buy
+          TradeCommand.sell: sell_fn,
+          TradeCommand.buy: buy_fn
       }
 
-      run, events = take(7,
-                         tradeCommands,
-                         window_generator(3600 * 4,
-                                          600,
-                                          ,**all_data))
-      # with caplog.at_level(logging.DEBUG):
-      run()
-      currentValueInEUROS = (xmrs * rate) + euros
-      logging.warn("portfolio value {}".format(currentValueInEUROS - newMoney))
-      logging.warn("Money {}".format(newMoney))
-      assert  False
-      #assert (xmrs * rate) + euros > newMoney * 3
+      engine, events = create(latest_order_epoc_fn, tradeCommands)
+
+      def strategy(db):
+          start, end = time_range(**db)
+          engine(window(None,
+                        end - 3600 * 4,
+                        end, **db))
+
+      return strategy, events
 
 #+END_SRC
-
-**** execute
-#+HEADER: :session test-profit
-#+BEGIN_SRC ipython
-  import pytest
-  pytest.main(["-m" "profit_persist"])
-#+END_SRC
-
-#+NAME: exec-test-profit
-#+HEADER: :session test-profit
-#+HEADER: :results drawer replace
-#+BEGIN_SRC sh
-  pipenv run pytest -m profit_persist
-#+END_SRC
-
-#+RESULTS: exec-test-profit
-:RESULTS:
-[32m[22mCourtesy Notice[39m[22m: Pipenv found itself running within a virtual environment, so it will automatically use that environment, instead of creating its own for any project. You can set [39m[1mPIPENV_IGNORE_VIRTUALENVS=1[39m[22m to force pipenv to ignore that environment and create its own instead.
-============================ test session starts ============================
-platform linux -- Python 3.5.3, pytest-3.6.3, py-1.5.4, pluggy-0.6.0
-rootdir: /home/kristian/projects/trading, inifile:
-/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
-  return f(*args, **kwds)
-/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
-  return f(*args, **kwds)
-/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
-  return f(*args, **kwds)
-collecting 0 items                                                          collecting 1 item                                                           collecting 2 items                                                          collecting 16 items                                                         collecting 19 items                                                         collecting 20 items                                                         collecting 22 items                                                         collecting 24 items                                                         collecting 25 items                                                         collecting 27 items                                                         collecting 28 items                                                         collecting 29 items                                                         collecting 30 items                                                         collecting 31 items                                                         collecting 32 items                                                         collecting 33 items                                                         collecting 34 items                                                         collecting 35 items                                                         collecting 36 items                                                         collecting 38 items                                                         collected 38 items / 37 deselected
-]
-
-================================= FAILURES ==================================
-________________________________ test_profit ________________________________
-}
-@pytest.mark.profit_persist
-    def test_profit(all_data, caplog):
-        newMoney = 0
-        newXMR = 0
-        euros = 0
-        xmrs = 0
-        rate = -1
-        firstOrder = True
-        topic = "trading"
-        state = load(topic)
-assert {} == state
-E       assert {} == None
-
-tests/trading/test_profit_persist.py:21: AssertionError
-================== 1 failed, 37 deselected in 3.79 seconds ==================
-:END:
-
 ** Kraken
 *** OHLC panda
 #+NAME: kraken-ohcl-panda
@@ -1863,8 +1763,378 @@ Store pickled data in a topic on a append log
 : # Out[1]:
 : : <module 'trading.storage' from '/home/kristian/projects/trading/src/trading/storage.py'>
 
+*** default strategy
 
+**** test
+#+NAME: test-default-kraken-strategy
+#+HEADER: :tangle tests/trading/test_default_strategy.py
+#+BEGIN_SRC ipython
+  from trading.core import default_kraken_strategy
+  import pytest
+  import logging
+
+
+  @pytest.mark.default_strategy
+  def test_default_strategy(ohlc_12_hour_as_sql, caplog):
+
+      def buy():
+          logging.debug("buy")
+
+      def sell():
+          logging.debug("sell")
+
+      def latest_order_epoc():
+          return 1534104841.0428
+
+      [strategy,
+       events] = default_kraken_strategy(**{"buy_fn":
+                                            buy,
+                                            "sell_fn":
+                                            sell,
+                                            "latest_order_epoc_fn":
+                                            latest_order_epoc})
+      with caplog.at_level(logging.DEBUG):
+          strategy(ohlc_12_hour_as_sql)
+
+      assert "sell" in caplog.text
+
+#+END_SRC
+
+**** Execute
+#+NAME: test-default-kraken-strategy-execute
+#+call: pytest-mark(mark="default_strategy")
+
+#+RESULTS: test-default-kraken-strategy-execute
+#+begin_example
+
+> > kristian@debian-x200:~/projects/trading$ kristian@debian-x200:~/projects/trading$ ==================================================================== test session starts ====================================================================
+platform linux -- Python 3.5.3, pytest-3.6.3, py-1.5.4, pluggy-0.6.0
+rootdir: /home/kristian/projects/trading, inifile:
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+collecting 0 items                                                                                                                                          collecting 1 item                                                                                                                                           collecting 2 items                                                                                                                                          collecting 16 items                                                                                                                                         collecting 17 items                                                                                                                                         collecting 20 items                                                                                                                                         collecting 21 items                                                                                                                                         collecting 23 items                                                                                                                                         collecting 25 items                                                                                                                                         collecting 26 items                                                                                                                                         collecting 28 items                                                                                                                                         collecting 29 items                                                                                                                                         collecting 30 items                                                                                                                                         collecting 31 items                                                                                                                                         collecting 32 items                                                                                                                                         collecting 33 items                                                                                                                                         collecting 34 items                                                                                                                                         collecting 35 items                                                                                                                                         collecting 36 items                                                                                                                                         collecting 37 items                                                                                                                                         collecting 39 items                                                                                                                                         collected 39 items / 38 deselected
+]
+
+========================================================================= FAILURES ==========================================================================
+___________________________________________________________________ test_default_strategy ___________________________________________________________________
+}
+@pytest.mark.default_strategy
+    def test_default_strategy(ohlc_12_hour_as_sql, caplog):
+
+        def buy():
+            logging.debug("buy")
+
+        def sell():
+            logging.debug("sell")
+
+        def latest_order_epoc():
+            return 1534104841.0428
+
+        [strategy,
+         events] = default_kraken_strategy(**{"buy_fn":
+                                              buy,
+                                              "sell_fn":
+                                              sell,
+                                              "latest_order_epoc_fn":
+                                              latest_order_epoc})
+        with caplog.at_level(logging.DEBUG):
+strategy(ohlc_12_hour_as_sql)
+
+tests/trading/test_default_strategy.py:27:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src/trading/core.py:25: in strategy
+    end, **db))
+src/trading/strategy/simple.py:25: in start
+    **kwargs)
+src/trading/data.py:85: in analyseData
+    event.send('analyse', data={'data': data, 'result': result})
+../../.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/site-packages/blinker/base.py:267: in send
+    for receiver in self.receivers_for(sender)]
+for receiver in self.receivers_for(sender)]
+src/trading/events.py:24: in strip_senders
+    subscriber(**kwargs)
+src/trading/strategy/simple.py:33: in check_peak
+    tradingEvents.newPeak.send(check_peak, peak_analysis=data['result'])
+../../.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/site-packages/blinker/base.py:267: in send
+    for receiver in self.receivers_for(sender)]
+for receiver in self.receivers_for(sender)]
+src/trading/events.py:24: in strip_senders
+    subscriber(**kwargs)
+src/trading/strategy/simple.py:40: in trigger_trade_advise
+    'analysis': peak_analysis})
+src/trading/events.py:45: in emit
+    event.send(sender, **{'data': data})
+../../.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/site-packages/blinker/base.py:267: in send
+    for receiver in self.receivers_for(sender)]
+for receiver in self.receivers_for(sender)]
+src/trading/events.py:24: in strip_senders
+    subscriber(**kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+: <function test_default_strategy.<locals>.buy at 0x7f895be6d510>, <TradeCommand.sell: 1>: <function test_default_strategy.<locals>.sell at 0x7f895be6d598>}
+, 'analysis': {'x': [1534714260, 1534714200, 1534714140, 1534714080, 1534714020, 15347...021e+09, 1.53469992e+09]), 'xpeak': array([1.5347008e+09]), 'y': [86.17, 86.19, 86.55, 86.26, 86.23, 86.82, ...], ...}}
+
+    def processAdvice(commands, data):
+        logging.debug("Call callback")
+        logging.debug(type(data['advice']))
+        advice = data['advice']
+        logging.debug(advice)
+        for idx in commands.keys():
+            logging.debug(idx)
+            if advice == idx:
+                logging.debug("Index found")
+            logging.debug(type(idx))
+            logging.debug(commands[idx])
+cmd = commands[data['advice']]
+src/trading/strategy/simple.py:54: KeyError
+--------------------------------------------------------------------- Captured log call ---------------------------------------------------------------------
+data.py                     62 DEBUG    Start analysis
+simple.py                   31 DEBUG    Got Peak
+data.py                    133 DEBUG    Peak at: 2018-08-19 19:46:37.959184
+data.py                    134 DEBUG    Latest order epoc: 2018-08-12 22:14:01.042800
+data.py                    136 DEBUG    Diff between latest order and current peak: 1970-01-07 22:32:36.916384
+simple.py                   38 DEBUG    Ƀ Trade advice TradeCommand.buy
+simple.py                   44 DEBUG    Call callback
+simple.py                   47 DEBUG    TradeCommand.buy
+simple.py                   49 DEBUG    TradeCommand.buy
+
+.buy at 0x7f895be6d510>
+simple.py                   49 DEBUG    TradeCommand.sell
+
+.sell at 0x7f895be6d598>
+========================================================== 1 failed, 38 deselected in 3.46 seconds ==========================================================
+#+end_example
+
+#+NAME: test-default-strategy-fixture
+#+HEADER: :session fixtures
+#+BEGIN_SRC ipython
+  @pytest.fixture
+  def ohlc_12_hour_as_sql():
+      db = connect("sqlite:///" + join('/home/kristian/projects/trading/data',
+                                         'ohlc-2018-08-19-23:32:55.sqlite'))
+      # db['time_column'] = 'timestamp'
+      return db
+
+
+#+END_SRC
+
+** Test
+
+*** Test mark
+#+NAME: pytest-mark
+#+HEADER: :session test-profit
+#+HEADER: :results drawer replace
+#+BEGIN_SRC sh :var mark="hest"
+  export PIPENV_IGNORE_VIRTUALENVS=1
+  pipenv run pytest -m ${mark}
+#+END_SRC
+
+*** Fixtures
+#+NAME: fixtures-head
+#+HEADER: :session fixtures
+#+BEGIN_SRC ipython
+  import pytest
+  from os import getcwd
+  from os.path import join, dirname
+  from sys import path
+  from trading.data import load_data_from_file
+  from trading.sql import connect, meta, latest
+  from trading.kraken import to_sql
+
+  try:
+      path.append(join(dirname(__file__), 'helpers'))
+  except NameError:
+      pass
+
+  @pytest.fixture
+  def low_peak():
+      path = join(getcwd(), 'data', 'low_pickle.byte')
+      return load_data_from_file(path)
+
+
+  @pytest.fixture
+  def high_peak():
+      path = join(getcwd(), 'data', 'high_pickle.byte')
+      return load_data_from_file(path)
+
+
+  @pytest.fixture
+  def latest_order():
+      path = join(getcwd(), 'data', 'orders.sqlite')
+      orders = load_data_from_file(path)
+      db = connect('sqlite://')
+      to_sql(orders, 'ohlc', **db)
+      db['meta_data'] = meta(db['connection'])
+      return latest(**db)
+
+
+  @pytest.fixture
+  def high_peak_order_epoc(high_peak):
+      return high_peak['result']['xpeak'][0] + 1800
+
+
+  @pytest.fixture
+  def low_peak_order_epoc(low_peak):
+      return low_peak['result']['xpeak'][0] + 1800
+
+  @pytest.fixture
+  def all_data():
+      db = connect("sqlite:///" + join('/home/kristian/projects/trading/data',
+                                         'ohlc-2018-08-19-23:32:55.sqlite'))
+      # db['time_column'] = 'timestamp'
+      return db
+
+
+#+END_SRC
+
+#+RESULTS: fixures-head
+: # Out[2]:
+
+**** all
+#+NAME: fixtures-all
+#+HEADER: :tangle tests/trading/conftest.py
+#+HEADER: :noweb yes
+#+BEGIN_SRC ipython
+<<fixtures-head>>
+<<test-default-strategy-fixture>>
+#+END_SRC
 ** Test profit
+*** Profit
+#+NAME: test-profit
+#+HEADER: :session test-profit
+#+HEADER: :tangle tests/trading/test_profit_persist.py
+#+BEGIN_SRC ipython :session profit
+  from trading.core import TradeCommand
+  from trading.data import window_generator
+  from trading.util import toDate
+  from trading.storage import save, load
+  from strategy_helper import take
+  import pytest
+  import logging
+
+
+  @pytest.mark.profit_persist
+  def test_profit(all_data, caplog):
+      newMoney = 0
+      euros = 0
+      xmrs = 0
+      rate = -1
+
+      topic = "trading"
+      state = load(topic)
+      if not state:
+          state = {}
+          firstOrder = True
+
+
+      def sell(analysis):
+          nonlocal euros, xmrs, rate, firstOrder, newMoney, state
+          rate = analysis['y'][-1]
+          if firstOrder:
+              firstOrder = False
+              logging.warn("Selling on first order")
+              newMonero = 5
+              xmrs = 5
+              euros = 0
+
+              state['newMonero'] = state['newMonero'] + 5
+              state['xmrs'] = 5
+          euros += xmrs * rate
+          logging.warn("at {} selling: {} xmr at rate {} for {} euros".format(toDate(analysis['x'][-1]), xmrs, rate, euros))
+          xmrs = 0
+          # sell here
+          state['xmrs'] = 0
+          state['euros'] = state['euros'] * rate
+          save(state)
+
+      def buy(analysis):
+          nonlocal euros, xmrs, rate, firstOrder, newMoney, state
+          rate = analysis['y'][-1]
+          if euros == 0:
+              firstOrder = False
+              extraMoney = 5 * rate
+              newMoney =+ extraMoney
+              euros = extraMoney
+              state['euros'] = 5 * rate
+              state['newMoney'] = state['newMoney'] + state['euros']
+
+          xmrs += euros / rate
+          logging.warn("at {} buying: {} xmr at rate {} for {} euros".format(toDate(analysis['x'][-1]), xmrs, rate, euros))
+          euros = 0
+
+      tradeCommands = {
+          TradeCommand.sell: sell,
+          TradeCommand.buy: buy
+      }
+
+      run, events = take(7,
+                         tradeCommands,
+                         window_generator(3600 * 4,
+                                          600,
+                                          ,**all_data))
+      # with caplog.at_level(logging.DEBUG):
+      run()
+      currentValueInEUROS = (xmrs * rate) + euros
+      logging.warn("portfolio value {}".format(currentValueInEUROS - newMoney))
+      logging.warn("Money {}".format(newMoney))
+      assert  False
+      #assert (xmrs * rate) + euros > newMoney * 3
+
+#+END_SRC
+
+**** execute
+#+HEADER: :session test-profit
+#+BEGIN_SRC ipython
+  import pytest
+  pytest.main(["-m" "profit_persist"])
+#+END_SRC
+
+#+NAME: exec-test-profit
+#+HEADER: :session test-profit
+#+HEADER: :results drawer replace
+#+BEGIN_SRC sh
+  pipenv run pytest -m profit_persist
+#+END_SRC
+
+#+RESULTS: exec-test-profit
+:RESULTS:
+[32m[22mCourtesy Notice[39m[22m: Pipenv found itself running within a virtual environment, so it will automatically use that environment, instead of creating its own for any project. You can set [39m[1mPIPENV_IGNORE_VIRTUALENVS=1[39m[22m to force pipenv to ignore that environment and create its own instead.
+============================ test session starts ============================
+platform linux -- Python 3.5.3, pytest-3.6.3, py-1.5.4, pluggy-0.6.0
+rootdir: /home/kristian/projects/trading, inifile:
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+collecting 0 items                                                          collecting 1 item                                                           collecting 2 items                                                          collecting 16 items                                                         collecting 19 items                                                         collecting 20 items                                                         collecting 22 items                                                         collecting 24 items                                                         collecting 25 items                                                         collecting 27 items                                                         collecting 28 items                                                         collecting 29 items                                                         collecting 30 items                                                         collecting 31 items                                                         collecting 32 items                                                         collecting 33 items                                                         collecting 34 items                                                         collecting 35 items                                                         collecting 36 items                                                         collecting 38 items                                                         collected 38 items / 37 deselected
+]
+
+================================= FAILURES ==================================
+________________________________ test_profit ________________________________
+}
+@pytest.mark.profit_persist
+    def test_profit(all_data, caplog):
+        newMoney = 0
+        newXMR = 0
+        euros = 0
+        xmrs = 0
+        rate = -1
+        firstOrder = True
+        topic = "trading"
+        state = load(topic)
+assert {} == state
+E       assert {} == None
+
+tests/trading/test_profit_persist.py:21: AssertionError
+================== 1 failed, 37 deselected in 3.79 seconds ==================
+:END:
+
+
 #+BEGIN_SRC ipython
   import pytest
   pytest.main(["-m" "profit"])
