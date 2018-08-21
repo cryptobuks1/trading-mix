@@ -22,7 +22,7 @@ def default_kraken_strategy(*, buy_fn, sell_fn, latest_order_epoc_fn):
         nonlocal engine
         start, end = time_range(**db)
         engine(window(None,
-                      end - 3600 * 4,
+                      end - 3600 * 3,
                       end, **db))
 
     return strategy, events
