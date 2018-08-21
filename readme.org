@@ -89,6 +89,21 @@ pip3 install -U --user pipenv
 
 #+END_SRC
 ** Kraken
+*** Buy
+#+NAME: buy-monero
+#+BEGIN_SRC ipython
+  from trading.kraken import create_order
+
+  create_order('buy', 10)
+#+END_SRC
+
+#+RESULTS: buy-monero
+: # Out[15]:
+: #+BEGIN_EXAMPLE
+:   {'descr': {'order': 'buy 10.00000000 XMREUR @ market'},
+:   'txid': ['OB2TSL-AHTMZ-3MGJ7P']}
+: #+END_EXAMPLE
+
 *** OHLC panda
 #+NAME: kraken-ohcl-panda
 #+BEGIN_SRC ipython
