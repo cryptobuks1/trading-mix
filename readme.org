@@ -1554,7 +1554,22 @@ class KrakenAPI(builtins.object)
       print(f.name)
 #+END_SRC
 
-#+RESULTS: latest-kraken-ohlc-file
+#+RESULTS: latest-kraken-ohlc-file-persist-snapshot
+/tmp/picklezjsr03ms
+
+
+
+#+NAME: add-latest-kraken-ohcl-to-project
+#+HEADER: :results raw drawer replace output
+#+BEGIN_SRC sh :var tmp_data_file=latest-kraken-ohlc-file-persist-snapshot
+project_data_file=data/ohcl-`date +%F-%H:%M:%S`.sqlite
+mv ${tmp_data_file} ${project_data_file}
+git add ${project_data_file}
+git commit -m'New data'
+git push
+#+END_SRC
+
+#+RESULTS: add-latest-kraken-ohcl-to-project
 :RESULTS:
 /tmp/picklem2bi7yg6
 :END:
@@ -1790,12 +1805,15 @@ Store pickled data in a topic on a append log
 
   @pytest.mark.default_strategy
   def test_default_strategy(ohlc_12_hour_as_sql, caplog):
-
+      buyMessage = "buy ~~~"
+      sellMessage = "sell ~~~"
       def buy(analysis):
-          logging.debug("buy")
+          nonlocal buyMessage
+          logging.debug(buyMessage)
 
       def sell(analysis):
-          logging.debug("sell")
+          nonlocal sellMessage
+          logging.debug(sellMessage)
 
       def latest_order_epoc():
           return 1534104841.0428
@@ -1810,19 +1828,21 @@ Store pickled data in a topic on a append log
       with caplog.at_level(logging.DEBUG):
           strategy(ohlc_12_hour_as_sql)
 
-      assert "sell" in caplog.text
+      assert buyMessage in caplog.text
+      assert sellMessage not in caplog.text
 
 #+END_SRC
 
 **** Execute
 #+NAME: test-default-kraken-strategy-execute
-#+call: pytest-mark(mark="default_strategy")
+#+call: pytest-mark(mark="default_strategy", debug="-vv")
 
 #+RESULTS: test-default-kraken-strategy-execute
 #+begin_example
 
-> > kristian@debian-x200:~/projects/trading$ kristian@debian-x200:~/projects/trading$ ==================================================================== test session starts ====================================================================
-platform linux -- Python 3.5.3, pytest-3.6.3, py-1.5.4, pluggy-0.6.0
+> > kristian@debian-x200:~/projects/trading$ > > > kristian@debian-x200:~/projects/trading$ kristian@debian-x200:~/projects/trading$ ==================================================================== test session starts ====================================================================
+platform linux -- Python 3.5.3, pytest-3.6.3, py-1.5.4, pluggy-0.6.0 -- /home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/bin/python3.5m
+cachedir: .pytest_cache
 rootdir: /home/kristian/projects/trading, inifile:
 /home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
   return f(*args, **kwds)
@@ -1833,7 +1853,7 @@ rootdir: /home/kristian/projects/trading, inifile:
 collecting 0 items                                                                                                                                          collecting 1 item                                                                                                                                           collecting 2 items                                                                                                                                          collecting 16 items                                                                                                                                         collecting 17 items                                                                                                                                         collecting 20 items                                                                                                                                         collecting 21 items                                                                                                                                         collecting 23 items                                                                                                                                         collecting 25 items                                                                                                                                         collecting 26 items                                                                                                                                         collecting 28 items                                                                                                                                         collecting 29 items                                                                                                                                         collecting 30 items                                                                                                                                         collecting 31 items                                                                                                                                         collecting 32 items                                                                                                                                         collecting 33 items                                                                                                                                         collecting 34 items                                                                                                                                         collecting 35 items                                                                                                                                         collecting 36 items                                                                                                                                         collecting 37 items                                                                                                                                         collecting 39 items                                                                                                                                         collected 39 items / 38 deselected
 ]
 
-========================================================== 1 passed, 38 deselected in 3.15 seconds ==========================================================
+========================================================== 1 passed, 38 deselected in 3.14 seconds ==========================================================
 #+end_example
 
 #+NAME: test-default-strategy-fixture
@@ -1855,9 +1875,9 @@ rootdir: /home/kristian/projects/trading, inifile:
 #+NAME: pytest-mark
 #+HEADER: :session test-profit
 #+HEADER: :results drawer replace
-#+BEGIN_SRC sh :var mark="hest"
+#+BEGIN_SRC sh :var mark="hest" debug=""
   export PIPENV_IGNORE_VIRTUALENVS=1
-  pipenv run pytest -m ${mark}
+  pipenv run pytest -m ${mark} ${debug}
 #+END_SRC
 
 *** Fixtures
