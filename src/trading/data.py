@@ -129,12 +129,13 @@ def next_peak(**kwargs):
 
 
 def is_new_peak(latest_order_epoc, analysis):
+    loe = latest_order_epoc()
     peakEpoc = analysis['xpeak'][0]
     logging.debug("Peak at: {}".format(toDate(peakEpoc)))
-    logging.debug("Latest order epoc: {}".format(toDate(latest_order_epoc())))
-    timeDiff = abs(peakEpoc - latest_order_epoc())
+    logging.debug("Latest order epoc: {}".format(toDate(loe)))
+    timeDiff = abs(peakEpoc - loe)
     logging.debug("Diff between latest order and current peak: {}".format(toDate(timeDiff)))
-    return peakEpoc > latest_order_epoc and  timeDiff > 3600   # one hour
+    return peakEpoc > loe and  timeDiff > 3600   # one hour
 
 
 def advice(analysis):
