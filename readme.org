@@ -1895,6 +1895,32 @@ rootdir: /home/kristian/projects/trading, inifile:
 #+RESULTS: ask-for-datafile
 : /home/kristian/projects/trading/data/ohcl-2018-08-22-00:17:13.sqlite
 
+#+NAME: plot-data
+#+HEADER: :session plotdata
+#+HEADER: :ipyfile /tmp/image.png
+#+HEADER: :results raw drawer
+#+BEGIN_SRC ipython :var data_file=ask-for-datafile
+  # %matplotlib inline
+  from trading.sql import connect, window, time_range
+  from trading.data import extract
+  from trading.plot import axis_with_dates_x, as_dates
+  import matplotlib.pyplot as plt
+
+  connect_str = "sqlite:///" + data_file
+  db = connect(connect_str)
+  start, end = time_range(**db)
+  result = extract(window(None, start, end, **db))
+  fig, ax = axis_with_dates_x()
+  ax.plot(as_dates(result[0]), result[1])
+  plt.show()
+#+END_SRC
+
+#+RESULTS: plot-data
+:RESULTS:
+# Out[2]:
+[[file:/tmp/image.png]]
+:END:
+
 ** Test
 
 *** Test mark
