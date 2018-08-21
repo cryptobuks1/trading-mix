@@ -18,26 +18,39 @@ pip3 install -U --user pipenv
 #+NAME: app
 #+HEADER: :tangle trader.py :session app
 #+BEGIN_SRC ipython
-  from trading.core import TradeCommand
-  from trading.storage import save, load
-  from trading.sql import memdb, time_range, window
+  from trading.core import default_kraken_strategy
+  from trading.sql import memdb, time_range
   from trading.kraken import ohlc, get_latest_order_epoc, create_order
-  from trading.strategy.simple import create
+  import logging
+
+  logging.basicConfig(filename='trading.log', level=logging.DEBUG)
 
 
-  def main():
-      tradeCommands = {
-          TradeCommand.sell: lambda: create_order('sell', 5),
-          TradeCommand.buy: lambda: create_order('buy', 5)
-      }
+  def test_default_strategy():
 
+      def buy(analysis):
+          create_order('buy', 5)
+
+      def sell(analysis):
+          create_order('sell', 5)
+
+      [strategy,
+       events] = default_kraken_strategy(**{"buy_fn":
+                                            buy,
+                                            "sell_fn":
+                                            sell,
+                                            "latest_order_epoc_fn":
+                                            get_latest_order_epoc})
       db = memdb()
       ohlc(**db)
       start, end = time_range(**db)
-      engine, events = create(get_latest_order_epoc, tradeCommands)
-      engine(window(None,
-                    end - 3600 * 4,
-                    end, **db))
+      logging.debug(start)
+      logging.warn(end)
+      strategy(db)
+
+
+  if __name__ == "__main__":
+      test_default_strategy()
 #+END_SRC
 
 *** Core
