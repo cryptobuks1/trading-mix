@@ -82,7 +82,7 @@ pip3 install -U --user pipenv
           nonlocal engine
           start, end = time_range(**db)
           engine(window(None,
-                        end - 3600 * 4,
+                        end - 3600 * 3,
                         end, **db))
 
       return strategy, events
