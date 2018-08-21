@@ -1541,8 +1541,9 @@ class KrakenAPI(builtins.object)
 *** OHLC
 
 **** Save latest ohlc data
-#+NAME: latest-kraken-ohlc-file
-#+HEADER: :results drawer raw
+#+NAME: latest-kraken-ohlc-file-persist-snapshot
+#+HEADER: :results drawer raw output replace
+#+HEADER: :exports both
 #+BEGIN_SRC ipython
   from trading.kraken import ohlc
   from trading.sql import connect
@@ -1571,11 +1572,11 @@ git push
 
 #+RESULTS: add-latest-kraken-ohcl-to-project
 :RESULTS:
-/tmp/picklem2bi7yg6
+data/ohcl-2018-08-21-22:23:10.sqlite
+[master b453696] New data
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 data/ohcl-2018-08-21-22:23:10.sqlite
 :END:
-
-#+RESULTS:
-: # Out[1]:
 
 
 **** import latest ohlc data
