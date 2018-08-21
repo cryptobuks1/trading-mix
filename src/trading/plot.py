@@ -37,6 +37,10 @@ def update_with_fit_and_peak(analysis_fns, frame, plots, ax):
     return ticks, fitted, psl
 
 
+def as_dates(xs):
+    return [datetime.fromtimestamp(x) for x in xs]
+
+
 def init_with_fit_and_peak(plots, ax):
     ticks, fitted, psl = ax.plot([],
                                  [],
