@@ -1921,6 +1921,22 @@ rootdir: /home/kristian/projects/trading, inifile:
 [[file:/tmp/image.png]]
 :END:
 
+*** Get orders since
+#+NAME: orders-since
+#+HEADER: :session getorders
+#+BEGIN_SRC ipython
+  from trading.kraken import get_orders, connect
+
+  k = connect()
+  orders, _ = k.get_trades_history()
+  orders.query('time>1534900208.0')['time'].tolist()
+#+END_SRC
+
+#+RESULTS: orders-since
+=# Out[43]:
+: [1534921809.8653, 1534915207.0475, 1534906208.7583, 1534900208.2574]
+=#+end_example
+
 ** Test
 
 *** Test mark
