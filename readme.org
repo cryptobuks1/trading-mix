@@ -1836,13 +1836,12 @@ Store pickled data in a topic on a append log
 
 #+END_SRC
 
-**** Execute
+***** Execute
 #+NAME: test-default-kraken-strategy-execute
 #+call: pytest-mark(mark="default_strategy", debug="-vv")
 
 #+RESULTS: test-default-kraken-strategy-execute
-#+begin_example
-
+=
 > > kristian@debian-x200:~/projects/trading$ > > > kristian@debian-x200:~/projects/trading$ kristian@debian-x200:~/projects/trading$ ==================================================================== test session starts ====================================================================
 platform linux -- Python 3.5.3, pytest-3.6.3, py-1.5.4, pluggy-0.6.0 -- /home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/bin/python3.5m
 cachedir: .pytest_cache
@@ -1853,12 +1852,95 @@ rootdir: /home/kristian/projects/trading, inifile:
   return f(*args, **kwds)
 /home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
   return f(*args, **kwds)
-collecting 0 items                                                                                                                                          collecting 1 item                                                                                                                                           collecting 2 items                                                                                                                                          collecting 16 items                                                                                                                                         collecting 17 items                                                                                                                                         collecting 20 items                                                                                                                                         collecting 21 items                                                                                                                                         collecting 23 items                                                                                                                                         collecting 25 items                                                                                                                                         collecting 26 items                                                                                                                                         collecting 28 items                                                                                                                                         collecting 29 items                                                                                                                                         collecting 30 items                                                                                                                                         collecting 31 items                                                                                                                                         collecting 32 items                                                                                                                                         collecting 33 items                                                                                                                                         collecting 34 items                                                                                                                                         collecting 35 items                                                                                                                                         collecting 36 items                                                                                                                                         collecting 37 items                                                                                                                                         collecting 39 items                                                                                                                                         collected 39 items / 38 deselected
+collecting 0 items                                                                                                                                          collecting 1 item                                                                                                                                           collecting 2 items                                                                                                                                          collecting 16 items                                                                                                                                         collecting 17 items                                                                                                                                         collecting 18 items                                                                                                                                         collecting 21 items                                                                                                                                         collecting 22 items                                                                                                                                         collecting 24 items                                                                                                                                         collecting 26 items                                                                                                                                         collecting 27 items                                                                                                                                         collecting 29 items                                                                                                                                         collecting 30 items                                                                                                                                         collecting 31 items                                                                                                                                         collecting 32 items                                                                                                                                         collecting 33 items                                                                                                                                         collecting 34 items                                                                                                                                         collecting 35 items                                                                                                                                         collecting 36 items                                                                                                                                         collecting 37 items                                                                                                                                         collecting 38 items                                                                                                                                         collecting 40 items                                                                                                                                         collected 40 items / 39 deselected
 ]
 
-========================================================== 1 passed, 38 deselected in 3.13 seconds ==========================================================
-#+end_example
+========================================================== 1 passed, 39 deselected in 4.44 seconds ==========================================================
+==
+> > kristian@debian-x200:~/projects/trading$ > > > kristian@debian-x200:~/projects/trading$ kristian@debian-x200:~/projects/trading$ ==================================================================== test session starts ====================================================================
+platform linux -- Python 3.5.3, pytest-3.6.3, py-1.5.4, pluggy-0.6.0 -- /home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/bin/python3.5m
+cachedir: .pytest_cache
+rootdir: /home/kristian/projects/trading, inifile:
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+collecting 0 items                                                                                                                                          collecting 1 item                                                                                                                                           collecting 2 items                                                                                                                                          collecting 16 items                                                                                                                                         collecting 17 items                                                                                                                                         collecting 18 items                                                                                                                                         collecting 21 items                                                                                                                                         collecting 22 items                                                                                                                                         collecting 24 items                                                                                                                                         collecting 26 items                                                                                                                                         collecting 27 items                                                                                                                                         collecting 29 items                                                                                                                                         collecting 30 items                                                                                                                                         collecting 31 items                                                                                                                                         collecting 32 items                                                                                                                                         collecting 33 items                                                                                                                                         collecting 34 items                                                                                                                                         collecting 35 items                                                                                                                                         collecting 36 items                                                                                                                                         collecting 37 items                                                                                                                                         collecting 38 items                                                                                                                                         collecting 40 items                                                                                                                                         collected 40 items / 39 deselected
+]
 
+========================================================================= FAILURES ==========================================================================
+___________________________________________________________________ test_default_strategy ___________________________________________________________________
+@pytest.mark.default_strategy_store
+    def test_default_strategy(caplog):
+        def save_data(tmp_db_file):
+            data_dir = expanduser('~/.local/lib/trading/data/orders')
+            os.makedirs(data_dir)
+            stored_date_file = join(data_dir, "date_data.sqlite")
+            copyfile(tmp_db_file, stored_date_file)
+
+        [strategy,
+         events] = bindings_for_default_kraken_strategy(1534104841.0428, 3600 * 4)
+        with caplog.at_level(logging.DEBUG):
+            with tempfile.NamedTemporaryFile(prefix='pickle') as f:
+                bind(TradingEvents.tradeAdvise.fget(events), save_data)
+                db = connect('sqlite:///' + f.name)
+strategy(db)
+
+tests/trading/test_default_strategy_store.py:27:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src/trading/core.py:27: in strategy
+    start, end = time_range(**db)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cur = None, time_column = 'time', table = 'ohlc'
+}
+, meta_data = MetaData(bind=None)
+
+    def time_range(cur=None, time_column='time', table='ohlc', **kwargs):
+        if 'connection' not in kwargs:
+            cur.execute("SELECT min({}) FROM {}".format(time_column, table))
+            start = int(cur.fetchall()[0][0])
+            cur.execute("SELECT max({}) FROM {}".format(time_column, table))
+            end = int(cur.fetchall()[0][0])
+        else:
+            session = kwargs['session']
+            meta_data = meta(kwargs['connection'])
+orders_tables = meta_data.tables[table]
+E           KeyError: 'ohlc'
+
+src/trading/sql.py:62: KeyError
+========================================================== 1 failed, 39 deselected in 3.40 seconds ==========================================================
+==
+> > kristian@debian-x200:~/projects/trading$ > > > kristian@debian-x200:~/projects/trading$ kristian@debian-x200:~/projects/trading$ ==================================================================== test session starts ====================================================================
+platform linux -- Python 3.5.3, pytest-3.6.3, py-1.5.4, pluggy-0.6.0 -- /home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/bin/python3.5m
+cachedir: .pytest_cache
+rootdir: /home/kristian/projects/trading, inifile:
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+collecting 0 items                                                                                                                                          collecting 1 item                                                                                                                                           collecting 2 items                                                                                                                                          collecting 16 items                                                                                                                                         collecting 17 items                                                                                                                                         collecting 20 items                                                                                                                                         collecting 21 items                                                                                                                                         collecting 23 items                                                                                                                                         collecting 25 items                                                                                                                                         collecting 26 items                                                                                                                                         collecting 28 items                                                                                                                                         collecting 29 items                                                                                                                                         collecting 30 items                                                                                                                                         collecting 31 items                                                                                                                                         collecting 32 items                                                                                                                                         collecting 33 items                                                                                                                                         collecting 34 items                                                                                                                                         collecting 35 items                                                                                                                                         collecting 36 items                                                                                                                                         collecting 37 items                                                                                                                                         collecting 39 items                                                                                                                                         collected 39 items / 39 deselected
+
+=============================================================== 39 deselected in 3.01 seconds ===============================================================
+==
+> > kristian@debian-x200:~/projects/trading$ > > > kristian@debian-x200:~/projects/trading$ kristian@debian-x200:~/projects/trading$ ==================================================================== test session starts ====================================================================
+platform linux -- Python 3.5.3, pytest-3.6.3, py-1.5.4, pluggy-0.6.0 -- /home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/bin/python3.5m
+cachedir: .pytest_cache
+rootdir: /home/kristian/projects/trading, inifile:
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+collecting 0 items                                                                                                                                          collecting 1 item                                                                                                                                           collecting 2 items                                                                                                                                          collecting 16 items                                                                                                                                         collecting 17 items                                                                                                                                         collecting 20 items                                                                                                                                         collecting 21 items                                                                                                                                         collecting 23 items                                                                                                                                         collecting 25 items                                                                                                                                         collecting 26 items                                                                                                                                         collecting 28 items                                                                                                                                         collecting 29 items                                                                                                                                         collecting 30 items                                                                                                                                         collecting 31 items                                                                                                                                         collecting 32 items                                                                                                                                         collecting 33 items                                                                                                                                         collecting 34 items                                                                                                                                         collecting 35 items                                                                                                                                         collecting 36 items                                                                                                                                         collecting 37 items                                                                                                                                         collecting 39 items                                                                                                                                         collected 39 items / 39 deselected
+
+=============================================================== 39 deselected in 3.05 seconds ===============================================================
+=***** Fixture
 #+NAME: test-default-strategy-fixture
 #+HEADER: :session fixtures
 #+BEGIN_SRC ipython
@@ -1880,6 +1962,49 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 
 #+END_SRC
+
+**** Store temp db when trading
+#+NAME: store-temp-db-when-trading
+#+HEADER: :tangle tests/trading/test_default_strategy_store.py
+#+BEGIN_SRC ipython
+  from strategy_helper import bindings_for_default_kraken_strategy
+  from trading.events import TradingEvents, bind
+  from trading.kraken import ohlc
+  from trading.sql import connect
+  from os.path import expanduser, join
+  import os
+  from shutil import copyfile
+  import pytest
+  import tempfile
+  import logging
+
+
+  @pytest.mark.default_strategy_store
+  def test_default_strategy(caplog):
+      def save_data(tmp_db_file):
+          data_dir = expanduser('~/.local/lib/trading/data/orders')
+          os.makedirs(data_dir)
+          stored_date_file = join(data_dir, "date_data.sqlite")
+          copyfile(tmp_db_file, stored_date_file)
+          raise Exception("Hest")
+
+      [strategy,
+       events] = bindings_for_default_kraken_strategy(1534104841.0428, 3600 * 4)
+      with caplog.at_level(logging.DEBUG):
+          with tempfile.NamedTemporaryFile(prefix='pickle') as f:
+              bind(TradingEvents.tradeAdvise.fget(events), save_data)
+              db = connect('sqlite:///' + f.name)
+              ohlc(**db)
+              strategy(db)
+      assert "buy ~~~" in caplog.text
+
+#+END_SRC
+
+***** Execute
+#+NAME: test-default-kraken-strategy-execute
+#+call: pytest-mark(mark="default_strategy_store", debug="-vv")
+
+
 
 ** Working with data
 #+NAME: ask-for-datafile
@@ -2033,10 +2158,28 @@ rootdir: /home/kristian/projects/trading, inifile:
 #+NAME: pytest-mark
 #+HEADER: :session test-profit
 #+HEADER: :results drawer replace
-#+BEGIN_SRC sh :var mark="hest" debug=""
+#+BEGIN_SRC sh :var mark="default_strategy_store" debug=""
   export PIPENV_IGNORE_VIRTUALENVS=1
   pipenv run pytest -m ${mark} ${debug}
 #+END_SRC
+
+#+RESULTS: pytest-mark
+:RESULTS:
+
+> > kristian@debian-x200:~/projects/trading$ > > > kristian@debian-x200:~/projects/trading$ kristian@debian-x200:~/projects/trading$ ==================================================================== test session starts ====================================================================
+platform linux -- Python 3.5.3, pytest-3.6.3, py-1.5.4, pluggy-0.6.0
+rootdir: /home/kristian/projects/trading, inifile:
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+/home/kristian/.local/share/virtualenvs/trading-xHDJ7tx5/lib/python3.5/importlib/_bootstrap.py:222: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+collecting 0 items                                                                                                                                          collecting 1 item                                                                                                                                           collecting 2 items                                                                                                                                          collecting 16 items                                                                                                                                         collecting 17 items                                                                                                                                         collecting 18 items                                                                                                                                         collecting 21 items                                                                                                                                         collecting 22 items                                                                                                                                         collecting 24 items                                                                                                                                         collecting 26 items                                                                                                                                         collecting 27 items                                                                                                                                         collecting 29 items                                                                                                                                         collecting 30 items                                                                                                                                         collecting 31 items                                                                                                                                         collecting 32 items                                                                                                                                         collecting 33 items                                                                                                                                         collecting 34 items                                                                                                                                         collecting 35 items                                                                                                                                         collecting 36 items                                                                                                                                         collecting 37 items                                                                                                                                         collecting 38 items                                                                                                                                         collecting 40 items                                                                                                                                         collected 40 items / 39 deselected
+]
+
+========================================================== 1 passed, 39 deselected in 4.82 seconds ==========================================================
+:END:
 
 *** Fixtures
 #+NAME: fixtures-head
