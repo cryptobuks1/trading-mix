@@ -51,6 +51,15 @@ def all_data():
     return db
 
 
+
+
+
+
+
+
+
+
+
 @pytest.fixture
 def ohlc_12_hour_as_sql():
     db = connect("sqlite:///" + join('/home/kristian/projects/trading/data',
