@@ -1925,11 +1925,12 @@ rootdir: /home/kristian/projects/trading, inifile:
 #+NAME: orders-since
 #+HEADER: :session getorders
 #+BEGIN_SRC ipython
-  from trading.kraken import get_orders, connect
+  from trading.kraken import connect
 
   k = connect()
   orders, _ = k.get_trades_history()
-  orders.query('time>1534900208.0')['time'].tolist()
+  orders[orders['time'].between(1534900208.0, 1535004000.0)]['time'].tolist()
+
 #+END_SRC
 
 #+RESULTS: orders-since
