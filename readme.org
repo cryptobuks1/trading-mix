@@ -28,7 +28,7 @@ pip3 install -U --user pipenv
                       datefmt='%Y-%m-%d %H:%M:%S')
 
 
-  def test_default_strategy():
+  def main():
 
       def buy(analysis):
           create_order('buy', 5)
@@ -52,7 +52,7 @@ pip3 install -U --user pipenv
 
 
   if __name__ == "__main__":
-      test_default_strategy()
+      main()
 #+END_SRC
 
 *** Core
