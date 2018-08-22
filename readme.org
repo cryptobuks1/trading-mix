@@ -1589,9 +1589,9 @@ git push
 
 #+RESULTS: add-latest-kraken-ohcl-to-project
 :RESULTS:
-[master d054961] New data added data/ohcl-2018-08-22-00:17:13.sqlite
+[master a3c0067] New data added data/ohcl-2018-08-22-07:41:50.sqlite
  1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 data/ohcl-2018-08-22-00:17:13.sqlite
+ create mode 100644 data/ohcl-2018-08-22-07:41:50.sqlite
 :END:
 
 
@@ -1917,7 +1917,7 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 #+RESULTS: plot-data
 :RESULTS:
-# Out[2]:
+# Out[4]:
 [[file:/tmp/image.png]]
 :END:
 
