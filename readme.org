@@ -1904,37 +1904,41 @@ rootdir: /home/kristian/projects/trading, inifile:
   from trading.sql import connect, window, time_range
   from trading.data import extract
   from trading.plot import axis_with_dates_x, as_dates
+  from trading.kraken import get_orders_between
   import matplotlib.pyplot as plt
 
   connect_str = "sqlite:///" + data_file
   db = connect(connect_str)
   start, end = time_range(**db)
+  orders = get_orders_between(start, end)
   result = extract(window(None, start, end, **db))
   fig, ax = axis_with_dates_x()
   ax.plot(as_dates(result[0]), result[1])
+  for order in as_dates(orders):
+      ax.axvline(x=order, color='#ff0000')
   plt.show()
 #+END_SRC
 
 #+RESULTS: plot-data
 :RESULTS:
-# Out[3]:
+# Out[7]:
 [[file:/tmp/image.png]]
 :END:
 
 *** Get orders since
 #+NAME: orders-since
-#+HEADER: :session getorders
+#+HEADER: :session getorders_between
 #+BEGIN_SRC ipython
-  from trading.kraken import connect
+  from trading.kraken import get_orders_between
+  get_orders_between(1534900208.0, 1535004000.0)
 
-  k = connect()
-  orders, _ = k.get_trades_history()
-  orders[orders['time'].between(1534900208.0, 1535004000.0)]['time'].tolist()
 
 #+END_SRC
 
 #+RESULTS: orders-since
-=# Out[65]:
+=# Out[1]:
+: [1534921809.8653, 1534915207.0475, 1534906208.7583, 1534900208.2574]
+==# Out[65]:
 : [1534921809.8653, 1534915207.0475, 1534906208.7583, 1534900208.2574]
 ==# Out[64]:
 : [1534921809.8653, 1534915207.0475, 1534906208.7583, 1534900208.2574]
