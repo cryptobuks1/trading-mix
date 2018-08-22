@@ -1,6 +1,8 @@
 from trading.strategy.simple import create
 from eventhelpers import update_order_with_peak
 from trading.events import bind
+from trading.core import default_kraken_strategy
+import logging
 
 
 def take(count, tradeCommands, gen):
@@ -20,3 +22,28 @@ def take(count, tradeCommands, gen):
                        for w in gen):
             engine(window)
     return run, events
+
+
+def bindings_for_default_kraken_strategy(latest_order_epoc,
+                                         window_size=3600 * 3):
+    buyMessage = "buy ~~~"
+    sellMessage = "sell ~~~"
+
+    def buy(analysis):
+        nonlocal buyMessage
+        logging.debug(buyMessage)
+
+    def sell(analysis):
+        nonlocal sellMessage
+        logging.debug(sellMessage)
+
+    def latest_order_epoc_fn():
+        return latest_order_epoc
+
+    return default_kraken_strategy(**{"buy_fn":
+                                      buy,
+                                      "sell_fn":
+                                      sell,
+                                      "latest_order_epoc_fn":
+                                      latest_order_epoc_fn},
+                                   window_size=window_size)
