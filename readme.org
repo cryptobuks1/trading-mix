@@ -1579,7 +1579,7 @@ class KrakenAPI(builtins.object)
 #+RESULTS: latest-kraken-ohlc-file-persist-snapshot
 /tmp/picklezjsr03ms
 
-
+**** Import ohlc snapshot
 
 #+NAME: add-latest-kraken-ohcl-to-project
 #+HEADER: :results raw drawer replace output
@@ -1593,9 +1593,9 @@ git push
 
 #+RESULTS: add-latest-kraken-ohcl-to-project
 :RESULTS:
-[master a3c0067] New data added data/ohcl-2018-08-22-07:41:50.sqlite
+[master 026fcdc] New data added data/ohcl-2018-08-22-21:11:04.sqlite
  1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 data/ohcl-2018-08-22-07:41:50.sqlite
+ create mode 100644 data/ohcl-2018-08-22-21:11:04.sqlite
 :END:
 
 
