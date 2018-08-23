@@ -3,7 +3,6 @@
   :PROPERTIES:
   :header-args: python :prologue (progn (pipenv-activate) (pyvenv-activate python-shell-virtualenv-root) "")
   :END:
-
 ** Installation
 All python dependencies can be installed with pipenv.
 But fist pipenv needs to be installed:
@@ -12,7 +11,6 @@ pip3 install -U --user pipenv
 #+END_SRC
 
 #+RESULTS:
-
 
 ** Application
 #+NAME: app
@@ -2003,7 +2001,6 @@ rootdir: /home/kristian/projects/trading, inifile:
 ***** Execute
 #+NAME: test-default-kraken-strategy-execute
 #+call: pytest-mark(mark="default_strategy_store", debug="-vv")
-
 
 
 ** Working with data
