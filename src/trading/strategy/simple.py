@@ -9,6 +9,9 @@ from functools import partial
 import inspect
 
 
+analyzer = partial(analyseData, peakConf)
+
+
 def create(latest_order_epoc, tradeCommands):
     tradingEvents = create_trading_events()
 
@@ -20,9 +23,9 @@ def create(latest_order_epoc, tradeCommands):
     bind(tradingEvents.advice, partial(processAdvice, tradeCommands))
 
     def start(data, **kwargs):
-        analyseData(peakConf, data,
-                    foundPeakEvent=tradingEvents.foundPeak,
-                    **kwargs)
+        analyzer(data,
+                 foundPeakEvent=tradingEvents.foundPeak,
+                 **kwargs)
 
     return start, tradingEvents
 
