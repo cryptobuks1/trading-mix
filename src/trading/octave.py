@@ -11,7 +11,7 @@ def peaks(values, **kwargs):
         peak_params = kwargs['peak_params']
     else:
         peak_params = ('DoubleSided',
-                       'MinPeakHeight', 0.04,
+                       'MinPeakHeight', 0.5,
                        'MinPeakDistance', 30,
                        'MinPeakWidth', 0)
     ps = octave.findpeaks(values,

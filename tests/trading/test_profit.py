@@ -63,8 +63,8 @@ def test_profit(all_data, caplog):
 
     run, events = take(7,
                        tradeCommands,
-                       window_generator(3600 * 4,
-                                        600,
+                       window_generator(3600 * 5 ,
+                                        300,
                                         **all_data))
     # with caplog.at_level(logging.DEBUG):
     run()

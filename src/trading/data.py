@@ -135,7 +135,7 @@ def is_new_peak(latest_order_epoc, analysis):
     logging.debug("Latest order epoc: {}".format(toDate(loe)))
     timeDiff = abs(peakEpoc - loe)
     logging.debug("Diff between latest order and current peak: {}".format(toDate(timeDiff)))
-    return peakEpoc > loe and timeDiff > 3600   # one hour
+    return peakEpoc > loe and timeDiff > 3600 * 2   # one hour
 
 
 def advice(analysis):
