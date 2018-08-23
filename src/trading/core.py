@@ -13,7 +13,7 @@ def default_kraken_strategy(*,
                             buy_fn,
                             sell_fn,
                             latest_order_epoc_fn,
-                            window_size=3600 * 3):
+                            window_size=3600 * 5):
     global TradeActions
     tradeCommands = {
         TradeCommand.sell: sell_fn,
