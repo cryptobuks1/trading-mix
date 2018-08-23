@@ -36,8 +36,9 @@ state = {"continue": True}
 def test_animation(caplog):
     global state
     db = connect("sqlite:///" + join('/home/kristian/projects/trading/data',
-                                     'alldata.sqlite'))
-    env = {**db, **table_mapping[orders_table]}
+                                     'ohcl-2018-08-22-07:41:50.sqlite'))
+    # env = {**db, **table_mapping[orders_table]}
+    env = db
 
     onFoundPeak_fn = partial(onFoundPeak, state)
     onNoPeak_fn = partial(onNoPeak, state)
