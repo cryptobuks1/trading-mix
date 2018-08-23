@@ -2255,6 +2255,22 @@ rootdir: /home/kristian/projects/trading, inifile:
 <<fixtures-head>>
 <<test-default-strategy-fixture>>
 #+END_SRC
+
+** Tempfile
+#+NAME: create-temp-file
+#+BEGIN_SRC sh :var prefix=""
+  mktemp /tmp/${prefix}.XXXXXXX
+#+END_SRC
+
+#+RESULTS: create-temp-file
+: /tmp/.84VIdrd
+
+*** test
+#+CALL: create-temp-file(prefix="test-create-temp-file")
+
+#+RESULTS:
+: /tmp/test-create-temp-file.ILKvCVA
+
 ** Test profit
 *** Profit
 #+NAME: test-profit
