@@ -1,4 +1,3 @@
-
 import pytest
 from os import getcwd
 from os.path import join, dirname
@@ -46,7 +45,7 @@ def low_peak_order_epoc(low_peak):
 @pytest.fixture
 def all_data():
     db = connect("sqlite:///" + join('/home/kristian/projects/trading/data',
-                                       'ohlc-2018-08-19-23:32:55.sqlite'))
+                                       'ohcl-2018-08-22-21:11:04.sqlite'))
     # db['time_column'] = 'timestamp'
     return db
 

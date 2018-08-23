@@ -2016,7 +2016,7 @@ rootdir: /home/kristian/projects/trading, inifile:
 : /home/kristian/projects/trading/data/ohcl-2018-08-22-00:17:13.sqlite
 
 #+NAME: plot-data
-#+HEADER: :session plotdata
+#+HEADER: :session
 #+HEADER: :ipyfile /tmp/image.png
 #+HEADER: :results raw drawer
 #+BEGIN_SRC ipython :var data_file=ask-for-datafile
@@ -2025,7 +2025,9 @@ rootdir: /home/kristian/projects/trading, inifile:
   from trading.data import extract
   from trading.plot import axis_with_dates_x, as_dates
   from trading.kraken import get_orders_between
+  import matplotlib.patches as mpatches
   import matplotlib.pyplot as plt
+  from datetime import datetime
 
   connect_str = "sqlite:///" + data_file
   db = connect(connect_str)
@@ -2034,14 +2036,20 @@ rootdir: /home/kristian/projects/trading, inifile:
   result = extract(window(None, start, end, **db))
   fig, ax = axis_with_dates_x()
   ax.plot(as_dates(result[0]), result[1])
-  for order in as_dates(orders):
-      ax.axvline(x=order, color='#ff0000')
+  red_patch = mpatches.Patch(color='red', label='Buy')
+  green_patch = mpatches.Patch(color='green', label='Sell')
+  fig.legend(handles=[red_patch, green_patch])
+  for idx, order in orders.iterrows():
+      colors = {'buy': '#ff0000',
+                'sell': '#00ff00'}
+      ax.axvline(x=datetime.fromtimestamp(order['time']),
+                 color=colors[order['type']])
   plt.show()
 #+END_SRC
 
 #+RESULTS: plot-data
 :RESULTS:
-# Out[7]:
+# Out[9]:
 [[file:/tmp/image.png]]
 :END:
 

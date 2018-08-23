@@ -47,7 +47,7 @@ def get_orders(**kwargs):
 def get_orders_between(start, end):
     k = connect()
     orders, _ = k.get_trades_history()
-    return orders[orders['time'].between(start, end)]['time'].tolist()
+    return orders[orders['time'].between(start, end)]
 
 
 def get_latest_order_epoc(**kwargs):
