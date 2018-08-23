@@ -2050,7 +2050,7 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 #+RESULTS: plot-data
 :RESULTS:
-# Out[2]:
+# Out[3]:
 [[file:/tmp/image.png]]
 :END:
 
