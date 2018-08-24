@@ -2019,7 +2019,7 @@ rootdir: /home/kristian/projects/trading, inifile:
 #+RESULTS: ask-for-datafile
 : /home/kristian/projects/trading/data/ohcl-2018-08-22-00:17:13.sqlite
 
-** Plot data
+** Plot orders
 #+NAME: plot-data
 #+HEADER: :session
 #+HEADER: :ipyfile /tmp/image.png
@@ -2057,7 +2057,7 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 #+RESULTS: plot-data
 :RESULTS:
-# Out[3]:
+# Out[4]:
 [[file:/tmp/image.png]]
 :END:
 
