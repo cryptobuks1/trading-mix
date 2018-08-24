@@ -1579,7 +1579,7 @@ class KrakenAPI(builtins.object)
 
 **** Import ohlc snapshot
 
-#+NAME: add-latest-kraken-ohcl-to-project
+#+NAME: add-latest-kraken-snapshot-ohcl-to-project
 #+HEADER: :results raw drawer replace output
 #+BEGIN_SRC sh :var tmp_data_file=latest-kraken-ohlc-file-persist-snapshot
 project_data_file=data/ohcl-`date +%F-%H:%M:%S`.sqlite
@@ -1588,6 +1588,13 @@ git add ${project_data_file}
 git commit -m"New data added ${project_data_file}"
 git push
 #+END_SRC
+
+#+RESULTS: add-latest-kraken-snapshot-ohcl-to-project
+:RESULTS:
+[master 7853719] New data added data/ohcl-2018-08-24-08:25:00.sqlite
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 data/ohcl-2018-08-24-08:25:00.sqlite
+:END:
 
 #+RESULTS: add-latest-kraken-ohcl-to-project
 :RESULTS:
