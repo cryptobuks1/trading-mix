@@ -127,15 +127,25 @@ def next_peak(**kwargs):
             yield result
 
 
-
 def is_new_peak(latest_order_epoc, analysis):
+    '''TODO: rename to good peak
+    '''
     loe = latest_order_epoc()
     peakEpoc = analysis['xpeak'][0]
     logging.debug("Peak at: {}".format(toDate(peakEpoc)))
     logging.debug("Latest order epoc: {}".format(toDate(loe)))
     timeDiff = abs(peakEpoc - loe)
     logging.debug("Diff between latest order and current peak: {}".format(toDate(timeDiff)))
-    return peakEpoc > loe and timeDiff > 3600 * 2   # one hour
+
+    # Price distance from peak
+    logging.debug("Price distance {}".format(abs(analysis['ypeak'][0] - analysis['yfit'][0])))
+    if 1 < abs(analysis['ypeak'][0] - analysis['yfit'][0]):
+        logging.debug("Distance too big")
+        return False
+    # valley J bad
+    # if analysis['yfit'][0] > analysis['yfit'][-1]:
+    #     return True
+    return peakEpoc > loe and timeDiff > 1200   # one hour
 
 
 def advice(analysis):
