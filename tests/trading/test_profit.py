@@ -66,8 +66,8 @@ def test_profit(all_data, caplog):
                        window_generator(3600 * 5 ,
                                         300,
                                         **all_data))
-    # with caplog.at_level(logging.DEBUG):
-    run()
+    with caplog.at_level(logging.DEBUG):
+        run()
     currentValueInEUROS = (xmrs * rate) + euros
     logging.warn("portfolio value {}".format(currentValueInEUROS - newMoney))
     logging.warn("Money {}".format(newMoney))
