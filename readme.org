@@ -1575,6 +1575,9 @@ class KrakenAPI(builtins.object)
 #+END_SRC
 
 #+RESULTS: latest-kraken-ohlc-file-persist-snapshot
+attempt: 000 | ['EService:Unavailable']
+/tmp/pickle1cynlrgb
+/tmp/pickle9ahgr6eq
 /tmp/picklezjsr03ms
 
 **** Import ohlc snapshot
@@ -1591,9 +1594,9 @@ git push
 
 #+RESULTS: add-latest-kraken-snapshot-ohcl-to-project
 :RESULTS:
-[master 7853719] New data added data/ohcl-2018-08-24-08:25:00.sqlite
+[master 2c08e06] New data added data/ohcl-2018-08-24-22:51:11.sqlite
  1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 data/ohcl-2018-08-24-08:25:00.sqlite
+ create mode 100644 data/ohcl-2018-08-24-22:51:11.sqlite
 :END:
 
 #+RESULTS: add-latest-kraken-ohcl-to-project
@@ -2019,7 +2022,9 @@ rootdir: /home/kristian/projects/trading, inifile:
 #+RESULTS: ask-for-datafile
 : /home/kristian/projects/trading/data/ohcl-2018-08-22-00:17:13.sqlite
 
-** Plot orders
+** Plot
+
+*** Plot orders
 #+NAME: plot-data
 #+HEADER: :session
 #+HEADER: :ipyfile /tmp/image.png
@@ -2057,10 +2062,11 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 #+RESULTS: plot-data
 :RESULTS:
-# Out[4]:
+# Out[2]:
 [[file:/tmp/image.png]]
 :END:
 
+*** Plot strategy
 *** Get orders since
 #+NAME: orders-since
 #+HEADER: :session getorders_between
