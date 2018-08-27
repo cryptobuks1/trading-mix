@@ -32,7 +32,7 @@ def create(latest_order_epoc, tradeCommands):
 
 def check_peak(tradingEvents, is_new_peak_fn, data, **kwargs):
     logging.debug("Got Peak")
-    if is_new_peak_fn(data['result']):
+    if is_new_peak_fn(data['result'], **kwargs):
         tradingEvents.newPeak.send(check_peak, peak_analysis=data['result'])
 
 

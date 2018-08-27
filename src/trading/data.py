@@ -127,8 +127,9 @@ def next_peak(**kwargs):
             yield result
 
 
-def is_new_peak(latest_order_epoc, analysis):
-    '''TODO: rename to good peak
+def is_new_peak(latest_order_epoc, analysis, **kwargs):
+    '''
+    TODO: rename to good peak
     '''
     loe = latest_order_epoc()
     peakEpoc = analysis['xpeak'][0]
@@ -145,7 +146,9 @@ def is_new_peak(latest_order_epoc, analysis):
     # valley J bad
     # if analysis['yfit'][0] > analysis['yfit'][-1]:
     #     return True
-    return peakEpoc > loe and timeDiff > 3600 * 1.5   # one hour
+    minimum_peak_distance = kwargs.get('minimum_peak_distance',
+                                       3600 * 1.5)  # default 1.5 hour
+    return peakEpoc > loe and timeDiff > minimum_peak_distance
 
 
 def advice(analysis):
