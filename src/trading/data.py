@@ -145,7 +145,7 @@ def is_new_peak(latest_order_epoc, analysis):
     # valley J bad
     # if analysis['yfit'][0] > analysis['yfit'][-1]:
     #     return True
-    return peakEpoc > loe and timeDiff > 1200   # one hour
+    return peakEpoc > loe and timeDiff > 3600 * 1.5   # one hour
 
 
 def advice(analysis):
