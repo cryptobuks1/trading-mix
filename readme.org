@@ -1594,9 +1594,9 @@ git push
 
 #+RESULTS: add-latest-kraken-snapshot-ohcl-to-project
 :RESULTS:
-[master 2c08e06] New data added data/ohcl-2018-08-24-22:51:11.sqlite
- 1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 data/ohcl-2018-08-24-22:51:11.sqlite
+[master 24e4fac] New data added data/ohcl-2018-08-29-23:19:29.sqlite
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 data/ohcl-2018-08-29-23:19:29.sqlite
 :END:
 
 #+RESULTS: add-latest-kraken-ohcl-to-project
@@ -2173,6 +2173,43 @@ rootdir: /home/kristian/projects/trading, inifile:
 ==# Out[43]:
 : [1534921809.8653, 1534915207.0475, 1534906208.7583, 1534900208.2574]
 =#+end_example
+*** Animation
+#+NAME: animate-data
+#+HEADER: :session
+#+HEADER: :results raw drawer replace
+#+HEADER: :var data_file="/home/kristian/projects/trading/data/ohlc-2018-08-19-23:32:55.sqlite"
+#+BEGIN_SRC ipython
+  import warnings
+  warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
+  from trading.data import window_generator
+  from trading.sql import connect
+  from trading.octave import conf as peakConf
+  from functools import partial
+  from trading.data import analyseData
+  import matplotlib.animation as animation
+
+  from trading.plot import create_plot_with_fit_and_peak
+
+  db = connect("sqlite:///" + data_file)
+
+  analysis_fn = partial(analyseData,
+                        peakConf)
+
+  Writer = animation.writers['ffmpeg']
+  writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
+
+  fig, ax, ani = create_plot_with_fit_and_peak(analysis_fn,
+                                               window_generator(3600 * 3,
+                                                                600,
+                                                                ,**db))
+  ani.save('im.mp4', writer=writer)
+#+END_SRC
+
+#+RESULTS: animate-data
+:RESULTS:
+# Out[2]:
+[[file:./obipy-resources/16874Oot.png]]
+:END:
 
 ** Test
 

@@ -57,7 +57,7 @@ def test_animation(caplog):
     analysis_fn = partial(analyseData,
                           peakConf)
     with caplog.at_level(logging.DEBUG):
-        ani = create_plot_with_fit_and_peak(analysis_fn, frame_fn)
+        fig, ax, ani = create_plot_with_fit_and_peak(analysis_fn, frame_fn)
         plt.show(block=False)
         show_control_window(lambda: controlPlot(state),
                             recordEvent)
