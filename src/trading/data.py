@@ -140,7 +140,9 @@ def is_new_peak(latest_order_epoc, analysis, **kwargs):
 
     # Price distance from peak
     logging.debug("Price distance {}".format(abs(analysis['ypeak'][0] - analysis['yfit'][0])))
-    if 1 < abs(analysis['ypeak'][0] - analysis['yfit'][0]):
+    # if advice(analysis) == TradeCommand.buy:
+
+    if abs(analysis['ypeak'][0] - analysis['yfit'][-1]) < 1:
         logging.debug("Distance too big")
         return False
     # valley J bad
