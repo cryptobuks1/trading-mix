@@ -62,7 +62,7 @@ def create_plot_with_fit_and_peak(analysis_fns, frame_fn, **kwargs):
     fig, ax = axis_with_dates_x()
     plots = {}
     init_fn = partial(init_with_fit_and_peak, plots, ax)
-    interval = kwargs.get("animation_interval", 50)
+    interval = kwargs.get("animation_interval", 2000)
     return fig, ax, animation.FuncAnimation(fig,
                                             partial(update_with_fit_and_peak,
                                                     analysis_fns),

@@ -2174,7 +2174,8 @@ rootdir: /home/kristian/projects/trading, inifile:
 : [1534921809.8653, 1534915207.0475, 1534906208.7583, 1534900208.2574]
 =#+end_example
 *** Animation
-#+NAME: animate-data
+**** Save animation
+#+NAME: save-animate-data
 #+HEADER: :session
 #+HEADER: :results raw drawer replace
 #+HEADER: :var data_file="/home/kristian/projects/trading/data/ohlc-2018-08-19-23:32:55.sqlite"
@@ -2195,20 +2196,25 @@ rootdir: /home/kristian/projects/trading, inifile:
   analysis_fn = partial(analyseData,
                         peakConf)
 
-  Writer = animation.writers['ffmpeg']
-  writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
-
   fig, ax, ani = create_plot_with_fit_and_peak(analysis_fn,
                                                window_generator(3600 * 3,
                                                                 600,
                                                                 ,**db))
+  Writer = animation.writers['ffmpeg']
+  writer = Writer(fps=1, metadata=dict(artist='Me'), bitrate=1800)
   ani.save('im.mp4', writer=writer)
 #+END_SRC
 
+#+RESULTS: save-animate-data
+:RESULTS:
+# Out[5]:
+[[file:./obipy-resources/168743W2.png]]
+:END:
+
 #+RESULTS: animate-data
 :RESULTS:
-# Out[2]:
-[[file:./obipy-resources/16874Oot.png]]
+# Out[3]:
+[[file:./obipy-resources/16874O9J.png]]
 :END:
 
 ** Test
