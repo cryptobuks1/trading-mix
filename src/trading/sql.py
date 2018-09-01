@@ -2,7 +2,7 @@ import sqlite3
 from sqlalchemy import MetaData, create_engine, func
 from sqlalchemy.sql import select
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.sql import select
+
 
 def connect(connect_string):
     connection = create_engine(connect_string)
@@ -12,6 +12,10 @@ def connect(connect_string):
 
 
 def meta(connection, **kwargs):
+    '''
+    Bind to database and returns reflection
+    :returns sqlalchemy.Metadata:
+    '''
     meta = MetaData()
     meta.reflect(bind=connection)
     return meta
