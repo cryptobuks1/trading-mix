@@ -2066,7 +2066,6 @@ rootdir: /home/kristian/projects/trading, inifile:
 [[file:/tmp/image.png]]
 :END:
 
-*** Plot strategy
 *** Get orders since
 #+NAME: orders-since
 #+HEADER: :session getorders_between
