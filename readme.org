@@ -1823,6 +1823,32 @@ Store pickled data in a topic on a append log
 
 *** default strategy
 
+**** Plot
+#+NAME: plot-default-strategy-profit
+#+HEADER: :results raw drawer
+#+HEADER: :session
+#+HEADER: :tangle scratch.py
+#+BEGIN_SRC ipython
+  from trading.kraken import table_mapping, ohlc_table
+  from trading.sql import connect, meta, window_query, execute, time_range
+  from os.path import join as join_path
+
+  db = connect("sqlite:///" + join_path('/home/kristian/projects/trading/data',
+                                        'ohlc-2018-08-19-23:32:55.sqlite'))
+
+  ohlc = {**db,
+          ,**table_mapping[ohlc_table],
+          ,**{"table_object": meta(**db).tables[ohlc_table]}}
+
+  start, end = time_range(**ohlc)
+
+  query = window_query(**{**{"start": start,
+                             "end": end},
+                          ,**ohlc})
+
+  data = execute(query=query, connection=db['connection'])
+
+#+END_SRC
 **** test
 #+NAME: test-default-kraken-strategy
 #+HEADER: :tangle tests/trading/test_default_strategy.py

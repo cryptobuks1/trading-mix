@@ -74,9 +74,13 @@ def ohlc(**kwargs):
     return to_sql(ohlc, 'ohlc', **kwargs)
 
 
-orders_table = "ohlc"
+orders_table = "orders"
+ohlc_table = "ohlc"
 table_mapping = {orders_table: {"table": orders_table,
-                                "time_column": "timestamp"}}
+                                "time_column": "timestamp"},
+                 ohlc_table: {"table": ohlc_table,
+                              "time_column": "time",
+                              "data_column": "open"}}
 
 
 def create_order(command, amount):

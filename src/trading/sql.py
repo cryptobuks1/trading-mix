@@ -40,13 +40,27 @@ def window(cursor,
                                                        end))
         result = cursor.fetchall()
     else:
-
         table = meta(connection).tables[table]
-        s = select([table.c[time_column],
-                    table.c.open]).where(table.c[time_column].between(start,
-                                                                      end))
-        result = connection.execute(s).fetchall()
+        q = window_query(start=start,
+                         end=end,
+                         time_column=time_column,
+                         data_column='open')
+        result = connection.execute(q).fetchall()
+
     return result
+
+
+def window_query(*,
+                 start,
+                 end,
+                 table_object,
+                 time_column,
+                 data_column,
+                 **kwargs):
+    return select([table_object.c[time_column],
+                   table_object.c[data_column]])\
+                   .where(table_object.c[time_column].between(start,
+                                                              end))
 
 
 def memdb():
@@ -88,3 +102,7 @@ def latest(connection, meta_data, table_name='ohlc', time_column='time',
     return result[0]
     # start, end = time_range(cur, time_column, table)
     # cur.execute("SELECT * from {}, open ")
+
+
+def execute(*, query, connection, **kwargs):
+    return connection.execute(query).fetchall()
