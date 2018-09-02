@@ -1831,6 +1831,8 @@ Store pickled data in a topic on a append log
 #+BEGIN_SRC ipython
   from trading.kraken import table_mapping, ohlc_table
   from trading.sql import connect, meta, window_query, execute, time_range
+  from trading.strategy.simple import create
+  from trading.core import TradeCommand
   from os.path import join as join_path
 
   db = connect("sqlite:///" + join_path('/home/kristian/projects/trading/data',
@@ -1840,14 +1842,20 @@ Store pickled data in a topic on a append log
           ,**table_mapping[ohlc_table],
           ,**{"table_object": meta(**db).tables[ohlc_table]}}
 
+  offset = 3600
+  window_size = 3600 * 5
   start, end = time_range(**ohlc)
+  begin = start + offset
 
-  query = window_query(**{**{"start": start,
-                             "end": end},
+  query = window_query(**{**{"start": begin,
+                             "end": begin + window_size},
                           ,**ohlc})
 
   data = execute(query=query, connection=db['connection'])
-
+  engine, events = create(lambda: 0,
+                          {TradeCommand.buy: lambda analysis: print("BUY!!"),
+                           TradeCommand.sell: lambda analysis: print("SELL!!")})
+  engine(data, **ohlc)
 #+END_SRC
 **** test
 #+NAME: test-default-kraken-strategy
