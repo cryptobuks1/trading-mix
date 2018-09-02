@@ -11,6 +11,10 @@ def connect(connect_string):
             "session": sessionmaker(bind=connection)()}
 
 
+def sqlite_connect(path):
+    return connect('sqlite:///' + path)
+
+
 def meta(connection, **kwargs):
     '''
     Bind to database and returns reflection
@@ -43,6 +47,7 @@ def window(cursor,
         table = meta(connection).tables[table]
         q = window_query(start=start,
                          end=end,
+                         table_object=table,
                          time_column=time_column,
                          data_column='open')
         result = connection.execute(q).fetchall()

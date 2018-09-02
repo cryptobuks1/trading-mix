@@ -1,4 +1,3 @@
-
 from trading.sql import time_range, window
 from trading.strategy.simple import create
 from trading.data import TradeCommand
@@ -22,11 +21,19 @@ def default_kraken_strategy(*,
 
     engine, events = create(latest_order_epoc_fn, tradeCommands)
 
-    def strategy(db):
+    def strategy(db, **kwargs):
         nonlocal engine
         start, end = time_range(**db)
+        direction = kwargs.get("direction", "tail")
+        offset = kwargs.get("offset", 0)
+        if direction == "tail":
+            window_start = end - offset - window_size
+        elif direction == "head":
+            window_start = start + offset
+
+        window_end = window_start + window_size
         engine(window(None,
-                      end - window_size,
-                      end, **db))
+                      window_start,
+                      window_end, **db))
 
     return strategy, events
