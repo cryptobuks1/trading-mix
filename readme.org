@@ -1823,7 +1823,7 @@ Store pickled data in a topic on a append log
 
 *** default strategy
 
-**** Plot
+**** Simple use case
 #+NAME: plot-default-strategy-profit
 #+HEADER: :results raw drawer
 #+HEADER: :session
