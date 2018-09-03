@@ -2,7 +2,7 @@
 from trading.sql import time_range, window
 from trading.strategy.simple import create
 from trading.data import TradeCommand
-from enum import Enum
+from trading.events import TradingEvents, emit
 from collections import namedtuple
 
 
@@ -33,8 +33,11 @@ def default_kraken_strategy(*,
             window_start = start + offset
 
         window_end = window_start + window_size
-        engine(window(None,
+        data = window(None,
                       window_start,
-                      window_end, **db))
+                      window_end, **db)
+        emit(TradingEvents.data.fget(events), {"data": data})
+        engine(data)
+
 
     return strategy, events

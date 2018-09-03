@@ -6,7 +6,8 @@ TradingEvents = namedtuple('TradingEvents', ['foundPeak',
                                              'noPeak',
                                              'newPeak',
                                              'tradeAdvise',
-                                             'advice'])
+                                             'advice',
+                                             'data'])
 
 tradingEvents = TradingEvents(*[signal(k) for k in TradingEvents._fields])
 
