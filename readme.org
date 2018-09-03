@@ -19,7 +19,12 @@ pip3 install -U --user pipenv
   from trading.core import default_kraken_strategy
   from trading.sql import memdb, time_range
   from trading.kraken import ohlc, get_latest_order_epoc, create_order
+  from trading.events import TradingEvents, bind
   import logging
+  import datetime
+  import pickle
+  from os.path import expanduser, exists, dirname
+  from os import makedirs
 
   logging.basicConfig(level=logging.DEBUG,
                       format='%(asctime)s %(levelname)-8s %(message)s',
@@ -46,6 +51,17 @@ pip3 install -U --user pipenv
       start, end = time_range(**db)
       logging.debug(start)
       logging.warn(end)
+
+      def store_data(data):
+          date = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+          data_path = expanduser('~/.local/lib/trading/data/order-data-' + date + '.sqlite')
+          data_dir = dirname(data_path)
+          if not exists(data_dir):
+              makedirs(data_dir)
+          with open(data_path, 'wb') as f:
+              pickle.dump(data, f)
+
+      bind(TradingEvents.data.fget(events), lambda data: store_data(data['data']))
       strategy(db)
 
 
