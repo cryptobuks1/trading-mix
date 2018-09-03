@@ -16,6 +16,8 @@ pip3 install -U --user pipenv
 #+NAME: app
 #+HEADER: :tangle trader.py :session app
 #+BEGIN_SRC ipython
+  import warnings
+  warnings.filterwarnings("ignore", message="numpy.dtype size changed")
   from trading.core import default_kraken_strategy
   from trading.sql import memdb, time_range
   from trading.kraken import ohlc, get_latest_order_epoc, create_order
@@ -32,11 +34,16 @@ pip3 install -U --user pipenv
 
 
   def main():
+      store_data_p = False
 
       def buy(analysis):
+          nonlocal store_data_p
+          store_data_p = True
           create_order('buy', 5)
 
       def sell(analysis):
+          nonlocal store_data_p
+          store_data_p = True
           create_order('sell', 5)
 
       [strategy,
@@ -61,8 +68,17 @@ pip3 install -U --user pipenv
           with open(data_path, 'wb') as f:
               pickle.dump(data, f)
 
-      bind(TradingEvents.data.fget(events), lambda data: store_data(data['data']))
+      ohlc_data = None
+
+      def reference_data(data):
+          nonlocal ohlc_data
+          ohlc_data = data
+
+      bind(TradingEvents.data.fget(events), lambda data: reference_data(data['data']))
       strategy(db)
+      if store_data_p:
+          store_data(ohlc_data)
+
 
 
   if __name__ == "__main__":
@@ -1621,9 +1637,9 @@ git push
 
 #+RESULTS: add-latest-kraken-snapshot-ohcl-to-project
 :RESULTS:
-[master 24e4fac] New data added data/ohcl-2018-08-29-23:19:29.sqlite
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 data/ohcl-2018-08-29-23:19:29.sqlite
+[master b6b38a3] New data added data/ohcl-2018-09-04-00:51:09.sqlite
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 data/ohcl-2018-09-04-00:51:09.sqlite
 :END:
 
 #+RESULTS: add-latest-kraken-ohcl-to-project
