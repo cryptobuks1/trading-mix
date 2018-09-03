@@ -1835,7 +1835,6 @@ Store pickled data in a topic on a append log
 #+NAME: simple-strategy-use-case
 #+HEADER: :results raw drawer
 #+HEADER: :session
-#+HEADER: :tangle scratch.py
 #+BEGIN_SRC ipython
   from trading.kraken import table_mapping, ohlc_table
   from trading.sql import connect, meta, window_query, execute, time_range
