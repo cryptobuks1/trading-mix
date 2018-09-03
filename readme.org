@@ -1901,7 +1901,57 @@ Store pickled data in a topic on a append log
 # Out[1]:
 [[file:./obipy-resources/32155iIn.png]]
 :END:
+**** Store on order
+#+NAME: store-on-order
+#+HEADER: :results raw drawer
+#+HEADER: :session
+#+BEGIN_SRC ipython
+  # %matplotlib inline
+  import warnings
+  warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+  from trading.plot import axis_with_dates_x
+  from trading.core import default_kraken_strategy
+  from trading.sql import sqlite_connect
+  from trading.events import TradingEvents, bind
+  from datetime import datetime
+  import pickle
 
+  from os.path import expanduser, exists, dirname
+  from os import makedirs
+
+
+  fig, ax = axis_with_dates_x()
+
+
+  def plot(analysis):
+      ax.plot([datetime.fromtimestamp(x) for x in analysis['x']], analysis['y'])
+      ax.plot([datetime.fromtimestamp(x) for x in analysis['xfit']], analysis['yfit'])
+      ax.plot([datetime.fromtimestamp(x) for x in analysis['xpeak']], analysis['ypeak'], 'b+')
+
+
+  db = sqlite_connect('/home/kristian/projects/trading/data/ohlc-2018-08-19-23:32:55.sqlite')
+
+  strategy, events = default_kraken_strategy(buy_fn=plot,
+                                             sell_fn=plot,
+                                             latest_order_epoc_fn=lambda: 0)
+
+
+  def store_data(data):
+      date = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+      data_path = expanduser('~/.local/lib/trading/data/order-data-' + date + '.sqlite')
+      with open(data_path, 'wb') as f:
+          pickle.dump(data, f)
+
+
+  bind(TradingEvents.data.fget(events), lambda data: store_data(data['data']))
+  strategy(db, direction="head", offset=1800)
+#+END_SRC
+
+#+RESULTS: store-on-order
+:RESULTS:
+# Out[119]:
+[[file:./obipy-resources/321554aB.png]]
+:END:
 
 **** test
 #+NAME: test-default-kraken-strategy
