@@ -72,5 +72,4 @@ def test_profit(all_data, caplog):
     logging.warn("portfolio value {}".format(currentValueInEUROS - newMoney))
     logging.warn("Money {}".format(newMoney))
     plt.show()
-    assert  False
-    #assert (xmrs * rate) + euros > newMoney * 3
+    assert False
