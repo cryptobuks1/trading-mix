@@ -1637,9 +1637,9 @@ git push
 
 #+RESULTS: add-latest-kraken-snapshot-ohcl-to-project
 :RESULTS:
-[master b6b38a3] New data added data/ohcl-2018-09-04-00:51:09.sqlite
+[master 366237d] New data added data/ohcl-2018-09-04-07:33:05.sqlite
  1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 data/ohcl-2018-09-04-00:51:09.sqlite
+ create mode 100644 data/ohcl-2018-09-04-07:33:05.sqlite
 :END:
 
 #+RESULTS: add-latest-kraken-ohcl-to-project
@@ -1918,20 +1918,21 @@ Store pickled data in a topic on a append log
   def plot(analysis):
       ax.plot([datetime.fromtimestamp(x) for x in analysis['x']], analysis['y'])
       ax.plot([datetime.fromtimestamp(x) for x in analysis['xfit']], analysis['yfit'])
-      ax.plot([datetime.fromtimestamp(x) for x in analysis['xpeak']], analysis['ypeak'], 'b+')
+      # ax.plot([datetime.fromtimestamp(x) for x in analysis['xpeak']], analysis['ypeak'], 'b+')
+      ax.axvline(x=datetime.fromtimestamp(analysis['xpeak'][0]), color='#ff0000')
 
-  db = sqlite_connect('/home/kristian/projects/trading/data/ohlc-2018-08-19-23:32:55.sqlite')
+  db = sqlite_connect('/home/kristian/projects/trading/data/ohcl-2018-09-04-07:33:05.sqlite')
 
   strategy, events = default_kraken_strategy(buy_fn=plot,
                                              sell_fn=plot,
                                              latest_order_epoc_fn=lambda: 0)
-  strategy(db, direction="head", offset=1800)
+  strategy(db, offset=3600)
 #+END_SRC
 
 #+RESULTS: plot-simple-strategy
 :RESULTS:
-# Out[1]:
-[[file:./obipy-resources/32155iIn.png]]
+# Out[187]:
+[[file:./obipy-resources/321554sn.png]]
 :END:
 **** Store on order
 #+NAME: store-on-order
@@ -2225,7 +2226,7 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 #+RESULTS: plot-data
 :RESULTS:
-# Out[2]:
+# Out[175]:
 [[file:/tmp/image.png]]
 :END:
 
