@@ -2192,7 +2192,7 @@ rootdir: /home/kristian/projects/trading, inifile:
 ** Plot
 
 *** Plot orders
-#+NAME: plot-data
+#+NAME: plot-orders
 #+HEADER: :session
 #+HEADER: :ipyfile /tmp/image.png
 #+HEADER: :results raw drawer
