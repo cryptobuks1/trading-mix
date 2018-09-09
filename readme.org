@@ -39,12 +39,12 @@ pip3 install -U --user pipenv
       def buy(analysis):
           nonlocal store_data_p
           store_data_p = True
-          create_order('buy', 2)
+          create_order('buy', 5)
 
       def sell(analysis):
           nonlocal store_data_p
           store_data_p = True
-          create_order('sell', 2)
+          create_order('sell', 5)
 
       [strategy,
        events] = default_kraken_strategy(**{"buy_fn":
