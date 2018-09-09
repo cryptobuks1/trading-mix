@@ -1,4 +1,3 @@
-
 from trading.sql import time_range, window
 from trading.strategy.simple import create
 from trading.data import TradeCommand
@@ -14,6 +13,8 @@ def default_kraken_strategy(*,
                             sell_fn,
                             latest_order_epoc_fn,
                             window_size=3600 * 5):
+    ''' TODO Rename to default strategy
+    '''
     global TradeActions
     tradeCommands = {
         TradeCommand.sell: sell_fn,
