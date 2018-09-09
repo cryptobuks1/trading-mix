@@ -23,8 +23,10 @@ def test_profit(all_data, caplog):
     fig, ax = axis_with_dates_x()
 
     def plotAnalysis(analysis):
-        ax.plot([datetime.fromtimestamp(x) for x in analysis['x']], analysis['y'],
-                [datetime.fromtimestamp(x) for x in analysis['xfit']], analysis['yfit'])
+        ax.plot([datetime.fromtimestamp(x) for x in analysis['x']],
+                analysis['y'],
+                [datetime.fromtimestamp(x) for x in analysis['xfit']],
+                analysis['yfit'])
         ax.axvline(x=datetime.fromtimestamp(analysis['xpeak'][0]))
 
     def sell(analysis):
@@ -39,7 +41,8 @@ def test_profit(all_data, caplog):
             euros = 0
             firstOrder = False
         euros += xmrs * rate
-        logging.warn("at {} selling: {} xmr at rate {} for {} euros".format(toDate(analysis['x'][-1]), xmrs, rate, euros))
+        logging.warn("at {} selling: {} xmr at rate {} for {} euros".
+                     format(toDate(analysis['x'][-1]), xmrs, rate, euros))
         xmrs = 0
 
     def buy(analysis):
@@ -48,12 +51,13 @@ def test_profit(all_data, caplog):
         plotAnalysis(analysis)
         if euros == 0:
             extraMoney = 5 * rate
-            newMoney =+ extraMoney
+            newMoney += extraMoney
             euros = extraMoney
             firstOrder = False
 
         xmrs += euros / rate
-        logging.warn("at {} buying: {} xmr at rate {} for {} euros".format(toDate(analysis['x'][-1]), xmrs, rate, euros))
+        logging.warn("at {} buying: {} xmr at rate {} for {} euros".
+                     format(toDate(analysis['x'][-1]), xmrs, rate, euros))
         euros = 0
 
     tradeCommands = {
