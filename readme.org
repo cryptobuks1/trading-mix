@@ -2195,6 +2195,9 @@ rootdir: /home/kristian/projects/trading, inifile:
 #+HEADER: :results raw drawer
 #+BEGIN_SRC ipython :var data_file=ask-for-datafile
   # %matplotlib inline
+  import warnings
+  warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+  warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
   from trading.sql import connect, window, time_range
   from trading.data import extract
   from trading.plot import axis_with_dates_x, as_dates
@@ -2202,9 +2205,7 @@ rootdir: /home/kristian/projects/trading, inifile:
   import matplotlib.patches as mpatches
   import matplotlib.pyplot as plt
   from datetime import datetime
-  import warnings
-  warnings.filterwarnings("ignore", message="numpy.dtype size changed")
-  warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
+
 
   connect_str = "sqlite:///" + data_file
   db = connect(connect_str)
@@ -2226,7 +2227,7 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 #+RESULTS: plot-data
 :RESULTS:
-# Out[175]:
+# Out[2]:
 [[file:/tmp/image.png]]
 :END:
 
