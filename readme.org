@@ -52,7 +52,9 @@ pip3 install -U --user pipenv
                                             "sell_fn":
                                             sell,
                                             "latest_order_epoc_fn":
-                                            get_latest_order_epoc})
+                                            get_latest_order_epoc,
+                                            "window_size":
+                                            3600 * 3})
       db = memdb()
       ohlc(**db)
       start, end = time_range(**db)
