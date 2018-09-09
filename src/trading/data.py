@@ -134,7 +134,10 @@ def is_new_peak(latest_order_epoc, analysis, **kwargs):
     loe = latest_order_epoc()
     peakEpoc = analysis['xpeak'][0]
     logging.debug("Peak at: {}".format(toDate(peakEpoc)))
+    logging.debug("Peak price: {}".format(analysis['ypeak'][0]))
     logging.debug("Latest order epoc: {}".format(toDate(loe)))
+    logging.debug("First fit prize: {}".format(analysis['yfit'][0]))
+    logging.debug("Last fit prize: {}".format(analysis['yfit'][-1]))
     timeDiff = abs(peakEpoc - loe)
     logging.debug("Diff between latest order and current peak: {}".format(toDate(timeDiff)))
 
