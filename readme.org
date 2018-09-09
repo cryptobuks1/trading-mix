@@ -80,6 +80,7 @@ pip3 install -U --user pipenv
       strategy(db)
       if store_data_p:
           store_data(ohlc_data)
+          store_data_p = False
 
 
 
