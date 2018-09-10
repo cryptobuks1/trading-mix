@@ -2270,7 +2270,7 @@ rootdir: /home/kristian/projects/trading, inifile:
   for idx, order in orders.iterrows():
       colors = {'buy': '#ff0000',
                 'sell': '#00ff00'}
-      ax.axvline(x=datetime.fromtimestamp(order['tpime']),
+      ax.axvline(x=datetime.fromtimestamp(order['time']),
                  color=colors[order['type']])
   plt.show()
 #+END_SRC
@@ -2278,7 +2278,7 @@ rootdir: /home/kristian/projects/trading, inifile:
 #+RESULTS: plot-latest-orders-12-hours
 :RESULTS:
 # Out[3]:
-[[file:./obipy-resources/10726zXI.png]]
+[[file:./obipy-resources/13306CKQ.png]]
 :END:
 
 #+RESULTS: plot-latest-orders
