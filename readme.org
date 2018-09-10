@@ -2240,6 +2240,53 @@ rootdir: /home/kristian/projects/trading, inifile:
 [[file:/tmp/image.png]]
 :END:
 
+*** Plot latest 12 hours
+#+NAME: plot-latest-orders-12-hours
+#+HEADER: :results raw drawer
+#+BEGIN_SRC ipython
+  %matplotlib inline
+  import warnings
+  warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+  warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
+  from trading.sql import connect, window, time_range, memdb
+  from trading.data import extract
+  from trading.plot import axis_with_dates_x, as_dates
+  from trading.kraken import get_orders_between, ohlc
+  import matplotlib.patches as mpatches
+  import matplotlib.pyplot as plt
+  from datetime import datetime
+
+
+  db = memdb()
+  ohlc(**db)
+  start, end = time_range(**db)
+  orders = get_orders_between(start, end)
+  result = extract(window(None, start, end, **db))
+  fig, ax = axis_with_dates_x()
+  ax.plot(as_dates(result[0]), result[1])
+  red_patch = mpatches.Patch(color='red', label='Buy')
+  green_patch = mpatches.Patch(color='green', label='Sell')
+  fig.legend(handles=[red_patch, green_patch])
+  for idx, order in orders.iterrows():
+      colors = {'buy': '#ff0000',
+                'sell': '#00ff00'}
+      ax.axvline(x=datetime.fromtimestamp(order['tpime']),
+                 color=colors[order['type']])
+  plt.show()
+#+END_SRC
+
+#+RESULTS: plot-latest-orders-12-hours
+:RESULTS:
+# Out[3]:
+[[file:./obipy-resources/10726zXI.png]]
+:END:
+
+#+RESULTS: plot-latest-orders
+:RESULTS:
+# Out[2]:
+[[file:./obipy-resources/9161Zj2.png]]
+:END:
+
 *** Get orders since
 #+NAME: orders-since
 #+HEADER: :session getorders_between
