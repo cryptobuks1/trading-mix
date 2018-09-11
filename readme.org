@@ -2180,6 +2180,11 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 *** Save all data on order
 
+*** Calculate amount
+#+NAME simple-strategy-calculate-amount
+#+BEGIN_SRC ipython
+
+#+END_SRC
 ** Working with data
 #+NAME: ask-for-datafile
 #+BEGIN_SRC emacs-lisp
