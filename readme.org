@@ -39,12 +39,12 @@ pip3 install -U --user pipenv
       def buy(analysis):
           nonlocal store_data_p
           store_data_p = True
-          create_order('buy', 5)
+          create_order('buy', 10)
 
       def sell(analysis):
           nonlocal store_data_p
           store_data_p = True
-          create_order('sell', 5)
+          create_order('sell', 10)
 
       [strategy,
        events] = default_kraken_strategy(**{"buy_fn":
@@ -2277,8 +2277,8 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 #+RESULTS: plot-latest-orders-12-hours
 :RESULTS:
-# Out[6]:
-[[file:./obipy-resources/133063zv.png]]
+# Out[9]:
+[[file:./obipy-resources/13306ene.png]]
 :END:
 
 #+RESULTS: plot-latest-orders
