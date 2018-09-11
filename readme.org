@@ -39,12 +39,12 @@ pip3 install -U --user pipenv
       def buy(analysis):
           nonlocal store_data_p
           store_data_p = True
-          create_order('buy', 10)
+          create_order('buy', 5)
 
       def sell(analysis):
           nonlocal store_data_p
           store_data_p = True
-          create_order('sell', 10)
+          create_order('sell', 5)
 
       [strategy,
        events] = default_kraken_strategy(**{"buy_fn":
@@ -1640,9 +1640,9 @@ git push
 
 #+RESULTS: add-latest-kraken-snapshot-ohcl-to-project
 :RESULTS:
-[master 57686a8] New data added data/ohcl-2018-09-09-23:18:09.sqlite
+[master db50422] New data added data/ohcl-2018-09-11-13:26:25.sqlite
  1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 data/ohcl-2018-09-09-23:18:09.sqlite
+ create mode 100644 data/ohcl-2018-09-11-13:26:25.sqlite
 :END:
 
 #+RESULTS: add-latest-kraken-ohcl-to-project
@@ -2277,8 +2277,8 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 #+RESULTS: plot-latest-orders-12-hours
 :RESULTS:
-# Out[9]:
-[[file:./obipy-resources/13306ene.png]]
+# Out[10]:
+[[file:./obipy-resources/13306FUZ.png]]
 :END:
 
 #+RESULTS: plot-latest-orders
