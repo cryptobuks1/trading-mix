@@ -1640,9 +1640,9 @@ git push
 
 #+RESULTS: add-latest-kraken-snapshot-ohcl-to-project
 :RESULTS:
-[master db50422] New data added data/ohcl-2018-09-11-13:26:25.sqlite
+[master c0a64f7] New data added data/ohcl-2018-09-11-16:31:34.sqlite
  1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 data/ohcl-2018-09-11-13:26:25.sqlite
+ create mode 100644 data/ohcl-2018-09-11-16:31:34.sqlite
 :END:
 
 #+RESULTS: add-latest-kraken-ohcl-to-project
@@ -2282,8 +2282,8 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 #+RESULTS: plot-latest-orders-12-hours
 :RESULTS:
-# Out[10]:
-[[file:./obipy-resources/13306FUZ.png]]
+# Out[1]:
+[[file:./obipy-resources/23894-DI.png]]
 :END:
 
 #+RESULTS: plot-latest-orders
