@@ -2268,6 +2268,7 @@ rootdir: /home/kristian/projects/trading, inifile:
   orders = get_orders_between(start, end)
   result = extract(window(None, start, end, **db))
   fig, ax = axis_with_dates_x()
+  fig.patch.set_facecolor('white')
   ax.plot(as_dates(result[0]), result[1])
   red_patch = mpatches.Patch(color='red', label='Buy')
   green_patch = mpatches.Patch(color='green', label='Sell')
