@@ -1916,6 +1916,7 @@ Store pickled data in a topic on a append log
   from datetime import datetime
 
   fig, ax = axis_with_dates_x()
+  fig.patch.set_facecolor('white')
 
 
   def plot(analysis):
@@ -1929,7 +1930,7 @@ Store pickled data in a topic on a append log
   strategy, events = default_kraken_strategy(buy_fn=plot,
                                              sell_fn=plot,
                                              latest_order_epoc_fn=lambda: 0)
-  strategy(db, offset=3600)
+  strategy(db, offset=(3600 * 2)+600)
 #+END_SRC
 
 #+RESULTS: plot-simple-strategy
