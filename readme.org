@@ -1935,8 +1935,8 @@ Store pickled data in a topic on a append log
 
 #+RESULTS: plot-simple-strategy
 :RESULTS:
-# Out[187]:
-[[file:./obipy-resources/321554sn.png]]
+# Out[3]:
+[[file:./obipy-resources/8871hEe.png]]
 :END:
 **** Store on order
 #+NAME: store-on-order
