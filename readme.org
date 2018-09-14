@@ -1906,7 +1906,7 @@ Store pickled data in a topic on a append log
 #+NAME: plot-simple-strategy
 #+HEADER: :results raw drawer
 #+HEADER: :session
-#+BEGIN_SRC ipython
+#+BEGIN_SRC ipython :var sqlfile=ask-for-datafile
   %matplotlib inline
   import warnings
   warnings.filterwarnings("ignore", message="numpy.dtype size changed")
@@ -1925,7 +1925,7 @@ Store pickled data in a topic on a append log
       # ax.plot([datetime.fromtimestamp(x) for x in analysis['xpeak']], analysis['ypeak'], 'b+')
       ax.axvline(x=datetime.fromtimestamp(analysis['xpeak'][0]), color='#ff0000')
 
-  db = sqlite_connect('/home/kristian/projects/trading/data/ohcl-2018-09-04-07:33:05.sqlite')
+  db = sqlite_connect(sqlfile)
 
   strategy, events = default_kraken_strategy(buy_fn=plot,
                                              sell_fn=plot,
@@ -2188,8 +2188,8 @@ rootdir: /home/kristian/projects/trading, inifile:
 #+END_SRC
 ** Working with data
 #+NAME: ask-for-datafile
-#+BEGIN_SRC emacs-lisp
-(read-file-name "Enter file name:")
+#+BEGIN_SRC emacs-lisp :cache yes
+  (read-file-name "Enter file name:")
 #+END_SRC
 
 #+RESULTS: ask-for-datafile
