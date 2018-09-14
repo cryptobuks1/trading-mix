@@ -2,11 +2,11 @@ import krakenex
 from pykrakenapi import KrakenAPI
 from trading.sql import memdb
 import logging
-
+from os.path import expanduser
 
 def credentials(separator = '='):
     result_dict = {}
-    with open('/home/kristian/.kraken') as f:
+    with open(expanduser('~/.kraken')) as f:
         for line in f:
             parts = line.split(separator, 1)
             result_dict[parts[0]] = parts[1].rstrip()
