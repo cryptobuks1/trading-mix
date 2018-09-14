@@ -1,0 +1,23 @@
+
+from sqlalchemy import MetaData, create_engine, Table, Column
+from sqlalchemy.types import DateTime, Integer, String, Float
+from sqlalchemy.sql import func
+from os.path import expanduser, exists, join
+from os import makedirs
+
+data_dir = expanduser('~/.local/lib/trading/data')
+if not exists(data_dir):
+    makedirs(data_dir)
+engine = create_engine('sqlite:///' + join(data_dir, 'orderlog.sqlite'))
+
+metadata = MetaData()
+
+orderlog_table = Table('orderlog', metadata,
+                       Column('id', Integer, primary_key=True),
+                       Column('currency', String, nullable=False),
+                       Column('amount', String, nullable=False),
+                       Column('datetime', DateTime,
+                              nullable=False,
+                              server_default=func.now()))
+
+orderlog_table.create(engine)

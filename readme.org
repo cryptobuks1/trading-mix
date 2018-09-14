@@ -1640,9 +1640,9 @@ git push
 
 #+RESULTS: add-latest-kraken-snapshot-ohcl-to-project
 :RESULTS:
-[master 0feb71f] New data added data/ohcl-2018-09-11-23:47:24.sqlite
+[master e9cd083] New data added data/ohcl-2018-09-14-17:17:40.sqlite
  1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 data/ohcl-2018-09-11-23:47:24.sqlite
+ create mode 100644 data/ohcl-2018-09-14-17:17:40.sqlite
 :END:
 
 #+RESULTS: add-latest-kraken-ohcl-to-project
@@ -1930,13 +1930,13 @@ Store pickled data in a topic on a append log
   strategy, events = default_kraken_strategy(buy_fn=plot,
                                              sell_fn=plot,
                                              latest_order_epoc_fn=lambda: 0)
-  strategy(db, offset=(3600 * 2)+600)
+  strategy(db, offset=(3600 * 3)+600)
 #+END_SRC
 
 #+RESULTS: plot-simple-strategy
 :RESULTS:
-# Out[3]:
-[[file:./obipy-resources/8871hEe.png]]
+# Out[9]:
+[[file:./obipy-resources/22757VAa.png]]
 :END:
 **** Store on order
 #+NAME: store-on-order
@@ -2192,8 +2192,9 @@ rootdir: /home/kristian/projects/trading, inifile:
   (read-file-name "Enter file name:")
 #+END_SRC
 
-#+RESULTS: ask-for-datafile
-: /home/kristian/projects/trading/data/ohcl-2018-08-22-00:17:13.sqlite
+#+RESULTS[d26d882457825d57211a1c7e3d54c7ef7f899250]: ask-for-datafile
+: /home/kristian/projects/trading/data/ohcl-2018-08-21-22:22:09.sqlite
+
 
 ** Plot
 
@@ -2203,7 +2204,7 @@ rootdir: /home/kristian/projects/trading, inifile:
 #+HEADER: :ipyfile /tmp/image.png
 #+HEADER: :results raw drawer
 #+BEGIN_SRC ipython :var data_file=ask-for-datafile
-  # %matplotlib inline
+  %matplotlib inline
   import warnings
   warnings.filterwarnings("ignore", message="numpy.dtype size changed")
   warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
@@ -2214,6 +2215,7 @@ rootdir: /home/kristian/projects/trading, inifile:
   import matplotlib.patches as mpatches
   import matplotlib.pyplot as plt
   from datetime import datetime
+
 
 
   connect_str = "sqlite:///" + data_file
@@ -2236,7 +2238,7 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 #+RESULTS: plot-orders
 :RESULTS:
-# Out[3]:
+# Out[1]:
 [[file:/tmp/image.png]]
 :END:
 
