@@ -1,4 +1,5 @@
 import json
+from functools import reduce
 
 
 def readjsonfile(path):
@@ -21,7 +22,7 @@ def join_data(accumList, currentList):
     accumList.extend(newData)
     return accumList
 
-def join(dataLists):
+def join_data_lists(dataLists):
     sortedData = sorted(dataLists, key=lambda dl: dl[0][0])
     print(sortedData[0][0])
     return reduce(join_data, sortedData, [])

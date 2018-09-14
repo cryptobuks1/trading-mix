@@ -116,7 +116,7 @@ def test_ohlc_1516320660():
 def test_combined_data():
     part1 = load("/home/kristian/projects/kraken-bash/ohlc-1521494568.json")
     part2 = load("/home/kristian/projects/kraken-bash/ohlc-1521533661.json")
-    data = oc.join([part2, part1])
+    data = oc.join_data_lists([part2, part1])
     print(data[0])
 
     x1, y1 = extract(part1)
