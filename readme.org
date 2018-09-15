@@ -1640,9 +1640,9 @@ git push
 
 #+RESULTS: add-latest-kraken-snapshot-ohcl-to-project
 :RESULTS:
-[master e9cd083] New data added data/ohcl-2018-09-14-17:17:40.sqlite
+[master 6b1c93c] New data added data/ohcl-2018-09-15-12:24:42.sqlite
  1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 data/ohcl-2018-09-14-17:17:40.sqlite
+ create mode 100644 data/ohcl-2018-09-15-12:24:42.sqlite
 :END:
 
 #+RESULTS: add-latest-kraken-ohcl-to-project
@@ -2188,12 +2188,12 @@ rootdir: /home/kristian/projects/trading, inifile:
 #+END_SRC
 ** Working with data
 #+NAME: ask-for-datafile
-#+BEGIN_SRC emacs-lisp :cache yes
+#+BEGIN_SRC emacs-lisp
   (read-file-name "Enter file name:")
 #+END_SRC
 
 #+RESULTS[d26d882457825d57211a1c7e3d54c7ef7f899250]: ask-for-datafile
-: /home/kristian/projects/trading/data/ohcl-2018-08-21-22:22:09.sqlite
+: /home/kristian/projects/trading/data/ohcl-2018-09-11-23:47:24.sqlite
 
 
 ** Plot
@@ -2224,6 +2224,7 @@ rootdir: /home/kristian/projects/trading, inifile:
   orders = get_orders_between(start, end)
   result = extract(window(None, start, end, **db))
   fig, ax = axis_with_dates_x()
+  fig.patch.set_facecolor('white')
   ax.plot(as_dates(result[0]), result[1])
   red_patch = mpatches.Patch(color='red', label='Buy')
   green_patch = mpatches.Patch(color='green', label='Sell')
@@ -2238,7 +2239,7 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 #+RESULTS: plot-orders
 :RESULTS:
-# Out[1]:
+# Out[2]:
 [[file:/tmp/image.png]]
 :END:
 
@@ -2287,7 +2288,7 @@ rootdir: /home/kristian/projects/trading, inifile:
 #+RESULTS: plot-latest-orders-12-hours
 :RESULTS:
 # Out[1]:
-[[file:./obipy-resources/8871Tyc.png]]
+[[file:./obipy-resources/1622MY1.png]]
 :END:
 
 #+RESULTS: plot-latest-orders
