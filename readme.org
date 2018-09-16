@@ -4,6 +4,12 @@
   :header-args: python :prologue (progn (pipenv-activate) (pyvenv-activate python-shell-virtualenv-root) "")
   :END:
 ** Installation
+** Prerequisites
+#+NAME: install-prerequisites
+#+HEADER: :session prerequisites
+#+BEGIN_SRC sh
+  sudo apt install octave octave-signal
+#+END_SRC
 All python dependencies can be installed with pipenv.
 But fist pipenv needs to be installed:
 #+BEGIN_SRC sh
@@ -11,7 +17,12 @@ pip3 install -U --user pipenv
 #+END_SRC
 
 #+RESULTS:
-
+*** Issues
+If things don't work try to go into ~~/.emacs.d/elpa/org~ and delete
+any *.elc files
+#+BEGIN_SRC sh
+  find . -name "*.elc" -exec rm {} \;
+#+END_SRC
 ** Application
 #+NAME: app
 #+HEADER: :tangle trader.py :session app
@@ -1640,9 +1651,9 @@ git push
 
 #+RESULTS: add-latest-kraken-snapshot-ohcl-to-project
 :RESULTS:
-[master 6b1c93c] New data added data/ohcl-2018-09-15-12:24:42.sqlite
+[master 250b685] New data added data/ohcl-2018-09-15-18:27:22.sqlite
  1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 data/ohcl-2018-09-15-12:24:42.sqlite
+ create mode 100644 data/ohcl-2018-09-15-18:27:22.sqlite
 :END:
 
 #+RESULTS: add-latest-kraken-ohcl-to-project
@@ -1930,14 +1941,40 @@ Store pickled data in a topic on a append log
   strategy, events = default_kraken_strategy(buy_fn=plot,
                                              sell_fn=plot,
                                              latest_order_epoc_fn=lambda: 0)
-  strategy(db, offset=(3600 * 3)+600)
+  strategy(db, offset=(3600 * 1)+600)
 #+END_SRC
 
 #+RESULTS: plot-simple-strategy
 :RESULTS:
-# Out[9]:
-[[file:./obipy-resources/22757VAa.png]]
+# Out[6]:
+[[file:./obipy-resources/109671yv.png]]
 :END:
+**** Animate default strategy
+#+NAME: animate-default-strategy
+#+HEADER: :results raw drawer
+#+HEADER: :tangle animate-default-strategy.py
+#+HEADER: :session animate-default-strategy
+#+BEGIN_SRC python :var sqlfile=ask-for-datafile
+  from trading.plot import axis_with_dates_x, plot_analysis
+  from functools import partial
+  from trading.core import default_kraken_strategy
+  from trading.sql import sqlite_connect
+
+  fig, ax = axis_with_dates_x()
+  fig.patch.set_facecolor('white')
+
+  db = sqlite_connect(sqlfile)
+
+  plotter = partial(plot_analysis, ax)
+
+  strategy, events = default_kraken_strategy(buy_fn=plotter,
+                                             sell_fn=plotter,
+                                             latest_order_epoc_fn=lambda: 0)
+  strategy(db, offset=(3600 * 1)+600)
+#+END_SRC
+
+#+RESULTS: animate-default-strategy
+
 **** Store on order
 #+NAME: store-on-order
 #+HEADER: :results raw drawer
@@ -2239,7 +2276,7 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 #+RESULTS: plot-orders
 :RESULTS:
-# Out[2]:
+# Out[3]:
 [[file:/tmp/image.png]]
 :END:
 

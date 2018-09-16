@@ -13,7 +13,7 @@ def credentials(separator = '='):
     return result_dict
 
 
-creds_dict = credentials()
+creds_dict = credentials(" ")
 
 api = krakenex.API(creds_dict['APIKEY'],
                    creds_dict['PRIVATEKEY'])

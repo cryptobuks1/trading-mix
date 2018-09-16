@@ -5,8 +5,8 @@ from trading.misc import desctructDict
 from datetime import datetime
 from functools import partial
 
-
 def axis_with_dates_x():
+    plt.ion()
     fig, ax = plt.subplots()
     fig.autofmt_xdate()
     ax.xaxis_date()
@@ -70,3 +70,11 @@ def create_plot_with_fit_and_peak(analysis_fns, frame_fn, **kwargs):
                                             init_fn,
                                             (plots, ax),
                                             interval=interval)
+
+
+def plot_analysis(ax, analysis):
+    ax.clear()
+    ax.plot([datetime.fromtimestamp(x) for x in analysis['x']], analysis['y'])
+    ax.plot([datetime.fromtimestamp(x) for x in analysis['xfit']], analysis['yfit'])
+    # ax.plot([datetime.fromtimestamp(x) for x in analysis['xpeak']], analysis['ypeak'], 'b+')
+    ax.axvline(x=datetime.fromtimestamp(analysis['xpeak'][0]), color='#ff0000')
