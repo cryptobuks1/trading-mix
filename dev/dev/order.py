@@ -1,0 +1,20 @@
+from collections import namedtuple
+from trading.events import bind, TradingEvents
+
+
+def simulation():
+    Simulation = namedtuple("Simulation", ['trade_on_peak',
+                                           'get_latest_order_epoc'])
+    latest_order_epoc = 0
+
+    def trade_on_peak(events):
+        bind(TradingEvents.newPeak.fget(events), update_latest_order_epoc)
+
+    def update_latest_order_epoc(peak_analysis):
+        nonlocal latest_order_epoc
+        latest_order_epoc = peak_analysis['x'][-1]
+
+    def get_latest_order_epoc():
+        return latest_order_epoc
+    return Simulation(trade_on_peak,
+                      get_latest_order_epoc)

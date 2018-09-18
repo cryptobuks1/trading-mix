@@ -30,6 +30,8 @@ def create(latest_order_epoc, tradeCommands):
     return start, tradingEvents
 
 
+create_strategy = create
+
 def check_peak(tradingEvents, is_new_peak_fn, data, **kwargs):
     logging.debug("Got Peak")
     if is_new_peak_fn(data['result'], **kwargs):

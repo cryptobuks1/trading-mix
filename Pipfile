@@ -12,6 +12,7 @@ jedi = "*"
 pyreadline = "*"
 rope = "*"
 flask = "*"
+tradingdev = {editable = true, path = "./dev"}
 
 [packages]
 ipython = "*"

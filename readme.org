@@ -1955,10 +1955,13 @@ Store pickled data in a topic on a append log
 #+HEADER: :tangle animate-default-strategy.py
 #+HEADER: :session animate-default-strategy
 #+BEGIN_SRC python :var sqlfile=ask-for-datafile
+  from trading.data import window_generator, TradeCommand
   from trading.plot import axis_with_dates_x, plot_analysis
   from functools import partial
-  from trading.core import default_kraken_strategy
+  from trading.strategy.simple import create_strategy
   from trading.sql import sqlite_connect
+  from dev.order import simulation
+  from time import sleep
 
   fig, ax = axis_with_dates_x()
   fig.patch.set_facecolor('white')
@@ -1967,13 +1970,23 @@ Store pickled data in a topic on a append log
 
   plotter = partial(plot_analysis, ax)
 
-  strategy, events = default_kraken_strategy(buy_fn=plotter,
-                                             sell_fn=plotter,
-                                             latest_order_epoc_fn=lambda: 0)
-  strategy(db, offset=(3600 * 1)+600)
+  tradeCommands = {
+      TradeCommand.sell: plotter,
+      TradeCommand.buy: plotter
+  }
+
+  sim = simulation()
+
+  strategy, events = create_strategy(sim.get_latest_order_epoc, tradeCommands)
+  sim.trade_on_peak(events)
+  for data in window_generator(3600 * 5, 1800, **db):
+      print("Hest")
+      strategy(data)
 #+END_SRC
 
 #+RESULTS: animate-default-strategy
+:RESULTS:
+:END:
 
 **** Store on order
 #+NAME: store-on-order
