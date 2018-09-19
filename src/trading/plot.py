@@ -37,6 +37,19 @@ def update_with_fit_and_peak(analysis_fns, frame, plots, ax):
     return ticks, fitted, psl
 
 
+def update_plot_with_fit_and_peak(plots, ax, analysis):
+    ticks, fitted, psl = [plots[graph] for graph in ("ticks",
+                                                     "fitted",
+                                                     "psl")]
+    xd = [datetime.fromtimestamp(x) for x in analysis['x']]
+    xfd = [datetime.fromtimestamp(x) for x in analysis['xfit']]
+    xpd = [datetime.fromtimestamp(x) for x in analysis['xpeak']]
+    ticks.set_data(xd, analysis['y'])
+    fitted.set_data(xfd, analysis['yfit'])
+    psl.set_data(xpd, analysis['ypeak'])
+
+
+
 def as_dates(xs):
     return [datetime.fromtimestamp(x) for x in xs]
 
