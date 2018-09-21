@@ -47,7 +47,7 @@ def update_plot_with_fit_and_peak(plots, ax, analysis):
     ticks.set_data(xd, analysis['y'])
     fitted.set_data(xfd, analysis['yfit'])
     psl.set_data(xpd, analysis['ypeak'])
-
+    plt.draw()
 
 
 def as_dates(xs):
@@ -55,12 +55,12 @@ def as_dates(xs):
 
 
 def init_with_fit_and_peak(plots, ax):
-    ticks, fitted, psl = ax.plot([],
-                                 [],
-                                 [],
-                                 [],
-                                 [],
-                                 [], 'b+')
+    ticks, fitted, psl = ax.plot([1],
+                                 [1],
+                                 [1],
+                                 [1],
+                                 [1],
+                                 [1], 'b+')
     plots['ticks'] = ticks
     plots['fitted'] = fitted
     plots['psl'] = psl

@@ -1979,7 +1979,6 @@ Store pickled data in a topic on a append log
   def throw(message):
       raise Exception(message)
 
-
   tradeCommands = {
       TradeCommand.sell: plotter,
       TradeCommand.buy: plotter
@@ -1995,12 +1994,25 @@ Store pickled data in a topic on a append log
       ax.set_xlim(min(xd), max(xd))
       ax.set_ylim(min(y), max(y))
       plots['ticks'].set_data(xd, y)
+      fig.canvas.draw()
+      fig.canvas.flush_events()
       strategy(data)
 #+END_SRC
 
 #+RESULTS: animate-default-strategy
 :RESULTS:
 (<matplotlib.lines.Line2D object at 0x7f9a7dbd5710>, <matplotlib.lines.Line2D object at 0x7f9a7db9e3c8>, <matplotlib.lines.Line2D object at 0x7f9a7db1c208>)
+:END:
+
+#+NAME: execute-animate-default-strategy
+#+CALL: execute-python-script(script="animate-default-strategy.py")
+
+#+RESULTS: execute-animate-default-strategy
+:RESULTS:
+:END:
+
+#+RESULTS:
+:RESULTS:
 :END:
 
 **** Store on order
@@ -2611,6 +2623,12 @@ rootdir: /home/kristian/projects/trading, inifile:
 <<test-default-strategy-fixture>>
 #+END_SRC
 
+** Script
+#+NAME: execute-python-script
+#+HEADER: :results drawer
+#+BEGIN_SRC sh :var script=""
+pipenv run python $script
+#+END_SRC
 ** Tempfile
 #+NAME: create-temp-file
 #+BEGIN_SRC sh :var prefix=""
