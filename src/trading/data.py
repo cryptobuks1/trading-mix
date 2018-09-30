@@ -18,9 +18,9 @@ class TradeCommand(Enum):
     wait = 3
 
 
-def fit(coord):
+def fit(coord, order=2, full=True, cov=False):
     x, y = coord
-    z = np.polyfit(x, y, 2, full=True)
+    z = np.polyfit(x, y, order, full=full, cov=cov)
     # print("Fit")
     # print(z)
     f = np.poly1d(z[0])

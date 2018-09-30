@@ -93,11 +93,12 @@ def plot_analysis(ax, analysis):
     ax.axvline(x=datetime.fromtimestamp(analysis['xpeak'][0]), color='#ff0000')
 
 
-def plot_data_with_x_as_date(x, y, ax, fig):
+def plot_data_with_x_as_date(fig, ax, x, y, clear=True):
     xd = [datetime.fromtimestamp(x_) for x_ in x]
-    ax.clear()
-    ax.set_xlim(min(xd), max(xd))
-    ax.set_ylim(min(y), max(y))
+    if clear:
+        ax.clear()
+        ax.set_xlim(min(xd), max(xd))
+        ax.set_ylim(min(y), max(y))
     ax.plot(xd, y)
     fig.canvas.draw()
     fig.canvas.flush_events()

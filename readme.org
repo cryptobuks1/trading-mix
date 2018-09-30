@@ -2022,7 +2022,7 @@ Store pickled data in a topic on a append log
   from trading.plot import axis_with_dates_x, plot_data_with_x_as_date
   from trading.sql import sqlite_connect, window
   from datetime import datetime, timedelta
-  from trading.data import extract
+  from trading.data import extract, fit
   from signal import pause
 
   fig, ax = axis_with_dates_x()
@@ -2035,8 +2035,12 @@ Store pickled data in a topic on a append log
 
   data = window(None, start.timestamp(), end.timestamp(), **db)
 
-  x, y = extract(data)
-  plot_data_with_x_as_date(x, y, ax, fig)
+  x, y, x_new, y_new, f, z = fit(extract(data),
+                                 order=3,
+                                 full=True,
+                                 cov=True)
+  plot_data_with_x_as_date(fig, ax, x, y)
+  plot_data_with_x_as_date(fig, ax, x_new, y_new, clear=False)
 
   pause()
 #+END_SRC
