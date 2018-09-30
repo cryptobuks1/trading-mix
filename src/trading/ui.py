@@ -17,3 +17,15 @@ def show_control_window(play_pause_fn, recordEvent):
     RB = Button(top, text="Record", command=recordCallback)
     RB.place(x=50, y=50)
     top.mainloop()
+
+
+def create_gui_window(**kwargs):
+    window = Tk()
+    width = kwargs.get("width", 300)
+    height = kwargs.get("height", 200)
+    window.geometry("{}x{}".format(width, height))
+    return window
+
+def update_ui(window):
+    window.update_idletasks()
+    window.update()
