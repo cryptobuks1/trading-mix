@@ -33,4 +33,4 @@ def update_ui(window):
 
 
 def place_button(label, destination, on_click_handler, **kwargs):
-    button = Button(destination, text=label, command=on_click_handler).pack()
+    return Button(destination, text=label, command=on_click_handler).pack()
