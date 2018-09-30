@@ -26,6 +26,11 @@ def create_gui_window(**kwargs):
     window.geometry("{}x{}".format(width, height))
     return window
 
+
 def update_ui(window):
     window.update_idletasks()
     window.update()
+
+
+def place_button(label, destination, on_click_handler, **kwargs):
+    button = Button(destination, text=label, command=on_click_handler).pack()
