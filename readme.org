@@ -2036,9 +2036,9 @@ Store pickled data in a topic on a append log
   data = window(None, start.timestamp(), end.timestamp(), **db)
 
   x, y, x_new, y_new, f, z = fit(extract(data),
-                                 order=3,
-                                 full=True,
-                                 cov=True)
+                                 order=4,
+                                 full=False,
+                                 cov=False)
   plot_data_with_x_as_date(fig, ax, x, y)
   plot_data_with_x_as_date(fig, ax, x_new, y_new, clear=False)
 

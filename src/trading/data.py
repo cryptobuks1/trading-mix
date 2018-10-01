@@ -23,7 +23,10 @@ def fit(coord, order=2, full=True, cov=False):
     z = np.polyfit(x, y, order, full=full, cov=cov)
     # print("Fit")
     # print(z)
-    f = np.poly1d(z[0])
+    if full or cov:
+        f = np.poly1d(z[0])
+    else:
+        f = np.poly1d(z)
     x_new = np.linspace(x[0], x[-1], 50)
     y_new = f(x_new)
     return [x, y, x_new, y_new, f, z]
