@@ -65,7 +65,7 @@ any *.elc files
                                             "latest_order_epoc_fn":
                                             get_latest_order_epoc,
                                             "window_size":
-                                            3600 * 3})
+                                            3600 * 5})
       db = memdb()
       ohlc(**db)
       start, end = time_range(**db)
@@ -1614,6 +1614,12 @@ class KrakenAPI(builtins.object)
 #+RESULTS:
 : # Out[1]:
 
+*** Latest order type
+#+NAME: latest-order-buy
+#+HEADER: :result drawer
+#+BEGIN_SRC python
+
+#+END_SRC
 *** OHLC
 
 **** Save latest ohlc data
@@ -2439,8 +2445,8 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 #+RESULTS: plot-latest-orders-12-hours
 :RESULTS:
-# Out[1]:
-[[file:./obipy-resources/1622MY1.png]]
+# Out[2]:
+[[file:./obipy-resources/6434crP.png]]
 :END:
 
 #+RESULTS: plot-latest-orders

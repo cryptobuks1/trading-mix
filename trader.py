@@ -36,7 +36,7 @@ def main():
                                           "latest_order_epoc_fn":
                                           get_latest_order_epoc,
                                           "window_size":
-                                          3600 * 3})
+                                          3600 * 5})
     db = memdb()
     ohlc(**db)
     start, end = time_range(**db)
