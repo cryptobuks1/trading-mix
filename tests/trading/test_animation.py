@@ -61,5 +61,3 @@ def test_animation(caplog):
         plt.show(block=False)
         show_control_window(lambda: controlPlot(state),
                             recordEvent)
-
-    assert "hest" in caplog.text

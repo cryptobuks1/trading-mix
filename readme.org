@@ -65,7 +65,7 @@ any *.elc files
                                             "latest_order_epoc_fn":
                                             get_latest_order_epoc,
                                             "window_size":
-                                            3600 * 3})
+                                            3600 * 5})
       db = memdb()
       ohlc(**db)
       start, end = time_range(**db)
@@ -1614,6 +1614,12 @@ class KrakenAPI(builtins.object)
 #+RESULTS:
 : # Out[1]:
 
+*** Latest order type
+#+NAME: latest-order-buy
+#+HEADER: :result drawer
+#+BEGIN_SRC python
+
+#+END_SRC
 *** OHLC
 
 **** Save latest ohlc data
@@ -1651,9 +1657,9 @@ git push
 
 #+RESULTS: add-latest-kraken-snapshot-ohcl-to-project
 :RESULTS:
-[master 250b685] New data added data/ohcl-2018-09-15-18:27:22.sqlite
+[master ef960fc] New data added data/ohcl-2018-09-30-19:54:51.sqlite
  1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 data/ohcl-2018-09-15-18:27:22.sqlite
+ create mode 100644 data/ohcl-2018-09-30-19:54:51.sqlite
 :END:
 
 #+RESULTS: add-latest-kraken-ohcl-to-project
@@ -2014,6 +2020,37 @@ Store pickled data in a topic on a append log
 #+RESULTS:
 :RESULTS:
 :END:
+**** Plot Window
+#+NAME: plot-data-window
+#+HEADER: :results drawer
+#+HEADER: :tangle plot_data_window.py
+#+BEGIN_SRC python :var sqlfile=ask-for-datafile
+  from trading.plot import axis_with_dates_x, plot_data_with_x_as_date
+  from trading.sql import sqlite_connect, window
+  from datetime import datetime, timedelta
+  from trading.data import extract, fit
+  from signal import pause
+
+  fig, ax = axis_with_dates_x()
+  fig.patch.set_facecolor('white')
+
+  db = sqlite_connect(sqlfile)
+
+  start = datetime(2018, 8, 21, 17)
+  end = start + timedelta(hours=5)
+
+  data = window(None, start.timestamp(), end.timestamp(), **db)
+
+  x, y, x_new, y_new, f, z = fit(extract(data),
+                                 order=4,
+                                 full=False,
+                                 cov=False)
+  plot_data_with_x_as_date(fig, ax, x, y)
+  plot_data_with_x_as_date(fig, ax, x_new, y_new, clear=False)
+
+  pause()
+#+END_SRC
+**** Plot s-curve
 #+NAME: s-curve
 #+HEADER: :results drawer
 #+HEADER: :session s-curve
@@ -2030,6 +2067,8 @@ Store pickled data in a topic on a append log
 
   filterwarnings('error', "", RankWarning)
 
+
+  place_button("Play/Pause", ui_window, play_pause_handler)
   fig, ax = axis_with_dates_x()
   fig.patch.set_facecolor('white')
 
@@ -2080,7 +2119,13 @@ Store pickled data in a topic on a append log
       ax.plot(sxd, yfit)
       fig.canvas.draw()
       fig.canvas.flush_events()
+      update_window()
 #+END_SRC
+
+#+RESULTS: s-curve
+:RESULTS:
+:END:
+
 **** Store on order
 #+NAME: store-on-order
 #+HEADER: :results raw drawer
@@ -2430,8 +2475,8 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 #+RESULTS: plot-latest-orders-12-hours
 :RESULTS:
-# Out[1]:
-[[file:./obipy-resources/1622MY1.png]]
+# Out[2]:
+[[file:./obipy-resources/6434crP.png]]
 :END:
 
 #+RESULTS: plot-latest-orders
