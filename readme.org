@@ -2056,7 +2056,7 @@ Store pickled data in a topic on a append log
 #+HEADER: :session s-curve
 #+HEADER: :tangle s_curve.py
 #+BEGIN_SRC python :var sqlfile=ask-for-datafile
-  from trading.plot import axis_with_dates_x
+  from trading.plot import axis_with_dates_x, plot_data_with_x_as_date
   from trading.sql import sqlite_connect
   from datetime import datetime
   from trading.data import window_generator, extract, pause_frame_generator
@@ -2083,21 +2083,48 @@ Store pickled data in a topic on a append log
 
   for data in play_pause_graph_generator(window_generator(3600 * 5, 600, **db)):
       x, y = extract(data)
-      xd = [datetime.fromtimestamp(x_) for x_ in x]
-      ax.clear()
-      ax.set_xlim(min(xd), max(xd))
-      ax.set_ylim(min(y), max(y))
-      ax.plot(xd, y)
-      fig.canvas.draw()
-      fig.canvas.flush_events()
+      plot_data_with_x_as_date(fig, ax, x, y)
       update_window()
 #+END_SRC
 
 #+RESULTS: s-curve
 :RESULTS:
-[<matplotlib.lines.Line2D object at 0x7fa0333c6048>]
 :END:
+**** Plot data events
+#+NAME: plot-data-events
+#+HEADER: :results drawer
+#+HEADER: :session plot-data-events
+#+HEADER: :tangle plot-data-events.py
+#+BEGIN_SRC python :var sqlfile=ask-for-datafile
+  from trading.plot import axis_with_dates_x, plot_data_with_x_as_date
+  from trading.sql import sqlite_connect
+  from trading.data import window_generator, extract, pause_frame_generator
+  from trading.ui import create_gui_window, update_ui, place_button
+  from functools import partial
 
+  ui_window = create_gui_window()
+  update_window = partial(update_ui, ui_window)
+
+  play_pause_state = {'continue': True}
+
+  play_pause_graph_generator = partial(pause_frame_generator, play_pause_state)
+
+
+  def play_pause_handler():
+      play_pause_state['continue'] = not play_pause_state['continue']
+
+
+  place_button("Play/Pause", ui_window, play_pause_handler)
+  fig, ax = axis_with_dates_x()
+  fig.patch.set_facecolor('white')
+
+  db = sqlite_connect(sqlfile)
+
+  for data in play_pause_graph_generator(window_generator(3600 * 5, 600, **db)):
+      x, y = extract(data)
+      plot_data_with_x_as_date(fig, ax, x, y)
+      update_window()
+#+END_SRC
 **** Store on order
 #+NAME: store-on-order
 #+HEADER: :results raw drawer
