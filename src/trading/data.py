@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import peakutils
 from blinker import signal
 from enum import Enum
 from collections import namedtuple
@@ -18,11 +17,13 @@ class TradeCommand(Enum):
     wait = 3
 
 
-def fit(coord):
+def fit(coord, **kwargs):
+    order = kwargs.get('fit_order', 2)
+    full = kwargs.get("fit_full", True)
+    cov = kwargs.get("fit_cov", False)
     x, y = coord
-    z = np.polyfit(x, y, 2, full=True)
-    # print("Fit")
-    # print(z)
+    z = np.polyfit(x, y, order, full=full, cov=cov)
+    print(z)
     f = np.poly1d(z[0])
     x_new = np.linspace(x[0], x[-1], 50)
     y_new = f(x_new)
@@ -60,7 +61,7 @@ def extract(env, xidx=0, yidx=1):
 
 def analyseData(peakConf, data, **kwargs):
     logging.debug("Start analysis")
-    x, y, xfit, yfit, ff, z = fit(extract(data))
+    x, y, xfit, yfit, ff, z = fit(extract(data), **kwargs)
     peakFn, indexPos = [peakConf[k] for k in ('fn', 'indexPos')]
     peaks = peakFn(yfit, **kwargs)
     peaksIndex = peaks[indexPos]
