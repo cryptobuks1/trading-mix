@@ -65,7 +65,7 @@ any *.elc files
                                             "latest_order_epoc_fn":
                                             get_latest_order_epoc,
                                             "window_size":
-                                            3600 * 5})
+                                            3600 * 3})
       db = memdb()
       ohlc(**db)
       start, end = time_range(**db)
@@ -2447,8 +2447,8 @@ rootdir: /home/kristian/projects/trading, inifile:
 
 #+RESULTS: plot-latest-orders-12-hours
 :RESULTS:
-# Out[2]:
-[[file:./obipy-resources/6434crP.png]]
+# Out[4]:
+[[file:./obipy-resources/64342_b.png]]
 :END:
 
 #+RESULTS: plot-latest-orders
