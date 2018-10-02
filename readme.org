@@ -2057,15 +2057,22 @@ Store pickled data in a topic on a append log
 #+HEADER: :tangle s_curve.py
 #+BEGIN_SRC python :var sqlfile=ask-for-datafile
   from trading.plot import axis_with_dates_x
-  from trading.sql import sqlite_connect, time_range
+  from trading.sql import sqlite_connect
   from datetime import datetime
-  from trading.data import window_generator, window, extract, fit, analyseData
-  from trading.octave import conf as peakConf
-  from warnings import filterwarnings
-  from numpy import RankWarning
-  from numpy.linalg import LinAlgError
+  from trading.data import window_generator, extract, pause_frame_generator
+  from trading.ui import create_gui_window, update_ui, place_button
+  from functools import partial
 
-  filterwarnings('error', "", RankWarning)
+  ui_window = create_gui_window()
+  update_window = partial(update_ui, ui_window)
+
+  play_pause_state = {'continue': True}
+
+  play_pause_graph_generator = partial(pause_frame_generator, play_pause_state)
+
+
+  def play_pause_handler():
+      play_pause_state['continue'] = not play_pause_state['continue']
 
 
   place_button("Play/Pause", ui_window, play_pause_handler)
@@ -2073,50 +2080,14 @@ Store pickled data in a topic on a append log
   fig.patch.set_facecolor('white')
 
   db = sqlite_connect(sqlfile)
-  start, end = time_range(**db)
-  latest_order_epoc = {'epoc': start}
 
-
-  def latest_order_epoc_fn():
-      global latest_order_epoc
-      print(latest_order_epoc['epoc'])
-      return latest_order_epoc['epoc']
-
-
-  for pos in range(latest_order_epoc_fn(), end, 600):
-      data = window(None, start=latest_order_epoc_fn(), end=pos, **db)
-      try:
-          analysis = analyseData(peakConf,
-                                 data,
-                                 fit_order=3,
-                                 fit_full=False,
-                                 fit_cov=True)
-      except RankWarning as e:
-          try:
-              analysis = analyseData(peakConf,
-                                     data,
-                                     fit_order=2,
-                                     fit_full=False,
-                                     fit_cov=True)
-          except Exception:
-              continue
-          else:
-              if analysis['xpeak']:
-                  print("Peak")
-                  print(analysis['xpeak'])
-                  latest_order_epoc['epoc'] = analysis['xpeak'][0]
-              x = analysis['x']
-              xfit = analysis['xfit']
-              y = analysis['y']
-              yfit = analysis['yfit']
-
+  for data in play_pause_graph_generator(window_generator(3600 * 5, 600, **db)):
+      x, y = extract(data)
       xd = [datetime.fromtimestamp(x_) for x_ in x]
-      sxd = [datetime.fromtimestamp(x_) for x_ in xfit]
       ax.clear()
       ax.set_xlim(min(xd), max(xd))
       ax.set_ylim(min(y), max(y))
       ax.plot(xd, y)
-      ax.plot(sxd, yfit)
       fig.canvas.draw()
       fig.canvas.flush_events()
       update_window()
@@ -2124,6 +2095,7 @@ Store pickled data in a topic on a append log
 
 #+RESULTS: s-curve
 :RESULTS:
+[<matplotlib.lines.Line2D object at 0x7fa0333c6048>]
 :END:
 
 **** Store on order
