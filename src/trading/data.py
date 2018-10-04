@@ -2,13 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 from blinker import signal
 from enum import Enum
-from collections import namedtuple
 from trading.sql import window, time_range
 from trading.octave import conf as peakConf
-from trading.control import handleError
 from trading.util import toDate
 import pickle
 import logging
+from time import sleep
 
 
 class TradeCommand(Enum):
@@ -122,6 +121,7 @@ def pause_frame_generator(state, generator):
             yield frame
         else:
             while not state['continue']:
+                sleep(0.3)
                 yield frame
 
 
