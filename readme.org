@@ -2096,10 +2096,11 @@ Store pickled data in a topic on a append log
 #+HEADER: :session plot-data-events
 #+HEADER: :tangle plot-data-events.py
 #+BEGIN_SRC python :var sqlfile=ask-for-datafile
-  from trading.plot import axis_with_dates_x, plot_data_with_x_as_date
+  from trading.plot import axis_with_dates_x
   from trading.sql import sqlite_connect
-  from trading.data import window_generator, extract
+  from trading.data import window_generator
   from trading.events import TradingEvents, create_trading_events, emit, bind
+  from trading.core import plot_data
   from dev.ui import control_graph
   from functools import partial
 
@@ -2113,16 +2114,16 @@ Store pickled data in a topic on a append log
   fig.patch.set_facecolor('white')
 
 
-  def plot_data(fig, ax, data):
-      x, y = extract(data)
-      plot_data_with_x_as_date(fig, ax, x, y)
-
-
   bind(TradingEvents.data.fget(events), partial(plot_data, fig, ax))
 
   for data in play_pause_graph_generator(window_generator(3600 * 5, 600, **db)):
       emit(TradingEvents.data.fget(events), data=data)
 #+END_SRC
+
+#+RESULTS: plot-data-events
+:RESULTS:
+:END:
+
 **** Store on order
 #+NAME: store-on-order
 #+HEADER: :results raw drawer

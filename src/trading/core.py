@@ -1,7 +1,8 @@
 from trading.sql import time_range, window
 from trading.strategy.simple import create
-from trading.data import TradeCommand
+from trading.data import TradeCommand, extract
 from trading.events import TradingEvents, emit
+from trading.plot import plot_data_with_x_as_date
 from collections import namedtuple
 
 
@@ -44,4 +45,6 @@ def default_kraken_strategy(*,
     return strategy, events
 
 
-def
+def plot_data(fig, ax, data):
+    x, y = extract(data)
+    plot_data_with_x_as_date(fig, ax, x, y)
