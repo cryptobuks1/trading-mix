@@ -42,3 +42,6 @@ def default_kraken_strategy(*,
 
 
     return strategy, events
+
+
+def
