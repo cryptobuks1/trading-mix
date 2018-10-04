@@ -2099,25 +2099,19 @@ Store pickled data in a topic on a append log
   from trading.plot import axis_with_dates_x
   from trading.sql import sqlite_connect
   from trading.data import window_generator
-  from trading.events import TradingEvents, create_trading_events, emit, bind
-  from trading.core import plot_data
-  from dev.ui import control_graph
+  from trading.events import TradingEvents, create_trading_events, bind
+  from trading.core import plot_data, stream_data_to_graph
   from functools import partial
 
   db = sqlite_connect(sqlfile)
 
   events = create_trading_events()
 
-  play_pause_graph_generator, window = control_graph()
-
   fig, ax = axis_with_dates_x()
   fig.patch.set_facecolor('white')
 
-
   bind(TradingEvents.data.fget(events), partial(plot_data, fig, ax))
-
-  for data in play_pause_graph_generator(window_generator(3600 * 5, 600, **db)):
-      emit(TradingEvents.data.fget(events), data=data)
+  stream_data_to_graph(window_generator(3600 * 5, 600, **db), events)
 #+END_SRC
 
 #+RESULTS: plot-data-events

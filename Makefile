@@ -17,3 +17,7 @@ test-mark-%:
 	pipenv run pytest -m $(*)
 
 regression-test: test-mark-regression
+
+
+plot-data-events:
+	pipenv run python plot-data-events.py
