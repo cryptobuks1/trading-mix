@@ -122,7 +122,6 @@ def pause_frame_generator(state, generator):
         else:
             while not state['continue']:
                 sleep(0.3)
-                yield frame
 
 
 def next_peak(**kwargs):
