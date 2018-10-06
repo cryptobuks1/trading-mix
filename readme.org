@@ -2098,8 +2098,8 @@ Store pickled data in a topic on a append log
 #+BEGIN_SRC python :var sqlfile=ask-for-datafile
   from trading.plot import axis_with_dates_x, plot_data_with_x_as_date
   from trading.sql import sqlite_connect
-  from trading.data import window_generator, analyseData
-  from trading.events import TradingEvents, create_trading_events, bind
+  from trading.data import window_generator, analyseData, is_new_peak
+  from trading.events import TradingEvents, create_trading_events, bind, emit
   from trading.core import plot_data, stream_data_to_graph
   from trading.octave import conf as peakConf
   from functools import partial
@@ -2120,12 +2120,50 @@ Store pickled data in a topic on a append log
            clear=False)
 
 
+  def order_handler():
+      latest_order_epoc = 0
+
+      def get_latest_order_epoc():
+          nonlocal latest_order_epoc
+          return latest_order_epoc
+
+      def set_latest_order_epoc(epoc):
+          nonlocal latest_order_epoc
+          latest_order_epoc = epoc
+
+      return get_latest_order_epoc, set_latest_order_epoc
+
+
+  get_latest_order_epoc, set_latest_order_epoc = order_handler()
+
+
+  def onPeak(get_latest_order_epoc, set_latest_order_epoc, newPeakEvent, data):
+      if is_new_peak(get_latest_order_epoc, data['result']):
+          set_latest_order_epoc(data['result']['x'][-1])
+          emit(newPeakEvent,
+               data={"peak_analysis": data['result']},
+               unpack_data=True)
+
+
+  def onNewPeak(peak_analysis):
+      plot(peak_analysis['xpeak'],
+           peak_analysis['ypeak'],
+           clear=False)
+
+
   bind(TradingEvents.data.fget(events), partial(plot_data, fig, ax))
   bind(TradingEvents.data.fget(events),
        partial(analyseData,
                peakConf,
                foundPeakEvent=TradingEvents.foundPeak.fget(events)))
   bind(TradingEvents.foundPeak.fget(events), plot_peak)
+  bind(events.newPeak, onNewPeak)
+  bind(events.foundPeak, partial(onPeak,
+                                 get_latest_order_epoc,
+                                 set_latest_order_epoc,
+                                 events.newPeak))
+
+
   stream_data_to_graph(window_generator(3600 * 5, 600, **db), events)
 #+END_SRC
 

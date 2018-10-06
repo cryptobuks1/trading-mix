@@ -41,8 +41,12 @@ def bind(event, subscriber, includeSender=False, keep_ref=True):
     cases[(includeSender, keep_ref)]()
 
 
-def emit(event, data=None, sender='anonymous'):
+def emit(event, data=None, sender='anonymous', **kwargs):
+    unpack_data = kwargs.get("unpack_data", False)
     if data:
-        event.send(sender, **{'data': data})
+        if not unpack_data:
+            event.send(sender, **{'data': data})
+        else:
+            event.send(sender, **data)
     else:
         event.send(sender)
