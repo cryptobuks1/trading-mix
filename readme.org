@@ -2130,7 +2130,7 @@ Store pickled data in a topic on a append log
   sim = simulation()
 
 
-  def onPeak(get_latest_order_epoc, newPeakEvent, data):) '('all 'alike))
+  def onPeak(get_latest_order_epoc, newPeakEvent, data):
       if is_new_peak(get_latest_order_epoc, data['result']):
           emit(newPeakEvent,
                data={"peak_analysis": data['result']},
