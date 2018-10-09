@@ -2113,7 +2113,7 @@ Store pickled data in a topic on a append log
   db = sqlite_connect(sqlfile)
 
 
-  data_analysis = setup_analysis(window_generator(3600 * 5,
+  data_analysis = setup_analysis(window_generator(3600 * 3,
                                                   600,
                                                   ,**db))
   sim = simulation()
