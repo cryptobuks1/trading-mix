@@ -2109,7 +2109,12 @@ Store pickled data in a topic on a append log
   db = sqlite_connect(sqlfile)
 
   events = create_trading_events()
-
+  (run,
+   window,
+   play_pause_handler) = stream_data_to_graph(window_generator(3600 * 5,
+                                                               600,
+                                                               ,**db),
+                                              events)
   fig, ax = axis_with_dates_x()
   fig.patch.set_facecolor('white')
 
@@ -2125,7 +2130,7 @@ Store pickled data in a topic on a append log
   sim = simulation()
 
 
-  def onPeak(get_latest_order_epoc, newPeakEvent, data):
+  def onPeak(get_latest_order_epoc, newPeakEvent, data):) '('all 'alike))
       if is_new_peak(get_latest_order_epoc, data['result']):
           emit(newPeakEvent,
                data={"peak_analysis": data['result']},
@@ -2151,7 +2156,7 @@ Store pickled data in a topic on a append log
                                  events.newPeak))
 
 
-  stream_data_to_graph(window_generator(3600 * 5, 600, **db), events)
+  run()
 #+END_SRC
 
 #+RESULTS: plot-data-events

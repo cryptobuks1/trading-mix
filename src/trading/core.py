@@ -66,10 +66,13 @@ def control_graph(**kwargs):
 
     place_button("Play/Pause", ui_window, play_pause_handler)
     update_ui(ui_window)
-    return play_pause_graph_generator, ui_window
+    return play_pause_graph_generator, ui_window, play_pause_handler
 
 
 def stream_data_to_graph(data_generator, events):
-    play_pause_graph_generator, window = control_graph()
-    for data in play_pause_graph_generator(data_generator):
-        emit(TradingEvents.data.fget(events), data=data)
+    play_pause_graph_generator, window, play_pause_handler = control_graph()
+
+    def run():
+        for data in play_pause_graph_generator(data_generator):
+            emit(TradingEvents.data.fget(events), data=data)
+    return run, window, play_pause_handler
