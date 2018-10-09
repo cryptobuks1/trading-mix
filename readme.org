@@ -2096,11 +2096,10 @@ Store pickled data in a topic on a append log
 #+HEADER: :session plot-data-events
 #+HEADER: :tangle plot-data-events.py
 #+BEGIN_SRC python :var sqlfile=ask-for-datafile
-  from trading.plot import axis_with_dates_x, plot_data_with_x_as_date
   from trading.sql import sqlite_connect
   from trading.data import window_generator, analyseData, is_new_peak
-  from trading.events import TradingEvents, create_trading_events, bind, emit
-  from trading.core import plot_data, stream_data_to_graph
+  from trading.events import TradingEvents, bind, emit
+  from trading.core import plot_data
   from trading.octave import conf as peakConf
   from trading.control import setup_analysis
   from functools import partial
@@ -2143,8 +2142,8 @@ Store pickled data in a topic on a append log
   bind(TradingEvents.data.fget(data_analysis.events),
        partial(analyseData,
                peakConf,
-               foundPeakEvent=TradingEvents.foundPeak.fget(data_analysis.events)))
-  bind(TradingEvents.foundPeak.fget(data_analysis.events), plot_peak)
+               foundPeakEvent=data_analysis.events.foundPeak))
+  bind(data_analysis.events.foundPeak, plot_peak)
   bind(data_analysis.events.newPeak, onNewPeak)
   sim.trade_on_peak(data_analysis.events)
   bind(data_analysis.events.foundPeak, partial(onPeak,
