@@ -2104,6 +2104,8 @@ Store pickled data in a topic on a append log
   from trading.events import bind, emit
   from trading.octave import conf as peakConf
   from trading.control import setup_analysis
+  from trading.plot import as_dates, update_graph
+  from trading.ui import update_ui
   from functools import partial
   from dev.order import simulation
 
@@ -2118,9 +2120,12 @@ Store pickled data in a topic on a append log
 
 
   def plot_peak(data):
-      data_analysis.plot(data['result']['xfit'],
-                         data['result']['yfit'],
-                         clear=False)
+      data_analysis\
+          .default_plots\
+          .psl.set_data(as_dates(data['result']['xfit']),
+                        data['result']['yfit'])
+      data_analysis.fig.canvas.draw()
+      data_analysis.fig.canvas.flush_events()
 
 
   def onPeak(get_latest_order_epoc, newPeakEvent, data):
@@ -2131,15 +2136,25 @@ Store pickled data in a topic on a append log
 
 
   def onNewPeak(peak_analysis):
-      data_analysis.play_pause_handler()
-      data_analysis.plot(peak_analysis['xpeak'],
-                         peak_analysis['ypeak'],
-                         clear=False)
+      # data_analysis.play_pause_handler()
+      data_analysis\
+          .default_plots\
+          .psl.\
+          set_data(as_dates(peak_analysis['xpeak']),
+                   peak_analysis['ypeak'])
+      data_analysis.fig.canvas.draw()
+      data_analysis.fig.canvas.flush_events()
 
 
   def plot_data(data):
       x, y = extract(data)
-      data_analysis.plot(x, y)
+      xd = as_dates(x)
+      data_analysis.ax.set_xlim(min(xd), max(xd))
+      data_analysis.ax.set_ylim(min(y), max(y))
+      update_graph(data_analysis.fig,
+                   data_analysis.default_plots.ticks,
+                   xd,
+                   y)
 
 
   bind(data_analysis.events.data, plot_data)
@@ -2160,7 +2175,7 @@ Store pickled data in a topic on a append log
                sim.get_latest_order_epoc,
                data_analysis.events.newPeak))
 
-
+  update_ui(data_analysis.window)
   data_analysis.run()
 #+END_SRC
 

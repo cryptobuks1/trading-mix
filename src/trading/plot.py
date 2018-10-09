@@ -4,6 +4,8 @@ import matplotlib.animation as animation
 from trading.misc import desctructDict
 from datetime import datetime
 from functools import partial
+from collections import namedtuple
+
 
 def axis_with_dates_x():
     plt.ion()
@@ -55,16 +57,26 @@ def as_dates(xs):
 
 
 def init_with_fit_and_peak(plots, ax):
-    ticks, fitted, psl = ax.plot([1],
+    default_plots = get_default_plots(ax)
+    plots['ticks'] = default_plots.ticks
+    plots['fitted'] = default_plots.fitted
+    plots['psl'] = default_plots.psl
+    return default_plots
+
+
+DefaultPlots = namedtuple("DefaultPlots", ["ticks",
+                                           "fitted",
+                                           "psl"])
+
+
+def get_default_plots(ax):
+    ticks, fitted, psl = ax.plot([datetime.fromtimestamp(1)],
                                  [1],
+                                 [datetime.fromtimestamp(1)],
                                  [1],
-                                 [1],
-                                 [1],
+                                 [datetime.fromtimestamp(1)],
                                  [1], 'b+')
-    plots['ticks'] = ticks
-    plots['fitted'] = fitted
-    plots['psl'] = psl
-    return ticks, fitted, psl
+    return DefaultPlots(ticks, fitted, psl)
 
 
 def create_plot_with_fit_and_peak(analysis_fns, frame_fn, **kwargs):
@@ -100,5 +112,11 @@ def plot_data_with_x_as_date(fig, ax, x, y, clear=True):
         ax.set_xlim(min(xd), max(xd))
         ax.set_ylim(min(y), max(y))
     ax.plot(xd, y)
+    fig.canvas.draw()
+    fig.canvas.flush_events()
+
+
+def update_graph(fig, graph, x, y):
+    graph.set_data(x, y)
     fig.canvas.draw()
     fig.canvas.flush_events()
