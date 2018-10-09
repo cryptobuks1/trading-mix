@@ -2146,9 +2146,10 @@ Store pickled data in a topic on a append log
   bind(data_analysis.events.foundPeak, plot_peak)
   bind(data_analysis.events.newPeak, onNewPeak)
   sim.trade_on_peak(data_analysis.events)
-  bind(data_analysis.events.foundPeak, partial(onPeak,
-                                               sim.get_latest_order_epoc,
-                                               data_analysis.events.newPeak))
+  bind(data_analysis.events.foundPeak,
+       partial(onPeak,
+               sim.get_latest_order_epoc,
+               data_analysis.events.newPeak))
 
 
   data_analysis.run()
