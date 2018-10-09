@@ -2098,7 +2098,7 @@ Store pickled data in a topic on a append log
 #+BEGIN_SRC python :var sqlfile=ask-for-datafile
   from trading.sql import sqlite_connect
   from trading.data import window_generator, analyseData, is_new_peak
-  from trading.events import TradingEvents, bind, emit
+  from trading.events import bind, emit
   from trading.core import plot_data
   from trading.octave import conf as peakConf
   from trading.control import setup_analysis
@@ -2135,17 +2135,22 @@ Store pickled data in a topic on a append log
                          clear=False)
 
 
-  bind(TradingEvents.data.fget(data_analysis.events),
+  bind(data_analysis.events.data,
        partial(plot_data,
                data_analysis.fig,
                data_analysis.ax))
-  bind(TradingEvents.data.fget(data_analysis.events),
+
+  bind(data_analysis.events.data,
        partial(analyseData,
                peakConf,
                foundPeakEvent=data_analysis.events.foundPeak))
+
   bind(data_analysis.events.foundPeak, plot_peak)
+
   bind(data_analysis.events.newPeak, onNewPeak)
+
   sim.trade_on_peak(data_analysis.events)
+
   bind(data_analysis.events.foundPeak,
        partial(onPeak,
                sim.get_latest_order_epoc,
