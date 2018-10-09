@@ -59,15 +59,25 @@ def control_graph(**kwargs):
         nonlocal play_pause_state
         play_pause_state['continue'] = not play_pause_state['continue']
 
+    def pause_graph():
+        nonlocal play_pause_state
+        play_pause_state['continue'] = False
+
     place_button("Play/Pause", ui_window, play_pause_handler)
-    update_ui(ui_window)
-    return play_pause_graph_generator, ui_window, play_pause_handler
+    return (play_pause_graph_generator,
+            ui_window,
+            play_pause_handler,
+            pause_graph)
 
 
 def stream_data_to_graph(data_generator, events):
-    play_pause_graph_generator, window, play_pause_handler = control_graph()
+    (play_pause_graph_generator,
+     window,
+     play_pause_handler,
+     pause_graph) = control_graph()
 
     def run():
         for data in play_pause_graph_generator(data_generator):
+            update_ui(window)
             emit(TradingEvents.data.fget(events), data=data)
-    return run, window, play_pause_handler
+    return run, window, play_pause_handler, pause_graph

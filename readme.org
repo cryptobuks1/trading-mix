@@ -2126,8 +2126,8 @@ Store pickled data in a topic on a append log
                unpack_data=True)
 
 
-  def pause_on_new_peak(peak_analysis):
-      pass
+  def pause_on_new_peak(pause_graph, peak_analysis):
+      pause_graph()
 
 
   def plot_peak(fig, graph, data):
@@ -2177,12 +2177,15 @@ Store pickled data in a topic on a append log
 
   sim.trade_on_peak(data_analysis.events.newPeak)
 
+  bind(data_analysis.events.newPeak,
+       partial(pause_on_new_peak,
+               data_analysis.pause_graph))
+
   bind(data_analysis.events.foundPeak,
        partial(onPeak,
                sim.get_latest_order_epoc,
                data_analysis.events.newPeak))
 
-  update_ui(data_analysis.window)
   data_analysis.run()
 #+END_SRC
 

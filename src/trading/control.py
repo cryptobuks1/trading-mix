@@ -20,7 +20,8 @@ def setup_analysis(window_generator):
     events = create_trading_events()
     (run,
      window,
-     play_pause_handler) = stream_data_to_graph(window_generator,
+     play_pause_handler,
+     pause_graph) = stream_data_to_graph(window_generator,
                                                 events)
     fig, ax = axis_with_dates_x()
     fig.patch.set_facecolor('white')
@@ -28,6 +29,7 @@ def setup_analysis(window_generator):
     DataAnalysis = namedtuple("DataAnalysis", ["run",
                                                "events",
                                                "play_pause_handler",
+                                               "pause_graph",
                                                "fig",
                                                "ax",
                                                "default_plots",
@@ -37,6 +39,7 @@ def setup_analysis(window_generator):
     return DataAnalysis(run,
                         events,
                         play_pause_handler,
+                        pause_graph,
                         fig,
                         ax,
                         default_plots,
