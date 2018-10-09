@@ -1993,7 +1993,7 @@ Store pickled data in a topic on a append log
   sim = simulation()
 
   strategy, events = create_strategy(sim.get_latest_order_epoc, tradeCommands)
-  sim.trade_on_peak(events)
+  sim.trade_on_peak(events.newPeak)
   for data in window_generator(3600 * 5, 600, **db):
       x, y = extract(data)
       xd = [datetime.fromtimestamp(x_) for x_ in x]
