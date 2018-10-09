@@ -7,8 +7,8 @@ def simulation():
                                            'get_latest_order_epoc'])
     latest_order_epoc = 0
 
-    def trade_on_peak(events):
-        bind(TradingEvents.newPeak.fget(events), update_latest_order_epoc)
+    def trade_on_peak(newPeakEvent):
+        bind(newPeakEvent, update_latest_order_epoc)
 
     def update_latest_order_epoc(peak_analysis):
         nonlocal latest_order_epoc
