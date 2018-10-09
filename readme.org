@@ -2103,6 +2103,8 @@ Store pickled data in a topic on a append log
   from trading.core import plot_data, stream_data_to_graph
   from trading.octave import conf as peakConf
   from functools import partial
+  from dev.order import simulation
+
 
   db = sqlite_connect(sqlfile)
 
@@ -2120,26 +2122,11 @@ Store pickled data in a topic on a append log
            clear=False)
 
 
-  def order_handler():
-      latest_order_epoc = 0
-
-      def get_latest_order_epoc():
-          nonlocal latest_order_epoc
-          return latest_order_epoc
-
-      def set_latest_order_epoc(epoc):
-          nonlocal latest_order_epoc
-          latest_order_epoc = epoc
-
-      return get_latest_order_epoc, set_latest_order_epoc
+  sim = simulation()
 
 
-  get_latest_order_epoc, set_latest_order_epoc = order_handler()
-
-
-  def onPeak(get_latest_order_epoc, set_latest_order_epoc, newPeakEvent, data):
+  def onPeak(get_latest_order_epoc, newPeakEvent, data):
       if is_new_peak(get_latest_order_epoc, data['result']):
-          set_latest_order_epoc(data['result']['x'][-1])
           emit(newPeakEvent,
                data={"peak_analysis": data['result']},
                unpack_data=True)
@@ -2158,9 +2145,9 @@ Store pickled data in a topic on a append log
                foundPeakEvent=TradingEvents.foundPeak.fget(events)))
   bind(TradingEvents.foundPeak.fget(events), plot_peak)
   bind(events.newPeak, onNewPeak)
+  sim.trade_on_peak(events)
   bind(events.foundPeak, partial(onPeak,
-                                 get_latest_order_epoc,
-                                 set_latest_order_epoc,
+                                 sim.get_latest_order_epoc,
                                  events.newPeak))
 
 
