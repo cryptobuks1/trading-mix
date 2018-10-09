@@ -16,5 +16,6 @@ def simulation():
 
     def get_latest_order_epoc():
         return latest_order_epoc
+
     return Simulation(trade_on_peak,
                       get_latest_order_epoc)
