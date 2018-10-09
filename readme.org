@@ -2122,7 +2122,7 @@ Store pickled data in a topic on a append log
   def plot_peak(data):
       data_analysis\
           .default_plots\
-          .psl.set_data(as_dates(data['result']['xfit']),
+          .fitted.set_data(as_dates(data['result']['xfit']),
                         data['result']['yfit'])
       data_analysis.fig.canvas.draw()
       data_analysis.fig.canvas.flush_events()
@@ -2135,29 +2135,28 @@ Store pickled data in a topic on a append log
                unpack_data=True)
 
 
-  def onNewPeak(peak_analysis):
-      # data_analysis.play_pause_handler()
-      data_analysis\
-          .default_plots\
-          .psl.\
-          set_data(as_dates(peak_analysis['xpeak']),
+  def plot_new_peak(fig, graph, peak_analysis):
+      update_graph(fig,
+                   graph,
+                   as_dates(peak_analysis['xpeak']),
                    peak_analysis['ypeak'])
-      data_analysis.fig.canvas.draw()
-      data_analysis.fig.canvas.flush_events()
 
 
-  def plot_data(data):
+  def plot_data(fig, graph, data):
       x, y = extract(data)
       xd = as_dates(x)
       data_analysis.ax.set_xlim(min(xd), max(xd))
       data_analysis.ax.set_ylim(min(y), max(y))
-      update_graph(data_analysis.fig,
-                   data_analysis.default_plots.ticks,
+      update_graph(fig,
+                   graph,
                    xd,
                    y)
 
 
-  bind(data_analysis.events.data, plot_data)
+  bind(data_analysis.events.data,
+       partial(plot_data,
+               data_analysis.fig,
+               data_analysis.default_plots.ticks))
 
   bind(data_analysis.events.data,
        partial(analyseData,
@@ -2166,7 +2165,10 @@ Store pickled data in a topic on a append log
 
   bind(data_analysis.events.foundPeak, plot_peak)
 
-  bind(data_analysis.events.newPeak, onNewPeak)
+  bind(data_analysis.events.newPeak,
+       partial(plot_new_peak,
+               data_analysis.fig,
+               data_analysis.default_plots.psl))
 
   sim.trade_on_peak(data_analysis.events)
 
