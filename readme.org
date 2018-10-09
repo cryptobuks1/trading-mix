@@ -2119,20 +2119,18 @@ Store pickled data in a topic on a append log
   sim = simulation()
 
 
-  def plot_peak(data):
-      data_analysis\
-          .default_plots\
-          .fitted.set_data(as_dates(data['result']['xfit']),
-                        data['result']['yfit'])
-      data_analysis.fig.canvas.draw()
-      data_analysis.fig.canvas.flush_events()
-
-
   def onPeak(get_latest_order_epoc, newPeakEvent, data):
       if is_new_peak(get_latest_order_epoc, data['result']):
           emit(newPeakEvent,
                data={"peak_analysis": data['result']},
                unpack_data=True)
+
+
+  def plot_peak(fig, graph, data):
+      update_graph(fig,
+                   graph,
+                   as_dates(data['result']['xfit']),
+                   data['result']['yfit'])
 
 
   def plot_new_peak(fig, graph, peak_analysis):
@@ -2163,7 +2161,10 @@ Store pickled data in a topic on a append log
                peakConf,
                foundPeakEvent=data_analysis.events.foundPeak))
 
-  bind(data_analysis.events.foundPeak, plot_peak)
+  bind(data_analysis.events.foundPeak,
+       partial(plot_peak,
+               data_analysis.fig,
+               data_analysis.default_plots.fitted))
 
   bind(data_analysis.events.newPeak,
        partial(plot_new_peak,
