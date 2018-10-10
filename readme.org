@@ -2105,7 +2105,6 @@ Store pickled data in a topic on a append log
   from trading.octave import conf as peakConf
   from trading.control import setup_analysis
   from trading.plot import as_dates, update_graph
-  from trading.ui import update_ui
   from functools import partial
   from dev.order import simulation
 
@@ -2126,7 +2125,9 @@ Store pickled data in a topic on a append log
                unpack_data=True)
 
 
-  def pause_on_new_peak(pause_graph, peak_analysis):
+  def pause_on_new_peak(pause_graph, epoc_fn, peak_analysis):
+      print("Pause")
+      print(epoc_fn())
       pause_graph()
 
 
@@ -2179,7 +2180,8 @@ Store pickled data in a topic on a append log
 
   bind(data_analysis.events.newPeak,
        partial(pause_on_new_peak,
-               data_analysis.pause_graph))
+               data_analysis.pause_graph,
+               sim.get_latest_order_epoc))
 
   bind(data_analysis.events.foundPeak,
        partial(onPeak,
