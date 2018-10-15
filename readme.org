@@ -2090,6 +2090,11 @@ Store pickled data in a topic on a append log
 #+RESULTS: s-curve
 :RESULTS:
 :END:
+**** Multiple peaks                                                   :peaks:
+1534839780
+1534853580
+1534854180
+
 **** Plot data events
 #+NAME: plot-data-events
 #+HEADER: :results drawer
