@@ -6,6 +6,7 @@ from trading.plot import plot_data_with_x_as_date
 from trading.ui import create_gui_window, update_ui, place_button
 from collections import namedtuple
 from functools import partial
+import time
 
 
 TradeActions = namedtuple('TradeActions', ["buy", "sell", "wait"])
@@ -63,21 +64,32 @@ def control_graph(**kwargs):
         nonlocal play_pause_state
         play_pause_state['continue'] = False
 
+    def is_paused_p():
+        nonlocal play_pause_state
+        return not play_pause_state['continue']
+
     place_button("Play/Pause", ui_window, play_pause_handler)
     return (play_pause_graph_generator,
             ui_window,
             play_pause_handler,
-            pause_graph)
+            pause_graph,
+            is_paused_p)
 
 
 def stream_data_to_graph(data_generator, events):
     (play_pause_graph_generator,
      window,
      play_pause_handler,
-     pause_graph) = control_graph()
+     pause_graph,
+     is_paused_p) = control_graph()
 
     def run():
-        for data in play_pause_graph_generator(data_generator):
+        for data in data_generator:
             update_ui(window)
-            emit(TradingEvents.data.fget(events), data=data)
+            if not is_paused_p():
+                emit(TradingEvents.data.fget(events), data=data)
+            else:
+                while is_paused_p():
+                    time.sleep(0.3)
+                    update_ui(window)
     return run, window, play_pause_handler, pause_graph

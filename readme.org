@@ -2178,7 +2178,6 @@ Store pickled data in a topic on a append log
 
   sim.trade_on_peak(data_analysis.events.newPeak)
 
-
   bind(data_analysis.events.newPeak,
        lambda peak_analysis: data_analysis.pause_graph())
 
