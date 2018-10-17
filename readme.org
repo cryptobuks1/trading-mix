@@ -2098,7 +2098,6 @@ Store pickled data in a topic on a append log
 **** Plot data events
 #+NAME: plot-data-events
 #+HEADER: :results drawer
-#+HEADER: :session plot-data-events
 #+HEADER: :tangle plot-data-events.py
 #+BEGIN_SRC python :var sqlfile=ask-for-datafile
   from trading.sql import sqlite_connect
@@ -2109,10 +2108,12 @@ Store pickled data in a topic on a append log
   from trading.events import bind, emit
   from trading.octave import conf as peakConf
   from trading.control import setup_analysis
-  from trading.control.graph import pause_graph_on
   from trading.plot import as_dates, update_graph
   from functools import partial
   from dev.order import simulation
+  import logging
+  logging.basicConfig(level=logging.DEBUG)
+
 
 
   db = sqlite_connect(sqlfile)
