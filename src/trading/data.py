@@ -138,27 +138,37 @@ def is_new_peak(latest_order_epoc, analysis, **kwargs):
     '''
     loe = latest_order_epoc()
     peakEpoc = analysis['xpeak'][0]
+    result = True
+    timeDiff = abs(peakEpoc - loe)
+    minimum_peak_distance = kwargs.get('minimum_peak_distance',
+                                       3600 * 1.5)  # default 1.5 hour
     logging.debug("Peak at: {}".format(toDate(peakEpoc)))
     logging.debug("Peak price: {}".format(analysis['ypeak'][0]))
     logging.debug("Latest order epoc: {}".format(toDate(loe)))
     logging.debug("First fit prize: {}".format(analysis['yfit'][0]))
     logging.debug("Last fit prize: {}".format(analysis['yfit'][-1]))
-    timeDiff = abs(peakEpoc - loe)
-    logging.debug("Diff between latest order and current peak: {}".format(toDate(timeDiff)))
-
+    logging.debug("Diff between latest order and current peak: {}"
+                  .format(toDate(timeDiff)))
     # Price distance from peak
-    logging.debug("Price distance {}".format(abs(analysis['ypeak'][0] - analysis['yfit'][0])))
+    logging.debug("Price distance {}"
+                  .format(abs(analysis['ypeak'][0] - analysis['yfit'][0])))
     # if advice(analysis) == TradeCommand.buy:
 
+
     if abs(analysis['ypeak'][0] - analysis['yfit'][0]) > 1:
-        logging.debug("Distance too big")
-        return False
+        logging.debug("Prize distance too big")
+        result = False
+    if not timeDiff > minimum_peak_distance:
+        logging.debug("Time distance too big")
+        result = False
+    if not peakEpoc > loe:
+        logging.debug("Peak before latest order epoc")
+        result = False
     # valley J bad
     # if analysis['yfit'][0] > analysis['yfit'][-1]:
     #     return True
-    minimum_peak_distance = kwargs.get('minimum_peak_distance',
-                                       3600 * 1.5)  # default 1.5 hour
-    return peakEpoc > loe and timeDiff > minimum_peak_distance
+
+    return result
 
 
 def advice(analysis):
