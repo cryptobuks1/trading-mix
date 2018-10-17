@@ -12,7 +12,7 @@ def simulation():
 
     def update_latest_order_epoc(peak_analysis):
         nonlocal latest_order_epoc
-        latest_order_epoc = peak_analysis['x'][-1]
+        latest_order_epoc = peak_analysis['x'][0]
 
     def get_latest_order_epoc():
         return latest_order_epoc

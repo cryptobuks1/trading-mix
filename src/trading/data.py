@@ -142,6 +142,8 @@ def is_new_peak(latest_order_epoc, analysis, **kwargs):
     timeDiff = abs(peakEpoc - loe)
     minimum_peak_distance = kwargs.get('minimum_peak_distance',
                                        3600 * 1.5)  # default 1.5 hour
+    logging.debug("Start time {}".format(analysis['x'][0]))
+    logging.debug("End time {}".format(analysis['x'][-1]))
     logging.debug("Peak at: {}".format(toDate(peakEpoc)))
     logging.debug("Peak price: {}".format(analysis['ypeak'][0]))
     logging.debug("Latest order epoc: {}".format(toDate(loe)))
