@@ -145,6 +145,7 @@ def is_new_peak(latest_order_epoc, analysis, **kwargs):
     logging.debug("Start time {}".format(analysis['x'][0]))
     logging.debug("End time {}".format(analysis['x'][-1]))
     logging.debug("Peak at: {}".format(toDate(peakEpoc)))
+    logging.debug("Peak at: {}".format(peakEpoc))
     logging.debug("Peak price: {}".format(analysis['ypeak'][0]))
     logging.debug("Latest order epoc: {}".format(toDate(loe)))
     logging.debug("First fit prize: {}".format(analysis['yfit'][-1]))
@@ -162,9 +163,9 @@ def is_new_peak(latest_order_epoc, analysis, **kwargs):
     if abs(analysis['ypeak'][0] - analysis['yfit'][0]) > 1:
         logging.debug("Prize distance too big")
         result = False
-    if not timeDiff > minimum_peak_distance:
-        logging.debug("Time distance too big")
-        result = False
+    # if not timeDiff > minimum_peak_distance:
+    #     logging.debug("Time distance too big")
+    #     result = False
     if not peakEpoc > loe:
         logging.debug("Peak before latest order epoc")
         result = False
