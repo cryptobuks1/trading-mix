@@ -51,7 +51,7 @@ def default_kraken_strategy(*,
 def control_graph(**kwargs):
     ui_window = create_gui_window()
 
-    play_pause_state = {'continue': True}
+    play_pause_state = {'continue': False}
 
     play_pause_graph_generator = partial(pause_frame_generator,
                                          play_pause_state)
@@ -90,6 +90,6 @@ def stream_data_to_graph(data_generator, events):
                 emit(TradingEvents.data.fget(events), data=data)
             else:
                 while is_paused_p():
-                    time.sleep(0.3)
+                    time.sleep(0.5)
                     update_ui(window)
     return run, window, play_pause_handler, pause_graph
