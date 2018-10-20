@@ -2112,7 +2112,9 @@ Store pickled data in a topic on a append log
    + [1534957675.1020408]
    + Der et potentiale kl 20:50 vindue en time
  - [ ] ohcl-2018-08-24-08:25:00.sqlite
-   Burder have fundet peak 0:35 men missede grundet time distance rule
+   + [1535055691.8367348, 1535064116.3265307, 1535077536.7346938]
+   + Burder have fundet peak 0:35 men missede grundet time distance rule
+   + Afstand mellem y min og y maks er for lille. Måske
  - [ ] ohcl-2018-08-24-15:17:21.sqlite
  - [ ] ohcl-2018-08-24-22:51:11.sqlite
  - [ ] ohcl-2018-08-29-23:19:29.sqlite
