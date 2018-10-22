@@ -2110,8 +2110,12 @@ Store pickled data in a topic on a append log
  - [X] ohcl-2018-08-22-07:41:50.sqlite
    + [1534886617.9591837, 1534892017.9591837]
  - [X] ohcl-2018-08-22-21:11:04.sqlite
+   + [1534957675.1020408]
+   + Der et potentiale kl 20:50 vindue en time
  - [ ] ohcl-2018-08-24-08:25:00.sqlite
-   Burder have fundet peak 0:35 men missede grundet time distance rule
+   + [1535055691.8367348, 1535064116.3265307, 1535077536.7346938]
+   + Burder have fundet peak 0:35 men missede grundet time distance rule
+   + Afstand mellem y min og y maks er for lille. Måske
  - [ ] ohcl-2018-08-24-15:17:21.sqlite
  - [ ] ohcl-2018-08-24-22:51:11.sqlite
  - [ ] ohcl-2018-08-29-23:19:29.sqlite
@@ -2127,40 +2131,7 @@ Store pickled data in a topic on a append log
  - [ ] ohcl-2018-09-15-18:27:22.sqlite
  - [ ] ohcl-2018-09-22-14:30:46.sqlite
  - [ ] ohcl-2018-09-30-19:54:51.sqlite
-**** Peak log                                                       :scratch:
-DEBUG:root:Peak at: 2018-08-21 17:05:39.183673
-DEBUG:root:Peak price: 80.26419067382812
-DEBUG:root:Latest order epoc: 2018-08-21 10:23:00
-DEBUG:root:First fit prize: 80.26542663574219
-DEBUG:root:Last fit prize: 82.22145080566406
-DEBUG:root:First fit time: 1534864380.0
-DEBUG:root:Last fit time: 1534853580.0
-DEBUG:root:Diff between latest order and current peak: 1970-01-01 07:42:39.183673
-DEBUG:root:Price distance 0.0012359619140625
-DEBUG:root:Found Result
-DEBUG:root:Found Result
-DEBUG:root:Start analysis
-DEBUG:root:Peak at: 2018-08-21 16:23:12.244898
-DEBUG:root:Peak price: 80.28916931152344
-DEBUG:root:Latest order epoc: 2018-08-21 14:13:00
-DEBUG:root:First fit prize: 81.00096130371094
-DEBUG:root:Last fit prize: 82.37123107910156
-DEBUG:root:First fit time: 1534865580.0
-DEBUG:root:Last fit time: 1534854780.0
-DEBUG:root:Diff between latest order and current peak: 1970-01-01 03:10:12.244898
-DEBUG:root:Price distance 0.7117919921875
-DEBUG:root:Found Result
-DEBUG:root:Found Result
-DEBUG:root:Start analysis
-DEBUG:root:Peak at: 2018-08-21 16:32:11.020408
-DEBUG:root:Peak price: 80.22639465332031
-DEBUG:root:Latest order epoc: 2018-08-21 14:33:00
-DEBUG:root:First fit prize: 81.18109130859375
-DEBUG:root:Last fit prize: 81.96824645996094
-DEBUG:root:First fit time: 1534866780.0
-DEBUG:root:Last fit time: 1534855980.0
-DEBUG:root:Diff between latest order and current peak: 1970-01-01 02:59:11.020408
-DEBUG:root:Price distance 0.9546966552734375
+
 **** Plot data events
 #+NAME: plot-data-events
 #+HEADER: :results drawer
@@ -2258,6 +2229,7 @@ DEBUG:root:Price distance 0.9546966552734375
 
 #+RESULTS: plot-data-events
 :RESULTS:
+None
 :END:
 
 **** Store on order
