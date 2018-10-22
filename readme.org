@@ -2108,6 +2108,7 @@ Store pickled data in a topic on a append log
    Burde have fundet et peak kl 23.
    Næsten en kopi af forrige.
  - [X] ohcl-2018-08-22-07:41:50.sqlite
+   + [1534886617.9591837, 1534892017.9591837]
  - [X] ohcl-2018-08-22-21:11:04.sqlite
  - [ ] ohcl-2018-08-24-08:25:00.sqlite
    Burder have fundet peak 0:35 men missede grundet time distance rule
