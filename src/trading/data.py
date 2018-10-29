@@ -75,7 +75,7 @@ def analyseData(peakConf, data, **kwargs):
               'xpeak': xfit[peaksIndex],
               'ypeak': yfit[peaksIndex],
               'z': z}
-    if result['xpeak']:
+    if result['xpeak'].size > 0:
         try:
             event = kwargs['foundPeakEvent']
         except Exception:

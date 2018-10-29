@@ -1,5 +1,5 @@
 from collections import namedtuple
-from trading.events import bind, TradingEvents
+from trading.events import bind
 
 
 def simulation():

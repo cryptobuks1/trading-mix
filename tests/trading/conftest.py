@@ -1,6 +1,6 @@
 import pytest
 from os import getcwd
-from os.path import join, dirname
+from os.path import join, dirname, abspath
 from sys import path
 from trading.data import load_data_from_file
 from trading.sql import connect, meta, latest
@@ -65,3 +65,8 @@ def ohlc_12_hour_as_sql():
                                        'ohlc-2018-08-19-23:32:55.sqlite'))
     # db['time_column'] = 'timestamp'
     return db
+
+@pytest.fixture
+def data_dir():
+    package_path = abspath(dirname(dirname(dirname(__file__))))
+    return join(package_path, "data")

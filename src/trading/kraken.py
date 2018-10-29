@@ -4,7 +4,8 @@ from trading.sql import memdb
 import logging
 from os.path import expanduser
 
-def credentials(separator = '='):
+
+def credentials(separator='='):
     result_dict = {}
     with open(expanduser('~/.kraken')) as f:
         for line in f:

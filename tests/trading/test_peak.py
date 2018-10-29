@@ -1,34 +1,48 @@
-from trading.events import create_trading_events, bind
+from trading.events import (create_trading_events,
+                            bind,
+                            emit,
+                            TradingEvents)
 from trading.sql import sqlite_connect
 from trading.data import (window_generator,
-                          analyseData)
+                          analyseData,
+                          is_new_peak)
 from trading.octave import conf as peakConf
+from os.path import join
 from dev.order import simulation
 from functools import partial
+from collections import namedtuple
 import logging
 import pytest
 
+Advice = namedtuple("Advice", ["buy", "sell"])
+advice = Advice("buy", "sell")
 
 @pytest.mark.peaks
 @pytest.mark.parametrize("data_file, peaks", [
-    ("ohcl-2018-08-21-22:22:09.sqlite", [1534863939.1836734,
-                                         1534878412.6530612])
+    ("ohcl-2018-08-21-22:22:09.sqlite",
+     [(1534847494.2857144, advice.buy),
+      (1534863939.1836734, advice.sell),
+      (1534878412.6530612, advice.buy)])
 ])
-def test_peaks(data_file, peaks, caplog):
-    db = sqlite_connect(data_file)
+def test_peaks(data_file, peaks, data_dir, caplog):
+    result = []
+    db = sqlite_connect(join(data_dir,
+                             data_file))
     events = create_trading_events()
     analyse_using_octave = partial(analyseData,
                                    peakConf,
                                    foundPeakEvent=events.foundPeak)
     sim = simulation()
     sim.trade_on_peak(events.newPeak)
+    bind(events.newPeak,
+         lambda peak_analysis: result.append(peak_analysis['xpeak'][0]))
     bind(events.foundPeak,
          lambda data: emit(events.newPeak,
                            data={
                                "peak_analysis":
                                data['result']},
                            unpack_data=True)
-         if is_new_peak(get_latest_order_epoc,
+         if is_new_peak(sim.get_latest_order_epoc,
                         data['result'])
          else None)
     with caplog.at_level(logging.DEBUG):
@@ -36,3 +50,6 @@ def test_peaks(data_file, peaks, caplog):
                                      600,
                                      **db):
             analyse_using_octave(data)
+        logging.debug(result)
+        logging.debug(peaks)
+        assert result == [peak_info[0] for peak_info in peaks]
