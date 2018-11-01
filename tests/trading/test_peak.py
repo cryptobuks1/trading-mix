@@ -5,8 +5,10 @@ from trading.events import (create_trading_events,
 from trading.sql import sqlite_connect
 from trading.data import (window_generator,
                           analyseData,
-                          is_new_peak)
+                          is_new_peak,
+                          TradeCommand)
 from trading.octave import conf as peakConf
+from trading.strategy.simple import trigger_trade_advise
 from os.path import join
 from dev.order import simulation
 from functools import partial
@@ -34,6 +36,7 @@ def test_peaks(data_file, peaks, data_dir, caplog):
                                    foundPeakEvent=events.foundPeak)
     sim = simulation()
     sim.trade_on_peak(events.newPeak)
+    bind(events.newPeak, partial(trigger_trade_advise, events))
     bind(events.newPeak,
          lambda peak_analysis: result.append(peak_analysis['xpeak'][0]))
     bind(events.foundPeak,
@@ -45,6 +48,11 @@ def test_peaks(data_file, peaks, data_dir, caplog):
          if is_new_peak(sim.get_latest_order_epoc,
                         data['result'])
          else None)
+    bind(events.advice,
+         lambda data:
+         logging.debug("~SELL~"
+                       if data['advice'] == TradeCommand.sell
+                       else "~BUY~"))
     with caplog.at_level(logging.DEBUG):
         for data in window_generator(3600 * 3,
                                      600,
