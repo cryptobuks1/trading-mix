@@ -20,8 +20,8 @@ import pytest
 @pytest.mark.parametrize("data_file, peaks", [
     ("ohcl-2018-08-21-22:22:09.sqlite",
      [(1534847494.2857144, TradeCommand.buy),
-      (1534863939.1836734, TradeCommand.sell),
-      (1534878412.6530612, TradeCommand.buy)])
+      (1534863939.1836734, TradeCommand.buy),
+      (1534878412.6530612, TradeCommand.sell)])
 ])
 def test_peaks(data_file, peaks, data_dir, caplog):
     result = []
@@ -47,10 +47,8 @@ def test_peaks(data_file, peaks, data_dir, caplog):
                         data['result'])
          else None)
     bind(events.advice,
-         lambda data:
-         logging.debug("~SELL~"
-                       if data['advice'] == TradeCommand.sell
-                       else "~BUY~"))
+         lambda data: advices.append(data['advice']))
+
     with caplog.at_level(logging.DEBUG):
         for data in window_generator(3600 * 3,
                                      600,
@@ -58,5 +56,6 @@ def test_peaks(data_file, peaks, data_dir, caplog):
             analyse_using_octave(data)
         logging.debug(result)
         logging.debug(peaks)
+
     assert result == [peak_info[0] for peak_info in peaks]
     assert advices == [peak_info[1] for peak_info in peaks]

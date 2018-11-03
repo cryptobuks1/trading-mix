@@ -14,7 +14,7 @@ test-mark-profit:
 test-make-profit_persist:
 test-mark-strategyhelper:
 test-mark-%:
-	pipenv run pytest --color=yes -m $(*)
+	pipenv run pytest -v --color=yes -m $(*)
 
 regression-test: test-mark-regression
 
