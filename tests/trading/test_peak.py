@@ -16,18 +16,16 @@ from collections import namedtuple
 import logging
 import pytest
 
-Advice = namedtuple("Advice", ["buy", "sell"])
-advice = Advice("buy", "sell")
-
 @pytest.mark.peaks
 @pytest.mark.parametrize("data_file, peaks", [
     ("ohcl-2018-08-21-22:22:09.sqlite",
-     [(1534847494.2857144, advice.buy),
-      (1534863939.1836734, advice.sell),
-      (1534878412.6530612, advice.buy)])
+     [(1534847494.2857144, TradeCommand.buy),
+      (1534863939.1836734, TradeCommand.sell),
+      (1534878412.6530612, TradeCommand.buy)])
 ])
 def test_peaks(data_file, peaks, data_dir, caplog):
     result = []
+    advices = []
     db = sqlite_connect(join(data_dir,
                              data_file))
     events = create_trading_events()
@@ -60,4 +58,5 @@ def test_peaks(data_file, peaks, data_dir, caplog):
             analyse_using_octave(data)
         logging.debug(result)
         logging.debug(peaks)
-        assert result == [peak_info[0] for peak_info in peaks]
+    assert result == [peak_info[0] for peak_info in peaks]
+    assert advices == [peak_info[1] for peak_info in peaks]
