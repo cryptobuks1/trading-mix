@@ -160,7 +160,7 @@ def is_new_peak(latest_order_epoc, analysis, **kwargs):
     # if advice(analysis) == TradeCommand.buy:
 
 
-    if abs(analysis['ypeak'][0] - analysis['yfit'][0]) > 1:
+    if abs(analysis['ypeak'][0] - analysis['yfit'][-1]) > 1:
         logging.debug("Prize distance too big")
         result = False
     # if not timeDiff > minimum_peak_distance:
