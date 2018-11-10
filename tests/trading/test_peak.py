@@ -21,7 +21,11 @@ import pytest
     ("ohcl-2018-08-21-22:22:09.sqlite",
      [(1534847494.2857144, TradeCommand.buy),
       (1534863939.1836734, TradeCommand.buy),
-      (1534878412.6530612, TradeCommand.sell)])
+      (1534878412.6530612, TradeCommand.sell)]),
+    ("ohcl-2018-08-22-00:17:13.sqlite",
+     [(1534862696.3265307, TradeCommand.buy),
+      (1534880096.3265307, TradeCommand.sell),
+      (1534885214.6938775, TradeCommand.buy)])
 ])
 def test_peaks(data_file, peaks, data_dir, caplog):
     result = []
