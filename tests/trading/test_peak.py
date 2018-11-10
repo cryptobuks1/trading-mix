@@ -6,7 +6,8 @@ from trading.sql import sqlite_connect
 from trading.data import (window_generator,
                           analyseData,
                           is_new_peak,
-                          TradeCommand)
+                          TradeCommand,
+                          extract)
 from trading.octave import conf as peakConf
 from trading.strategy.simple import trigger_trade_advise
 from os.path import join
@@ -57,6 +58,8 @@ def test_peaks(data_file, peaks, data_dir, caplog):
         for data in window_generator(3600 * 3,
                                      600,
                                      **db):
+            xy = extract(data)
+            logging.debug("Window size {}".format(xy[0][-1]-xy[0][0]))
             analyse_using_octave(data)
         logging.debug(result)
         logging.debug(peaks)

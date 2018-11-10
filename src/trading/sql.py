@@ -1,5 +1,5 @@
 import sqlite3
-from sqlalchemy import MetaData, create_engine, func
+from sqlalchemy import MetaData, create_engine, func, desc
 from sqlalchemy.sql import select
 from sqlalchemy.orm import sessionmaker
 
@@ -65,7 +65,8 @@ def window_query(*,
     return select([table_object.c[time_column],
                    table_object.c[data_column]])\
                    .where(table_object.c[time_column].between(start,
-                                                              end))
+                                                              end))\
+                   .order_by(table_object.c[time_column])
 
 
 def memdb():
