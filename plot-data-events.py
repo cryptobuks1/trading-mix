@@ -1,4 +1,4 @@
-sqlfile="/home/kristian/projects/trading/data/ohcl-2018-08-22-00:17:13.sqlite"
+sqlfile="/home/kristian/projects/trading/data/ohcl-2018-08-21-22:22:09.sqlite"
 from trading.sql import sqlite_connect
 from trading.data import (window_generator,
                           analyseData,
