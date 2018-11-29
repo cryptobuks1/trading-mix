@@ -14,6 +14,7 @@
 (define end-from-python 1534885655.510204)
 (define start-from-python (- 1534880537.142857 2400))
 (define end-from-python 1534885655.510204)
+(define kraken-time '(1543530002  "Thu, 29 Nov 18 22:20:02 +0000"))
 (define s-curve-data  (query-rows *db*
                                   "select time,open from ohlc where time >= $1 and time <= $2 order by time asc"
                                   start-from-python end-from-python))
