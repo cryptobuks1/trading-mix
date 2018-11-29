@@ -3,6 +3,7 @@
 (require db)
 (require racket/class)
 (require racket/date)
+(require data-frame)
 (define *db*
   (sqlite3-connect #:database
                    "data/ohcl-2018-08-22-00:17:13.sqlite"))
@@ -23,6 +24,8 @@
                   (* 1.0 (vector-ref row 1)))
                 s-curve-data))
 (define fitf(line-fit xs ys))
+
+(define fitf (df-least-squares-fit df "xs" "ys" #:mode 'polynomial  #:polynomial-degree 5))
 
 (define ynew (map fitf xs))
 ;; (plot-new-window? #t)
