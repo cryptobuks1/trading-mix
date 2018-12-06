@@ -35,6 +35,7 @@
 (module+ test
   (require racket/date)
   (require plot/pict)
+  (require "data-frame.rkt")
   (define start-s-curve (+ 3600 (find-seconds	0 45 20 22 8 2018)))
   (define end-s-curve (+ 3600 (find-seconds	0 20 23 22 8 2018)))
   (define *db*
@@ -43,4 +44,6 @@
   (define s-curve-data  (query-rows *db*
                                     "select time,open from ohlc where time >= $1 and time <= $2 order by time asc"
                                     start-from-python end-from-python))
-  (plot (lines s-curve-data)))
+  (define fitf (fit-function s-curve-data))
+  (plot (lines s-curve-data))
+  fitf)
