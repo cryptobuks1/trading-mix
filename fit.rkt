@@ -31,3 +31,16 @@
 (df-add-series df dys)
 
 (define fitf (df-least-squares-fit df "xs" "ys" #:mode 'polynomial))
+
+(module+ test
+  (require racket/date)
+  (require plot/pict)
+  (define start-s-curve (+ 3600 (find-seconds	0 45 20 22 8 2018)))
+  (define end-s-curve (+ 3600 (find-seconds	0 20 23 22 8 2018)))
+  (define *db*
+    (sqlite3-connect #:database
+                     "data/ohcl-2018-08-22-00:17:13.sqlite"))
+  (define s-curve-data  (query-rows *db*
+                                    "select time,open from ohlc where time >= $1 and time <= $2 order by time asc"
+                                    start-from-python end-from-python))
+  (plot (lines s-curve-data)))
