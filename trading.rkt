@@ -12,9 +12,11 @@
 (define end-s-curve (find-seconds	0 20 23 22 8 2018))
 (define start-from-python 1534880537.142857)
 (define end-from-python 1534885655.510204)
-(define start-from-python (- 1534880537.142857 2400))
-(define end-from-python 1534885655.510204)
+;; (define start-from-python (- 1534880537.142857 2400))
+;; (define end-from-python 1534885655.510204)
+
 (define kraken-time '(1543530002  "Thu, 29 Nov 18 22:20:02 +0000"))
+
 (define s-curve-data  (query-rows *db*
                                   "select time,open from ohlc where time >= $1 and time <= $2 order by time asc"
                                   start-from-python end-from-python))
@@ -24,10 +26,13 @@
 (define ys (map (lambda (row)
                   (* 1.0 (vector-ref row 1)))
                 s-curve-data))
-(define fitf(line-fit xs ys))
+;; (define fitf(line-fit xs ys))
 
 (define fitf (df-least-squares-fit df "xs" "ys" #:mode 'polynomial  #:polynomial-degree 5))
 
 (define ynew (map fitf xs))
 ;; (plot-new-window? #t)
 (plot (lines rows))
+
+(module+ test
+  )
