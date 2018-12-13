@@ -22,4 +22,4 @@
 
   (df-least-squares-fit df "xs" "ys"
                         #:mode 'polynomial
-                        #:polynomial-degree 3))
+                        #:polynomial-degree 2))
