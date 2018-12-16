@@ -66,9 +66,13 @@
          xs))
 
 
-(define (x-for-max-y)
-  (let*-values ([(data) (s-curve-data '(0 50 18 21 8 2018)
-                                      '(0 20 20 21 8 2018))]
-                [(xs ys) (extract data)]
+(define (x-for-max-y data)
+  (let*-values ([(xs ys) (extract data)]
                 [(fitf) (poly (fit xs ys 2))])
-    (find-x-for-max-y fitf xs)))
+    (foldl (lambda (x a)
+             (if (< (fitf a)
+                    (fitf x))
+                 x
+                 a))
+           (car xs)
+           xs)))
