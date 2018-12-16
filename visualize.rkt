@@ -52,3 +52,23 @@
                                       '(0 20 21 21 8 2018))]
                 [(x y) (extract data)])
     (fit x y 2)))
+
+
+(define (x-for-max-reducer fitf x a)
+  (if (< (fitf a)
+         (fitf x))
+      x
+      a))
+
+(define (find-x-for-max-y fitf xs)
+  (foldl ((curry x-for-max-reducer) fitf)
+         (car xs)
+         xs))
+
+
+(define (x-for-max-y)
+  (let*-values ([(data) (s-curve-data '(0 50 18 21 8 2018)
+                                      '(0 20 20 21 8 2018))]
+                [(xs ys) (extract data)]
+                [(fitf) (poly (fit xs ys 2))])
+    (find-x-for-max-y fitf xs)))
