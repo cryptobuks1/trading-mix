@@ -1,7 +1,7 @@
 #lang racket
 (require math plot)
 
-(provide poly fit fit-values)
+(provide poly fit fit-values extract-data fitf)
 
 (define xs '(0 1  2  3  4  5   6   7   8   9  10))
 (define ys '(1 6 17 34 57 86 121 162 209 262 321))
@@ -16,9 +16,23 @@
   (let-values ([(x y) xandy])
     (fit x y n)))
 
+(define (extract data)
+  (apply vector-map list data))
+
+
+(define (extract-data data)
+  (apply vector-map list data))
+
+
 (define ((poly v) x)
   (for/sum ([c v] [i (in-naturals)])
     (* c (expt x i))))
+
+
+(define (fitf data)
+  (poly (apply fit
+               (append (vector->list (extract data))
+                       '(2)))))
 
 
 (module+ test
