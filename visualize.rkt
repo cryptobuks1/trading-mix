@@ -3,6 +3,7 @@
 (require plot/pict)
 (require db)
 (require "data.rkt")
+(require "plot.rkt")
 
 (define (s-curve-data start end)
   (define *db*
@@ -16,12 +17,17 @@
   (values (map (lambda (v)(vector-ref v 0)) data)
           (map (lambda (v)(vector-ref v 1)) data)))
 
+
+(define (plot-it)
+  (plot-with-x-as-time (s-curve-data '(0 50 18 21 8 2018)
+                                     '(0 20 20 21 8 2018))))
+
 (define (plot-top-of-s)
   (let*-values ([(data) (s-curve-data '(0 50 18 21 8 2018)
                                       '(0 20 20 21 8 2018))]
                 [(x y) (extract data)])
     (parameterize ([plot-x-ticks (time-ticks)])
-      (plot (list (points   (map vector x y))
+      (plot (list (points data)
                   (function (poly (fit x y 2))))))))
 
 (define (plot-bottom-of-s)
@@ -29,7 +35,7 @@
                                       '(0 20 21 21 8 2018))]
                 [(x y) (extract data)])
     (parameterize ([plot-x-ticks (time-ticks)])
-      (plot (list (points   (map vector x y))
+      (plot (list (points data)
                   (function (poly (fit x y 2))))))))
 
 (define (fit-top-of-s)
@@ -50,7 +56,7 @@
                                       '(0 20 21 21 8 2018))]
                 [(x y) (extract data)])
     (parameterize ([plot-x-ticks (time-ticks)])
-      (plot (list (points   (map vector x y))
+      (plot (list (points data)
                   (function (poly (fit x y 2))))))))
 
 (define (fit-full-s-curve-data)
