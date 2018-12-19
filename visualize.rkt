@@ -32,12 +32,8 @@
                              (function (fitf top-of-s)))))
 
 (define (plot-bottom-of-s)
-  (let*-values ([(data) (s-curve-data '(0 20 19 21 8 2018)
-                                      '(0 20 21 21 8 2018))]
-                [(x y) (extract data)])
-    (parameterize ([plot-x-ticks (time-ticks)])
-      (plot (list (points data)
-                  (function (poly (fit x y 2))))))))
+  (plot-with-x-as-time (list (points bottom-of-s)
+                             (function (fitf bottom-of-s)))))
 
 (define (fit-top-of-s)
   (let*-values ([(data) (s-curve-data '(0 50 18 21 8 2018)
