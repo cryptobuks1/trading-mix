@@ -24,13 +24,12 @@
 
 
 (define (plot-it)
-  (plot-with-x-as-time (s-curve-data '(0 50 18 21 8 2018)
-                                     '(0 20 20 21 8 2018))))
+  (plot-with-x-as-time (points (s-curve-data '(0 50 18 21 8 2018)
+                                             '(0 20 20 21 8 2018)))))
 
 (define (plot-top-of-s)
-  (parameterize ([plot-x-ticks (time-ticks)])
-    (plot (list (points top-of-s)
-                (function (fitf top-of-s))))))
+  (plot-with-x-as-time (list (points top-of-s)
+                             (function (fitf top-of-s)))))
 
 (define (plot-bottom-of-s)
   (let*-values ([(data) (s-curve-data '(0 20 19 21 8 2018)
