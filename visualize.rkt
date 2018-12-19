@@ -13,32 +13,24 @@
               start
               end))
 
-(define (extract data)
-  (values (map (lambda (v)(vector-ref v 0)) data)
-          (map (lambda (v)(vector-ref v 1)) data)))
+(define top-of-s (s-curve-data '(0 50 18 21 8 2018)
+                               '(0 20 20 21 8 2018)))
+
+(define bottom-of-s (s-curve-data '(0 20 19 21 8 2018)
+                                  '(0 20 21 21 8 2018)))
+
+(define full-s-curve (s-curve-data '(0 50 18 21 8 2018)
+                                   '(0 20 21 21 8 2018)))
 
 
 (define (plot-it)
   (plot-with-x-as-time (s-curve-data '(0 50 18 21 8 2018)
                                      '(0 20 20 21 8 2018))))
 
-(define top-of-s (s-curve-data '(0 50 18 21 8 2018)
-                               '(0 20 20 21 8 2018)))
-
-(define (new-plot)
+(define (plot-top-of-s)
   (parameterize ([plot-x-ticks (time-ticks)])
     (plot (list (points top-of-s)
                 (function (fitf top-of-s))))))
-
-
-
-(define (plot-top-of-s)
-  (let*-values ([(data) (s-curve-data '(0 50 18 21 8 2018)
-                                      '(0 20 20 21 8 2018))]
-                [(x y) (extract data)])
-    (parameterize ([plot-x-ticks (time-ticks)])
-      (plot (list (points data)
-                  (function (poly (fit x y 2))))))))
 
 (define (plot-bottom-of-s)
   (let*-values ([(data) (s-curve-data '(0 20 19 21 8 2018)

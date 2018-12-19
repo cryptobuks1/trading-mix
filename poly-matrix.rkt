@@ -1,7 +1,7 @@
 #lang racket
 (require math plot)
 
-(provide poly fit fit-values extract-data fitf)
+(provide poly fit fit-data extract extract-data fitf)
 
 (define xs '(0 1  2  3  4  5   6   7   8   9  10))
 (define ys '(1 6 17 34 57 86 121 162 209 262 321))
@@ -12,16 +12,17 @@
   (define VT (matrix-transpose V))
   (matrix->vector (matrix-solve (matrix* VT V) (matrix* VT Y))))
 
-(define (fit-values xandy n)
-  (let-values ([(x y) xandy])
-    (fit x y n)))
-
 (define (extract data)
-  (apply vector-map list data))
-
+  (values (map (lambda (v)(vector-ref v 0)) data)
+          (map (lambda (v)(vector-ref v 1)) data)))
 
 (define (extract-data data)
   (apply vector-map list data))
+
+(define (fit-data data [n 2])
+  (apply fit
+         (append (vector->list (extract-data data))
+                 (list n))))
 
 
 (define ((poly v) x)
@@ -31,7 +32,7 @@
 
 (define (fitf data)
   (poly (apply fit
-               (append (vector->list (extract data))
+               (append (vector->list (extract-data data))
                        '(2)))))
 
 
