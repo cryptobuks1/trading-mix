@@ -23,10 +23,6 @@
                                    '(0 20 21 21 8 2018)))
 
 
-(define (plot-it)
-  (plot-with-x-as-time (points (s-curve-data '(0 50 18 21 8 2018)
-                                             '(0 20 20 21 8 2018)))))
-
 (define (plot-top-of-s)
   (plot-with-x-as-time (list (points top-of-s)
                              (function (fitf top-of-s)))))
