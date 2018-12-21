@@ -32,17 +32,11 @@
                              (function (fitf bottom-of-s)))))
 
 (define (fit-top-of-s)
-  (let*-values ([(data) (s-curve-data '(0 50 18 21 8 2018)
-                                      '(0 20 20 21 8 2018))]
-                [(x y) (extract data)])
-    (fit x y 2)))
+  (fit-data top-of-s))
 
 
 (define (fit-bottom-of-s)
-  (let*-values ([(data) (s-curve-data '(0 20 19 21 8 2018)
-                                      '(0 20 21 21 8 2018))]
-                [(x y) (extract data)])
-    (fit x y 2)))
+  (fit-data bottom-of-s))
 
 (define (plot-full-s-curve-data)
   (let*-values ([(data) (s-curve-data '(0 50 18 21 8 2018)
