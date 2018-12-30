@@ -46,3 +46,11 @@
 
 (define (fit-full-s-curve-data)
   (fit-data full-s-curve))
+
+;; 1534879320
+;; #f
+;; 1534885620
+(define (peaks)
+  (println (peak-at top-of-s))
+  (println (peak-at full-s-curve))
+  (println (peak-at bottom-of-s)))
