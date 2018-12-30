@@ -38,19 +38,14 @@
 (define (fit-bottom-of-s)
   (fit-data bottom-of-s))
 
+
 (define (plot-full-s-curve-data)
-  (let*-values ([(data) (s-curve-data '(0 50 18 21 8 2018)
-                                      '(0 20 21 21 8 2018))]
-                [(x y) (extract data)])
-    (parameterize ([plot-x-ticks (time-ticks)])
-      (plot (list (points data)
-                  (function (poly (fit x y 2))))))))
+  (plot-with-x-as-time (list (points full-s-curve)
+                             (function (fitf full-s-curve)))))
+
 
 (define (fit-full-s-curve-data)
-  (let*-values ([(data) (s-curve-data '(0 50 18 21 8 2018)
-                                      '(0 20 21 21 8 2018))]
-                [(x y) (extract data)])
-    (fit x y 2)))
+  (fit-data full-s-curve))
 
 
 (define (x-for-max-y data)
