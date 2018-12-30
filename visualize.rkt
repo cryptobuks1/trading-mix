@@ -46,15 +46,3 @@
 
 (define (fit-full-s-curve-data)
   (fit-data full-s-curve))
-
-
-(define (x-for-max-y data)
-  (let [(xs (first (transpose data)))
-        (fitf (fitf data))]
-    (foldl (lambda (x a)
-             (if (< (fitf a)
-                    (fitf x))
-                 x
-                 a))
-           (car xs)
-           xs)))
