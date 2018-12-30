@@ -49,8 +49,8 @@
 
 
 (define (x-for-max-y data)
-  (let*-values ([(xs ys) (extract data)]
-                [(fitf) (poly (fit xs ys 2))])
+  (let [(xs (first (transpose data)))
+        (fitf (fitf data))]
     (foldl (lambda (x a)
              (if (< (fitf a)
                     (fitf x))
