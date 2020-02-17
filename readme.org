@@ -3025,3 +3025,5 @@ tests/trading/test_profit_persist.py:21: AssertionError
 ** Why sqlite
   The reason for sqlite: kraken returns pandas which can probably be
   queried, but sqlite is more general and not all APIs return pandas
+** notes
+   [[./tests/trading/test_plot_current.py][plot date]]
